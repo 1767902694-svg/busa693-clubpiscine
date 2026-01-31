@@ -1,0 +1,93 @@
+import yaml
+
+config_content = """
+# Specific Configuration for Club Piscine MMM
+
+
+data_paths:
+  raw: "data/raw"
+  interim: "data/interim"
+  processed: "data/processed"
+
+fiscal:
+  start_month: 11
+  start_day: 1
+
+#  CHANNELS FROM CLIENT FILES
+channels:
+  # Traditional (from budget files)
+  traditional: ["TV", "RADIO", "AFFICHAGE"]
+  
+  # Digital (from media recap & budget)
+  digital_detail:  # More granular if data supports
+    - "FLIPP"
+    - "FACEBOOK_INSTAGRAM_PROMO"
+    - "FACEBOOK_INSTAGRAM_PRODUIT"
+    - "GOOGLE_DISPLAY"
+    - "GOOGLE_SEARCH"
+    - "GOOGLE_SHOPPING"
+    - "PINTEREST"
+    - "PREROLL_PREMIUM"  # YouTube/Bell/Québecor video
+    - "QUEBECOR_DISPLAY"  # Premium banners
+  
+  # Aggregated for modeling (if data is sparse)
+  digital_aggregated: ["FLIPP", "FACEBOOK_INSTAGRAM", "GOOGLE", "PINTEREST", "VIDEO_PREMIUM"]
+  
+  # All channels (choose based on data availability)
+  all: ["TV", "RADIO", "AFFICHAGE", "FLIPP", "FACEBOOK_INSTAGRAM", "GOOGLE", "PINTEREST", "VIDEO_PREMIUM"]
+
+# KPIs from media recap
+kpis:
+  traditional_targets: ["Impressions totales(PRÉVU)", "Impressions totales(RÉEL)"]
+  digital_targets: ["CLICS(RÉEL)"]
+  business_target: "submissions"  # From leads/soumission file
+
+# Model Parameters (adjusted for actual channels)
+model:
+  adstock_params:
+    # From narrative: TV has longest carryover effect
+    TV: {"theta": 0.7, "L": 6}
+    RADIO: {"theta": 0.5, "L": 3}  # More immediate per narrative
+    AFFICHAGE: {"theta": 0.4, "L": 2}  # Fast cumulative impact
+    FLIPP: {"theta": 0.2, "L": 1}  # Very immediate (transactional)
+    FACEBOOK_INSTAGRAM: {"theta": 0.3, "L": 2}
+    GOOGLE: {"theta": 0.3, "L": 2}
+    default: {"theta": 0.5, "L": 4}
+  
+  saturation_k: 100000
+  
+  # From narrative: "cross-media synergies" and "TV creates halo effect"
+  include_interactions: true
+  interaction_pairs: [["TV", "RADIO"], ["TV", "GOOGLE"], ["TV", "FLIPP"]]
+
+# File-specific settings 
+file_columns:
+  media_recap:
+    date_start: "Date début"
+    date_end: "Date fin"
+    media_type: "Média"
+    partner: "Partenaire Média"
+    cost: "Coût total ($ NET)"
+    impressions_prev: "Impressions totales(PRÉVU)"
+    impressions_reel: "Impressions totales(RÉVU)"
+    clicks_reel: "CLICS(RÉVU)"
+    
+  leads:
+    week_col: "Semaine"
+    submissions_col: "Grand total"
+    
+  budget:
+    # Will need to identify from actual files
+    month_col: "MOIS"
+    tv_col: "TELEVISION"
+    radio_col: "RADIO"
+    affichage_col: "PANNEAUX"
+    flipp_col: "CIRCULAIRE DIGITALE"
+    facebook_col: "FACEBOOK + INSTAGRAM (PROMO)"
+    google_col: "GOOGLE DISPLAY + PREROLL"
+"""
+
+with open('config/params.yaml', 'w') as f:
+    f.write(config_content)
+
+print(" Updated config/params.yaml")
