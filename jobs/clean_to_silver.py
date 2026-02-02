@@ -6,6 +6,7 @@ import io
 import re
 import warnings
 from pathlib import Path
+import pickle
 
 import pandas as pd
 import numpy as np
@@ -74,12 +75,12 @@ def save_df_to_silver_csv(df: pd.DataFrame, blob_path: str) -> None:
     csv_bytes = df.to_csv(index=False).encode("utf-8")
     upload_bytes_to_silver(blob_path, csv_bytes, content_type="text/csv")
 
-def save_df_to_silver_pickle(df: pd.DataFrame, blob_path: str) -> None:
-    pkl_bytes = pd.to_pickle(df, None)  # not supported like this
-    # We'll use BytesIO for pickle
-    buffer = io.BytesIO()
-    df.to_pickle(buffer)
-    upload_bytes_to_silver(blob_path, buffer.getvalue(), content_type="application/octet-stream")
+def save_df_to_silver_pickle(df, blob_path: str) -> None:
+    """
+    Save dataframe as a pickle file into Silver container.
+    """
+    pkl_bytes = pickle.dumps(df)
+    upload_bytes_to_silver(blob_path, pkl_bytes, content_type="application/octet-stream")
 
 def list_bronze_files() -> None:
     bsc = _blob_service_client()
