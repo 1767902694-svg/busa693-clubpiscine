@@ -11,6 +11,7 @@ import pandas as pd
 import numpy as np
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient
+from azure.storage.blob import ContentSettings
 
 warnings.filterwarnings("ignore")
 
@@ -59,10 +60,16 @@ def upload_bytes_to_silver(blob_path: str, content: bytes, content_type: str | N
     blob_client = silver.get_blob_client(blob_path)
 
     if content_type:
-        blob_client.upload_blob(content, overwrite=True, content_settings={"content_type": content_type})
+        blob_client.upload_blob(
+            content,
+            overwrite=True,
+            content_settings=ContentSettings(content_type=content_type)
+        )
     else:
-        blob_client.upload_blob(content, overwrite=True)
-
+        blob_client.upload_blob(
+            content,
+            overwrite=True
+        )
 def save_df_to_silver_csv(df: pd.DataFrame, blob_path: str) -> None:
     csv_bytes = df.to_csv(index=False).encode("utf-8")
     upload_bytes_to_silver(blob_path, csv_bytes, content_type="text/csv")
