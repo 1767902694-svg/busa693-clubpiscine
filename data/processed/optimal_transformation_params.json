@@ -1,0 +1,153 @@
+{
+  "decay_rates": {
+    "media_television": 0.7,
+    "media_radio": 0.5,
+    "media_panneaux": 0.4,
+    "media_social_media": 0.4,
+    "media_preroll": 0.5,
+    "media_premium_display": 0.3,
+    "media_circulaire_digital": 0.3
+  },
+  "decay_rate_sources": {
+    "media_television": "industry",
+    "media_radio": "industry",
+    "media_panneaux": "industry",
+    "media_social_media": "industry",
+    "media_preroll": "industry",
+    "media_premium_display": "industry",
+    "media_circulaire_digital": "industry"
+  },
+  "industry_benchmarks": {
+    "media_television": 0.7,
+    "media_radio": 0.5,
+    "media_panneaux": 0.4,
+    "media_social_media": 0.4,
+    "media_preroll": 0.5,
+    "media_premium_display": 0.3,
+    "media_circulaire_digital": 0.3
+  },
+  "saturation_functions": {
+    "media_television": "hill",
+    "media_radio": "hill",
+    "media_panneaux": "hill",
+    "media_social_media": "hill",
+    "media_preroll": "hill",
+    "media_premium_display": "hill",
+    "media_circulaire_digital": "hill"
+  },
+  "saturation_params": {
+    "media_television": {
+      "K": 296724.13202867284,
+      "alpha": 2
+    },
+    "media_radio": {
+      "K": 186241.79849662163,
+      "alpha": 2
+    },
+    "media_panneaux": {
+      "K": 10583.27125351784,
+      "alpha": 2
+    },
+    "media_social_media": {
+      "K": 33981.580454054056,
+      "alpha": 2
+    },
+    "media_preroll": {
+      "K": 29896.862957928628,
+      "alpha": 2
+    },
+    "media_premium_display": {
+      "K": 57569.32203783784,
+      "alpha": 2
+    },
+    "media_circulaire_digital": {
+      "K": 5626.917228402811,
+      "alpha": 2
+    }
+  },
+  "validation_scores": {
+    "media_television": {
+      "r2_cv": null,
+      "r2_ci": [
+        0.6,
+        0.7999999999999999
+      ]
+    },
+    "media_radio": {
+      "r2_cv": null,
+      "r2_ci": [
+        0.4,
+        0.6
+      ]
+    },
+    "media_panneaux": {
+      "r2_cv": null,
+      "r2_ci": [
+        0.30000000000000004,
+        0.5
+      ]
+    },
+    "media_social_media": {
+      "r2_cv": null,
+      "r2_ci": [
+        0.30000000000000004,
+        0.5
+      ]
+    },
+    "media_preroll": {
+      "r2_cv": null,
+      "r2_ci": [
+        0.4,
+        0.6
+      ]
+    },
+    "media_premium_display": {
+      "r2_cv": null,
+      "r2_ci": [
+        0.19999999999999998,
+        0.4
+      ]
+    },
+    "media_circulaire_digital": {
+      "r2_cv": null,
+      "r2_ci": [
+        0.19999999999999998,
+        0.4
+      ]
+    }
+  },
+  "confidence_intervals": {
+    "media_television": [
+      0.6,
+      0.7999999999999999
+    ],
+    "media_radio": [
+      0.4,
+      0.6
+    ],
+    "media_panneaux": [
+      0.30000000000000004,
+      0.5
+    ],
+    "media_social_media": [
+      0.30000000000000004,
+      0.5
+    ],
+    "media_preroll": [
+      0.4,
+      0.6
+    ],
+    "media_premium_display": [
+      0.19999999999999998,
+      0.4
+    ],
+    "media_circulaire_digital": [
+      0.19999999999999998,
+      0.4
+    ]
+  },
+  "calibration_method": "LOOCV_Ridge",
+  "calibration_date": "2026-02-07",
+  "n_observations": 19,
+  "n_bootstrap_samples": 100
+}
