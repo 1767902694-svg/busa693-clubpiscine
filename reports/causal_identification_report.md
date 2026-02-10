@@ -1,29 +1,31 @@
-# Causal Parameter Identification Report
+# Feature Engineering & Parameter Calibration Report
 
-Generated: 2026-02-07 17:45:38.931577
+Generated: 2026-02-09 19:24:13.612576
 
-19 months, 7 channels, 3 products
+36 monthly observations, 7 channels, target: total_all_revenue
+
+Controls-only baseline LOOCV R²: 0.8265
 
 ## Decay Rates
 
-| Channel | Our Data | Industry | CI |
-|---|---|---|---|
-| Television | 0.7 (industry) | 0.7 | [0.6,0.7999999999999999] |
-| Radio | 0.5 (industry) | 0.5 | [0.4,0.6] |
-| Panneaux | 0.4 (industry) | 0.4 | [0.30000000000000004,0.5] |
-| Social Media | 0.4 (industry) | 0.4 | [0.30000000000000004,0.5] |
-| Preroll | 0.5 (industry) | 0.5 | [0.4,0.6] |
-| Premium Display | 0.3 (industry) | 0.3 | [0.19999999999999998,0.4] |
-| Circulaire Digital | 0.3 (industry) | 0.3 | [0.19999999999999998,0.4] |
+| Channel | Lambda | Source | CI | Half-life |
+|---|---|---|---|---|
+| Television | 0.1 | data | [0.10, 0.20] | 0.3mo |
+| Radio | 0.5 | industry | [0.40, 0.60] | 1.0mo |
+| Panneaux | 0.4 | industry | [0.30, 0.50] | 0.8mo |
+| Social Media | 0.4 | industry | [0.30, 0.50] | 0.8mo |
+| Preroll | 0.1 | data | [0.10, 0.20] | 0.3mo |
+| Banniere Web | 0.3 | industry | [0.20, 0.40] | 0.6mo |
+| Circulaire Digitale | 0.3 | industry | [0.20, 0.40] | 0.6mo |
 
-## Saturation
+## Saturation Functions
 
-| Channel | Function | K |
+| Channel | Function | K / Scale |
 |---|---|---|
-| Television | hill | $296,724 |
-| Radio | hill | $186,242 |
-| Panneaux | hill | $10,583 |
-| Social Media | hill | $33,982 |
-| Preroll | hill | $29,897 |
-| Premium Display | hill | $57,569 |
-| Circulaire Digital | hill | $5,627 |
+| Television | log | $127,905 |
+| Radio | power | $0 |
+| Panneaux | power | $0 |
+| Social Media | power | $0 |
+| Preroll | hill | $51,231 |
+| Banniere Web | hill | $32,834 |
+| Circulaire Digitale | power | $0 |
