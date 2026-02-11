@@ -50,22 +50,22 @@
     "BBQ (BQ)": 0.9326033468832199
   },
   "ridge_r2": {
-    "Total Revenue": 0.9659792038989086,
+    "Total Revenue": 0.9659792038989087,
     "Above-Ground Pools (HT)": 0.8544364578881829,
     "In-Ground Pools (CR)": 0.6678908441146851,
     "Spas (SP)": 0.9288136765430535,
     "Furniture & Gazebo (ME&GA)": 0.9656876031915833,
     "Fitness (FI)": 0.5702643152944964,
-    "BBQ (BQ)": 0.9575727370451086
+    "BBQ (BQ)": 0.9575727370451085
   },
   "ridge_r2_cv": {
-    "Total Revenue": 0.9118876710293978,
-    "Above-Ground Pools (HT)": 0.7326592614568548,
+    "Total Revenue": 0.9118876710293979,
+    "Above-Ground Pools (HT)": 0.7326592614568549,
     "In-Ground Pools (CR)": 0.5311693175193561,
     "Spas (SP)": 0.8548107750061071,
     "Furniture & Gazebo (ME&GA)": 0.9147377240410395,
-    "Fitness (FI)": 0.41531351044413833,
-    "BBQ (BQ)": 0.8870910503853031
+    "Fitness (FI)": 0.4153135104441381,
+    "BBQ (BQ)": 0.8870910503853033
   },
   "feature_cols": [
     "media_television_saturated",

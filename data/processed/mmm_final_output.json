@@ -1,0 +1,49 @@
+{
+  "source_notebook": "NB07_mmm_optimization",
+  "model_source": "NB06_causal_inference",
+  "created": "2026-02-11 18:18:41",
+  "data_summary": {
+    "n_months": 36,
+    "fiscal_years": [
+      2023,
+      2024,
+      2025
+    ],
+    "total_revenue": 512411601.65000004,
+    "total_spend": 10257505.175862974,
+    "media_contribution": -1.7113052308559418e-08
+  },
+  "model_performance": {
+    "Total Revenue": 0.9659792038989087,
+    "Above-Ground Pools (HT)": 0.8544364578881829,
+    "In-Ground Pools (CR)": 0.6678908441146851,
+    "Spas (SP)": 0.9288136765430535,
+    "Furniture & Gazebo (ME&GA)": 0.9656876031915833,
+    "Fitness (FI)": 0.5702643152944964,
+    "BBQ (BQ)": 0.9575727370451085
+  },
+  "optimization": {
+    "current_monthly_budget": 284930.69932952704,
+    "current_monthly_contribution": 11780704.34562649,
+    "optimal_monthly_contribution": 36742954.72118364,
+    "lift_pct": 211.89098413138794,
+    "optimal_allocation": {
+      "television": 5484.654500000001,
+      "radio": 117800.94552032521,
+      "panneaux": 24374.585315315315,
+      "social_media": 68951.71661583333,
+      "preroll": 67720.65016891892,
+      "banniere_web": 2447.4557805743243,
+      "circulaire_digitale": 1000.0
+    }
+  },
+  "roi_by_channel": {
+    "media_preroll": 321.4577182585306,
+    "media_social_media": 145.39655767617643,
+    "media_panneaux": 73.51339486206142,
+    "media_radio": 27.473460414795078,
+    "media_banniere_web": 8.436548874759644,
+    "media_television": -5.608072355526431,
+    "media_circulaire_digitale": -69.86107239901538
+  }
+}

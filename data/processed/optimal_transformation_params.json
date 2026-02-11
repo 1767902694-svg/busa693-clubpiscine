@@ -91,7 +91,7 @@
     ]
   },
   "calibration_method": "LOOCV_Ridge_cross_val_predict",
-  "calibration_date": "2026-02-10",
+  "calibration_date": "2026-02-11",
   "n_observations": 36,
   "n_bootstrap_samples": 200,
   "target": "total_all_revenue",
