@@ -64,8 +64,8 @@
     "In-Ground Pools (CR)": 0.5311693175193561,
     "Spas (SP)": 0.8548107750061071,
     "Furniture & Gazebo (ME&GA)": 0.9147377240410395,
-    "Fitness (FI)": 0.4153135104441382,
-    "BBQ (BQ)": 0.8870910503853032
+    "Fitness (FI)": 0.41531351044413833,
+    "BBQ (BQ)": 0.8870910503853031
   },
   "feature_cols": [
     "media_television_saturated",
