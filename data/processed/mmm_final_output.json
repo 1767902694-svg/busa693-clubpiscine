@@ -1,7 +1,8 @@
 {
   "source_notebook": "NB07_mmm_optimization",
   "model_source": "NB06_causal_inference",
-  "created": "2026-02-11 18:18:41",
+  "created": "2026-02-11 19:33:14",
+  "framework": "Two-step online optimization (Teaching.pdf)",
   "data_summary": {
     "n_months": 36,
     "fiscal_years": [
@@ -11,39 +12,60 @@
     ],
     "total_revenue": 512411601.65000004,
     "total_spend": 10257505.175862974,
-    "media_contribution": -1.7113052308559418e-08
+    "media_contribution": 477231305.1234746,
+    "media_pct_of_revenue": 93.1343676815196
   },
   "model_performance": {
-    "Total Revenue": 0.9659792038989087,
-    "Above-Ground Pools (HT)": 0.8544364578881829,
-    "In-Ground Pools (CR)": 0.6678908441146851,
-    "Spas (SP)": 0.9288136765430535,
-    "Furniture & Gazebo (ME&GA)": 0.9656876031915833,
-    "Fitness (FI)": 0.5702643152944964,
-    "BBQ (BQ)": 0.9575727370451085
+    "r2": 0.9659792038989087,
+    "r2_cv": 0.9118876710293979
   },
   "optimization": {
+    "method": "Non-linear (saturation curves) with SLSQP",
+    "constraints": [
+      "budget_equality",
+      "50/50_trad_digital_pm10",
+      "min_$500",
+      "max_50%"
+    ],
     "current_monthly_budget": 284930.69932952704,
-    "current_monthly_contribution": 11780704.34562649,
-    "optimal_monthly_contribution": 36742954.72118364,
-    "lift_pct": 211.89098413138794,
+    "current_monthly_response": 13118092.977341399,
+    "optimal_monthly_response": 35234643.20589781,
+    "lift_pct": 168.595772775493,
     "optimal_allocation": {
-      "television": 5484.654500000001,
-      "radio": 117800.94552032521,
-      "panneaux": 24374.585315315315,
-      "social_media": 68951.71661583333,
-      "preroll": 67720.65016891892,
-      "banniere_web": 2447.4557805743243,
-      "circulaire_digitale": 1000.0
+      "television": 500.00000000564773,
+      "radio": 81987.87391772967,
+      "panneaux": 31484.40581408204,
+      "social_media": 75968.21579256041,
+      "preroll": 93990.20380514234,
+      "banniere_web": 500.00000000662493,
+      "circulaire_digitale": 500.0000000003502
     }
   },
   "roi_by_channel": {
     "media_preroll": 321.4577182585306,
     "media_social_media": 145.39655767617643,
     "media_panneaux": 73.51339486206142,
-    "media_radio": 27.473460414795078,
+    "media_radio": 27.47346041479507,
     "media_banniere_web": 8.436548874759644,
     "media_television": -5.608072355526431,
     "media_circulaire_digitale": -69.86107239901538
+  },
+  "contribution_by_channel": {
+    "media_television": -25651895.18092492,
+    "media_radio": 102035429.82520467,
+    "media_panneaux": 17861824.34287013,
+    "media_social_media": 227290791.45015943,
+    "media_preroll": 182623099.7217566,
+    "media_banniere_web": 22076552.26903616,
+    "media_circulaire_digitale": -49004497.304627545
+  },
+  "saturation_pct_by_channel": {
+    "media_television": 44.36094336319895,
+    "media_radio": 63.854631419616105,
+    "media_panneaux": 24.170718303081134,
+    "media_social_media": 74.06344723827523,
+    "media_preroll": 38.84710565169964,
+    "media_banniere_web": 76.72292725065365,
+    "media_circulaire_digitale": 50.50067572694621
   }
 }

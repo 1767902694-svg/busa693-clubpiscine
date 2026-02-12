@@ -1,8 +1,8 @@
-Channel,Total Spend (3Y),ROAS,Significant,Recommendation,Action
-Preroll (Video),"$812,648",321.46,✓,+200%,↑ Increase
-Social Media,"$827,421",145.40,~,+200%,↑ Increase
-Panneaux (Outdoor),"$292,495",73.51,~,+200%,↑ Increase
-Radio,"$2,167,277",27.47,~,+96%,↑ Increase
-Web Banners,"$1,762,168",8.44,~,-95%,↓ Decrease
-Television,"$3,948,951",-5.61,~,-95%,↓ Decrease
-Digital Flyers,"$446,546",-69.86,~,-92%,↓ Decrease
+Channel,Spend (3Y),Contribution (3Y),ROAS,Significant,Saturation,Opt Change,Action
+Preroll (Video),"$812,648","$182,623,100",321.5,Yes,39%,+316%,Increase
+Social Media,"$827,421","$227,290,791",145.4,No,74%,+231%,Increase
+Panneaux (Outdoor),"$292,495","$17,861,824",73.5,No,24%,+288%,Increase
+Radio,"$2,167,277","$102,035,430",27.5,No,64%,+36%,Increase
+Web Banners,"$1,762,168","$22,076,552",8.4,No,77%,-99%,Decrease
+Television,"$3,948,951","$-25,651,895",-5.6,No,44%,-100%,Decrease
+Digital Flyers,"$446,546","$-49,004,497",-69.9,No,51%,-96%,Decrease

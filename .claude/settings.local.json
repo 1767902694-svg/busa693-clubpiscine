@@ -5,7 +5,11 @@
       "Bash(cat:*)",
       "Bash(jupyter nbconvert:*)",
       "Bash(grep:*)",
-      "Bash(wc:*)"
+      "Bash(wc:*)",
+      "Bash(pdftotext:*)",
+      "Bash(pip3 show:*)",
+      "Bash(conda info:*)",
+      "Read(//opt/homebrew/bin/**)"
     ]
   }
 }
