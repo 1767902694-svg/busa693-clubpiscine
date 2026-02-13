@@ -6,6 +6,11 @@ python-dotenv>=1.0.0
 requests>=2.28.0
 pyyaml>=6.0
 
+# Bayesian MMM
+pymc-marketing>=0.10.0
+pymc>=5.0.0
+arviz>=0.15.0
+
 # Azure (needed for bronze/silver/gold in Blob)
 azure-identity>=1.15.0
 azure-storage-blob>=12.19.0

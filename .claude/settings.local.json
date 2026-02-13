@@ -5,7 +5,12 @@
       "Bash(cat:*)",
       "Bash(jupyter nbconvert:*)",
       "Bash(grep:*)",
-      "Bash(wc:*)"
+      "Bash(wc:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.pymc-marketing.io)",
+      "Bash(pip show:*)",
+      "Bash(python:*)",
+      "Bash(ls:*)"
     ]
   }
 }
