@@ -1,7 +1,7 @@
 {
   "source_notebook": "NB07_mmm_optimization",
   "model_source": "NB06_causal_inference",
-  "created": "2026-02-11 18:18:41",
+  "created": "2026-02-13 18:22:27",
   "data_summary": {
     "n_months": 36,
     "fiscal_years": [
@@ -25,11 +25,11 @@
   "optimization": {
     "current_monthly_budget": 284930.69932952704,
     "current_monthly_contribution": 11780704.34562649,
-    "optimal_monthly_contribution": 36742954.72118364,
-    "lift_pct": 211.89098413138794,
+    "optimal_monthly_contribution": 36742954.95284324,
+    "lift_pct": 211.89098609782042,
     "optimal_allocation": {
       "television": 5484.654500000001,
-      "radio": 117800.94552032521,
+      "radio": 117800.95395244822,
       "panneaux": 24374.585315315315,
       "social_media": 68951.71661583333,
       "preroll": 67720.65016891892,
@@ -41,7 +41,7 @@
     "media_preroll": 321.4577182585306,
     "media_social_media": 145.39655767617643,
     "media_panneaux": 73.51339486206142,
-    "media_radio": 27.473460414795078,
+    "media_radio": 27.47346041479507,
     "media_banniere_web": 8.436548874759644,
     "media_television": -5.608072355526431,
     "media_circulaire_digitale": -69.86107239901538

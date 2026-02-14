@@ -41,31 +41,31 @@
     }
   },
   "ridge_alphas": {
-    "Total Revenue": 0.41320124001153363,
-    "Above-Ground Pools (HT)": 6.7341506577508214,
-    "In-Ground Pools (CR)": 38.53528593710527,
-    "Spas (SP)": 4.229242874389499,
-    "Furniture & Gazebo (ME&GA)": 2.1049041445120196,
-    "Fitness (FI)": 38.53528593710527,
-    "BBQ (BQ)": 0.9326033468832199
+    "Total Revenue": 9.545484566618338,
+    "Above-Ground Pools (HT)": 12.045035402587823,
+    "In-Ground Pools (CR)": 30.538555088334157,
+    "Spas (SP)": 5.994842503189409,
+    "Furniture & Gazebo (ME&GA)": 13.530477745798061,
+    "Fitness (FI)": 24.20128264794381,
+    "BBQ (BQ)": 27.1858824273294
   },
   "ridge_r2": {
-    "Total Revenue": 0.9659792038989087,
-    "Above-Ground Pools (HT)": 0.8544364578881829,
-    "In-Ground Pools (CR)": 0.6678908441146851,
-    "Spas (SP)": 0.9288136765430535,
-    "Furniture & Gazebo (ME&GA)": 0.9656876031915833,
-    "Fitness (FI)": 0.5702643152944964,
-    "BBQ (BQ)": 0.9575727370451085
+    "Total Revenue": 0.9161071839080773,
+    "Above-Ground Pools (HT)": 0.8273293205686709,
+    "In-Ground Pools (CR)": 0.6570447036084686,
+    "Spas (SP)": 0.9202437723601355,
+    "Furniture & Gazebo (ME&GA)": 0.8870723790941796,
+    "Fitness (FI)": 0.5749231762900533,
+    "BBQ (BQ)": 0.7938972955024368
   },
   "ridge_r2_cv": {
-    "Total Revenue": 0.9118876710293979,
-    "Above-Ground Pools (HT)": 0.7326592614568549,
-    "In-Ground Pools (CR)": 0.5311693175193561,
-    "Spas (SP)": 0.8548107750061071,
-    "Furniture & Gazebo (ME&GA)": 0.9147377240410395,
-    "Fitness (FI)": 0.4153135104441381,
-    "BBQ (BQ)": 0.8870910503853033
+    "Total Revenue": 0.8560399756125022,
+    "Above-Ground Pools (HT)": 0.7236009613576979,
+    "In-Ground Pools (CR)": 0.517937767208247,
+    "Spas (SP)": 0.8544004073322062,
+    "Furniture & Gazebo (ME&GA)": 0.8154081210004603,
+    "Fitness (FI)": 0.4163796575305555,
+    "BBQ (BQ)": 0.689577818163435
   },
   "feature_cols": [
     "media_television_saturated",
@@ -77,11 +77,9 @@
     "media_circulaire_digitale_saturated",
     "sin_1",
     "cos_1",
-    "sin_2",
-    "cos_2",
-    "total_sunshine_hours_scaled",
-    "total_precipitation_scaled",
-    "days_above_25_scaled"
+    "total_sunshine_hours_dev_scaled",
+    "total_precipitation_dev_scaled",
+    "days_above_25_dev_scaled"
   ],
   "media_channels": [
     "television",

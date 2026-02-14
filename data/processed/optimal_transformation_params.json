@@ -1,10 +1,10 @@
 {
   "decay_rates": {
-    "media_television": 0.1,
+    "media_television": 0.2,
     "media_radio": 0.5,
     "media_panneaux": 0.4,
-    "media_social_media": 0.4,
-    "media_preroll": 0.1,
+    "media_social_media": 0.1,
+    "media_preroll": 0.4,
     "media_banniere_web": 0.3,
     "media_circulaire_digitale": 0.3
   },
@@ -12,7 +12,7 @@
     "media_television": "data",
     "media_radio": "industry",
     "media_panneaux": "industry",
-    "media_social_media": "industry",
+    "media_social_media": "data",
     "media_preroll": "data",
     "media_banniere_web": "industry",
     "media_circulaire_digitale": "industry"
@@ -31,13 +31,13 @@
     "media_radio": "power",
     "media_panneaux": "power",
     "media_social_media": "power",
-    "media_preroll": "hill",
+    "media_preroll": "log",
     "media_banniere_web": "hill",
     "media_circulaire_digitale": "power"
   },
   "saturation_params": {
     "media_television": {
-      "scale": 127905.17055400001
+      "scale": 146393.60077383884
     },
     "media_radio": {
       "beta": 0.5
@@ -49,8 +49,7 @@
       "beta": 0.5
     },
     "media_preroll": {
-      "K": 51230.931804083135,
-      "alpha": 2
+      "scale": 37880.636797331
     },
     "media_banniere_web": {
       "K": 32834.13138780101,
@@ -63,7 +62,7 @@
   "confidence_intervals": {
     "media_television": [
       0.1,
-      0.2
+      0.3
     ],
     "media_radio": [
       0.4,
@@ -74,12 +73,12 @@
       0.5
     ],
     "media_social_media": [
-      0.3,
-      0.5
-    ],
-    "media_preroll": [
       0.1,
       0.2
+    ],
+    "media_preroll": [
+      0.3,
+      0.4
     ],
     "media_banniere_web": [
       0.2,
@@ -91,18 +90,16 @@
     ]
   },
   "calibration_method": "LOOCV_Ridge_cross_val_predict",
-  "calibration_date": "2026-02-11",
+  "calibration_date": "2026-02-13",
   "n_observations": 36,
   "n_bootstrap_samples": 200,
   "target": "total_all_revenue",
   "control_features": [
     "sin_1",
     "cos_1",
-    "sin_2",
-    "cos_2",
-    "total_sunshine_hours_scaled",
-    "total_precipitation_scaled",
-    "days_above_25_scaled"
+    "total_sunshine_hours_dev_scaled",
+    "total_precipitation_dev_scaled",
+    "days_above_25_dev_scaled"
   ],
-  "baseline_r2": 0.8265
+  "baseline_r2": 0.7347
 }
