@@ -1,49 +1,76 @@
 {
-  "source_notebook": "NB07_mmm_optimization",
+  "source_notebook": "NB07_budget_optimization",
   "model_source": "NB06_causal_inference",
-  "created": "2026-02-13 18:22:27",
+  "created": "2026-02-14 15:18:53",
   "data_summary": {
     "n_months": 36,
-    "fiscal_years": [
-      2023,
-      2024,
-      2025
-    ],
-    "total_revenue": 512411601.65000004,
-    "total_spend": 10257505.175862974,
-    "media_contribution": -1.7113052308559418e-08
+    "total_revenue_3y": 512411601.65000004,
+    "total_spend_3y": 10257505.175862974,
+    "monthly_budget": 284930.69932952704
   },
   "model_performance": {
-    "Total Revenue": 0.9659792038989087,
-    "Above-Ground Pools (HT)": 0.8544364578881829,
-    "In-Ground Pools (CR)": 0.6678908441146851,
-    "Spas (SP)": 0.9288136765430535,
-    "Furniture & Gazebo (ME&GA)": 0.9656876031915833,
-    "Fitness (FI)": 0.5702643152944964,
-    "BBQ (BQ)": 0.9575727370451085
+    "r2": 0.916278673487738,
+    "r2_cv": 0.8615916202331159
   },
   "optimization": {
-    "current_monthly_budget": 284930.69932952704,
-    "current_monthly_contribution": 11780704.34562649,
-    "optimal_monthly_contribution": 36742954.95284324,
-    "lift_pct": 211.89098609782042,
+    "current_response": 1911574.3622907426,
+    "optimal_response": 11976256.222123077,
+    "lift_pct": 526.512703788896,
+    "current_allocation": {
+      "television": 109693.09000000001,
+      "radio": 60202.128528528534,
+      "panneaux": 8124.861771771772,
+      "social_media": 22983.90553861111,
+      "preroll": 22573.550056306307,
+      "banniere_web": 48949.115611486486,
+      "circulaire_digitale": 12404.047822822824
+    },
     "optimal_allocation": {
-      "television": 5484.654500000001,
-      "radio": 117800.95395244822,
-      "panneaux": 24374.585315315315,
-      "social_media": 68951.71661583333,
-      "preroll": 67720.65016891892,
-      "banniere_web": 2447.4557805743243,
-      "circulaire_digitale": 1000.0
+      "television": 500.0,
+      "radio": 21164.73453883065,
+      "panneaux": 14070.283609072965,
+      "social_media": 88754.23718592965,
+      "preroll": 108542.7135678392,
+      "banniere_web": 23589.87166719384,
+      "circulaire_digitale": 28308.858762096734
     }
   },
-  "roi_by_channel": {
-    "media_preroll": 321.4577182585306,
-    "media_social_media": 145.39655767617643,
-    "media_panneaux": 73.51339486206142,
-    "media_radio": 27.47346041479507,
-    "media_banniere_web": 8.436548874759644,
-    "media_television": -5.608072355526431,
-    "media_circulaire_digitale": -69.86107239901538
-  }
+  "scenarios": [
+    {
+      "name": "Cut 15%",
+      "budget": 242191.09443009796,
+      "optimized_response": 9574251.184140367,
+      "vs_current": 7662676.821849625
+    },
+    {
+      "name": "Cut 10%",
+      "budget": 256437.62939657434,
+      "optimized_response": 10417498.070902284,
+      "vs_current": 8505923.708611542
+    },
+    {
+      "name": "Cut 5%",
+      "budget": 270684.16436305066,
+      "optimized_response": 11218616.088833285,
+      "vs_current": 9307041.726542544
+    },
+    {
+      "name": "Current",
+      "budget": 284930.69932952704,
+      "optimized_response": 11976256.222123077,
+      "vs_current": 10064681.859832335
+    },
+    {
+      "name": "Increase 10%",
+      "budget": 313423.7692624798,
+      "optimized_response": 13307748.032374268,
+      "vs_current": 11396173.670083527
+    },
+    {
+      "name": "Increase 20%",
+      "budget": 341916.83919543243,
+      "optimized_response": 14431618.868172228,
+      "vs_current": 12520044.505881486
+    }
+  ]
 }
