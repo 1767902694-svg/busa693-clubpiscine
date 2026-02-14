@@ -1,17 +1,17 @@
 {
   "decay_rates": {
-    "television": 0.1,
+    "television": 0.2,
     "radio": 0.5,
     "panneaux": 0.4,
-    "social_media": 0.4,
-    "preroll": 0.1,
+    "social_media": 0.1,
+    "preroll": 0.4,
     "banniere_web": 0.3,
     "circulaire_digitale": 0.3
   },
   "saturation_params": {
     "television": {
       "type": "log",
-      "scale": 127905.17055400001
+      "scale": 146393.60077383884
     },
     "radio": {
       "type": "power",
@@ -26,9 +26,8 @@
       "beta": 0.5
     },
     "preroll": {
-      "type": "hill",
-      "K": 51230.931804083135,
-      "alpha": 2
+      "type": "log",
+      "scale": 37880.636797331
     },
     "banniere_web": {
       "type": "hill",
@@ -41,31 +40,31 @@
     }
   },
   "ridge_alphas": {
-    "Total Revenue": 9.545484566618338,
-    "Above-Ground Pools (HT)": 12.045035402587823,
-    "In-Ground Pools (CR)": 30.538555088334157,
-    "Spas (SP)": 5.994842503189409,
-    "Furniture & Gazebo (ME&GA)": 13.530477745798061,
+    "Total Revenue": 10.722672220103231,
+    "Above-Ground Pools (HT)": 15.199110829529332,
+    "In-Ground Pools (CR)": 38.53528593710527,
+    "Spas (SP)": 7.56463327554629,
+    "Furniture & Gazebo (ME&GA)": 12.045035402587823,
     "Fitness (FI)": 24.20128264794381,
     "BBQ (BQ)": 27.1858824273294
   },
   "ridge_r2": {
-    "Total Revenue": 0.9161071839080773,
-    "Above-Ground Pools (HT)": 0.8273293205686709,
-    "In-Ground Pools (CR)": 0.6570447036084686,
-    "Spas (SP)": 0.9202437723601355,
-    "Furniture & Gazebo (ME&GA)": 0.8870723790941796,
-    "Fitness (FI)": 0.5749231762900533,
-    "BBQ (BQ)": 0.7938972955024368
+    "Total Revenue": 0.916278673487738,
+    "Above-Ground Pools (HT)": 0.8081176887568108,
+    "In-Ground Pools (CR)": 0.6159168252072428,
+    "Spas (SP)": 0.9125967687274416,
+    "Furniture & Gazebo (ME&GA)": 0.9035856716286925,
+    "Fitness (FI)": 0.5760074461445867,
+    "BBQ (BQ)": 0.8073062587174709
   },
   "ridge_r2_cv": {
-    "Total Revenue": 0.8560399756125022,
-    "Above-Ground Pools (HT)": 0.7236009613576979,
-    "In-Ground Pools (CR)": 0.517937767208247,
-    "Spas (SP)": 0.8544004073322062,
-    "Furniture & Gazebo (ME&GA)": 0.8154081210004603,
-    "Fitness (FI)": 0.4163796575305555,
-    "BBQ (BQ)": 0.689577818163435
+    "Total Revenue": 0.8615916202331159,
+    "Above-Ground Pools (HT)": 0.699414841930819,
+    "In-Ground Pools (CR)": 0.482671546627764,
+    "Spas (SP)": 0.8507396321151647,
+    "Furniture & Gazebo (ME&GA)": 0.8403761470102887,
+    "Fitness (FI)": 0.41606542522623147,
+    "BBQ (BQ)": 0.7117628456665321
   },
   "feature_cols": [
     "media_television_saturated",
