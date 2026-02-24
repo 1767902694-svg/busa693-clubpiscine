@@ -4,8 +4,8 @@
     "media_radio": 0.5,
     "media_panneaux": 0.4,
     "media_social_media": 0.1,
-    "media_preroll": 0.4,
-    "media_banniere_web": 0.3,
+    "media_preroll": 0.3,
+    "media_banniere_web": 0.2,
     "media_circulaire_digitale": 0.3
   },
   "decay_rate_sources": {
@@ -14,7 +14,7 @@
     "media_panneaux": "industry",
     "media_social_media": "data",
     "media_preroll": "data",
-    "media_banniere_web": "industry",
+    "media_banniere_web": "data",
     "media_circulaire_digitale": "industry"
   },
   "industry_benchmarks": {
@@ -32,7 +32,7 @@
     "media_panneaux": "power",
     "media_social_media": "power",
     "media_preroll": "log",
-    "media_banniere_web": "hill",
+    "media_banniere_web": "log",
     "media_circulaire_digitale": "power"
   },
   "saturation_params": {
@@ -49,11 +49,10 @@
       "beta": 0.5
     },
     "media_preroll": {
-      "scale": 37880.636797331
+      "scale": 32334.87549718175
     },
     "media_banniere_web": {
-      "K": 32834.13138780101,
-      "alpha": 2
+      "scale": 25146.761865324523
     },
     "media_circulaire_digitale": {
       "beta": 0.5
@@ -77,12 +76,12 @@
       0.2
     ],
     "media_preroll": [
-      0.3,
+      0.2,
       0.4
     ],
     "media_banniere_web": [
-      0.2,
-      0.4
+      0.1,
+      0.3
     ],
     "media_circulaire_digitale": [
       0.2,
@@ -90,7 +89,7 @@
     ]
   },
   "calibration_method": "LOOCV_Ridge_cross_val_predict",
-  "calibration_date": "2026-02-13",
+  "calibration_date": "2026-02-23",
   "n_observations": 36,
   "n_bootstrap_samples": 200,
   "target": "total_all_revenue",

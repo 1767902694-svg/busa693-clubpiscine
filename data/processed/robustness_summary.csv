@@ -1,7 +1,7 @@
 Channel,Adstock-stable,Saturation-stable,LOO-stable,CI-excludes-0
 television,Yes,Yes,Yes,Yes
 radio,Yes,Yes,Yes,Yes
-panneaux,Yes,Yes,Yes,No
+panneaux,Yes,Yes,No,No
 social_media,Yes,Yes,Yes,Yes
 preroll,Yes,Yes,Yes,Yes
 banniere_web,Yes,Yes,Yes,Yes
