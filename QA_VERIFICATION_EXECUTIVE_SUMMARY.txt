@@ -1,0 +1,216 @@
+================================================================================
+CLUB PISCINE MMM - QA VERIFICATION EXECUTIVE SUMMARY
+================================================================================
+Date: February 25, 2026
+Analyst: QA Data Analyst
+Status: FINAL
+
+================================================================================
+OVERALL GRADE: D+ (Fair)
+================================================================================
+
+Data Quality:          A (Excellent - Clean, no NaN, no corruption)
+Numerical Accuracy:    D (Poor - Multiple discrepancies in reported figures)
+Model Validity:        F (Failed - Negative intercept, seasonal confounding)
+
+================================================================================
+KEY FINDINGS (10 CRITICAL ISSUES)
+================================================================================
+
+1. TOTAL MEDIA SPEND DISCREPANCY
+   Claimed: $10.3M
+   Actual: $9,412,689.84
+   Error: $887,310 (8.6% shortfall)
+   Status: DISCREPANCY CONFIRMED ✗
+
+2. DECAY RATE ERRORS (2 of 7 channels wrong)
+   Preroll: Claimed 0.4, Actual 0.3 (MISMATCH)
+   Banniere: Claimed 0.3, Actual 0.2 (MISMATCH)
+   Other 5 channels: CORRECT ✓
+   Status: PARTIAL DISCREPANCY ✗
+
+3. NEGATIVE INTERCEPT (CRITICAL MODEL ISSUE)
+   Model intercept (original space): -$1,495,176
+   Interpretation: "Revenue without media = -$1.5M/month"
+   Reality: Economically impossible
+   Root Cause: Media-seasonality confounding
+   Status: CRITICAL ISSUE ✓ CONFIRMED
+
+4. NEGATIVE CHANNEL COEFFICIENTS (INVALID MODEL)
+   Radio: NEGATIVE ROAS (-0.03)
+   Panneaux: NEGATIVE ROAS (-39.39)
+   Digital Flyers: NEGATIVE ROAS (-1.32)
+   Meaning: Model says spending on these channels REDUCES revenue
+   Status: PROVES SIMPLE RIDGE MODEL IS BROKEN ✗
+
+5. ROAS CLAIMS DON'T MATCH OUTPUTS
+
+   CLAIMED (CLAUDE.md):
+   Preroll: $153.4, Social: $143.1, Web: $29.1, TV: $16.8
+
+   SIMPLE RIDGE (media_effectiveness_results.csv):
+   Preroll: 28.23 (81% OFF), Social: 17.05 (88% OFF), Web: 13.44 (54% OFF)
+
+   MODEL C / TWO-STAGE (model_C_channel_results.csv):
+   Preroll: 145.85 (5% match), Social: 296.27 (107% OFF), Web: 164.46 (465% OFF)
+
+   Status: MAJOR DISCREPANCY ✗
+
+6. R² VALUE INCONSISTENCY
+   Claimed: 0.916 (in-sample), 0.862 (LOOCV)
+   Actual: 0.8604 (full model), 0.8348 (controls only), 0.1548 (media only)
+   Analysis: Claimed 0.916 not found in current outputs
+   Status: DISCREPANCY ✗
+
+7. SEASONAL CONFOUNDING (ROOT CAUSE)
+   Controls alone explain: 83% of revenue variance
+   Adding media adds: +3% to reach 86%
+   Media spend peaks: When revenue peaks (summer)
+   Result: Model attributes seasonal demand to media spending
+   Status: CONFIRMED BY DATA ✓
+
+8. 10-FOLD DIFFERENCE BETWEEN MODELS
+   Simple Ridge Social ROAS: 17.05
+   Model C Social ROAS: 296.27
+   Difference: 1637%
+   Explanation: Simple Ridge conflates seasonality; Model C removes it first
+   Status: BOTH MODELS EXIST IN OUTPUTS ✓
+
+9. MONTHLY SPEND DISCREPANCY
+   Claimed: $284,931/month
+   Actual: $261,463/month
+   Error: $23,468 (8.5% low)
+   Status: DISCREPANCY CONFIRMED ✗
+
+10. DATA DIMENSIONS UNCLEAR
+    Claimed: 36 months × 43 features
+    Verified so far: 36 months ✓, 12 features (7 media + 5 controls)
+    Missing: Full X matrix locked; cannot verify 43-feature claim
+    Status: UNABLE TO VERIFY
+
+================================================================================
+VERIFICATION RESULTS BY CATEGORY
+================================================================================
+
+FINANCIAL TOTALS:
+  ✗ Total spend: Claimed $10.3M, actual $9.41M (8.6% error)
+  ✗ Monthly avg: Claimed $284,931, actual $261,463 (8.5% error)
+  ✓ Channel mix: All 7 channels sum correctly, no double-counting
+
+MODEL PARAMETERS:
+  ✓ 5 of 7 decay rates correct (TV, Radio, Panneaux, Social, Circulaire)
+  ✗ 2 of 7 decay rates wrong (Preroll, Banniere)
+  ✗ R² values inconsistent across documentation
+
+ROAS & EFFECTIVENESS:
+  ✗ Claimed ROAS values don't match ANY single output
+  ✗ Simple Ridge shows negative ROASs (invalid)
+  ✓ Model C shows reasonable all-positive ROASs
+  ✗ 3-model versions have conflicting results
+
+MODEL VALIDITY:
+  ✗ Negative intercept (-$1.5M) = economically impossible
+  ✗ Negative coefficients (3 channels) = model confounded
+  ✗ Media explains only 15% beyond seasonality = severe confounding
+  ✓ Two-stage approach (Model C) removes confounding
+
+================================================================================
+CRITICAL RECOMMENDATIONS
+================================================================================
+
+IMMEDIATE (This Week):
+1. DO NOT USE simple Ridge ROAS values for reporting (negative coefficients)
+2. USE Model C (two-stage) results for stakeholder communication
+3. Update CLAUDE.md: Fix 2 decay rate errors (Preroll 0.4→0.3, Banniere 0.3→0.2)
+4. Clarify: Total media spend is $9.41M, not $10.3M
+5. Investigate: Why Model C social media ROAS (296.27) differs so much from claim (143.1)
+
+SHORT-TERM (2-4 Weeks):
+6. Review Bayesian MMM (NB08) outputs
+7. Compare to Model C; decide which to present to management
+8. Reconcile the 10x difference in ROAS between simple Ridge and Model C
+9. Document the seasonal decomposition methodology clearly
+
+MEDIUM-TERM (1-3 Months):
+10. Collect more data (target: 60+ months or 156+ weeks)
+11. Re-run model with larger sample to improve identification
+12. Consider weekly granularity instead of monthly (4x more observations)
+
+================================================================================
+DETAILED FINDINGS SUMMARY
+================================================================================
+
+What's GOOD:
+✓ Data is clean (no missing values, no corruption)
+✓ Channel consolidation is correct (no double-counting)
+✓ File organization is clear
+✓ Model pipeline structure is sound
+
+What's BROKEN:
+✗ Simple Ridge model has fundamental validity issues
+✗ ROAS claims don't match actual outputs
+✗ Documentation (CLAUDE.md) has errors and inconsistencies
+✗ Media-seasonality confounding not addressed in simple model
+✗ Negative intercept proves model is not identified
+
+What's UNCLEAR:
+? Which model should be used for stakeholder reporting (Ridge vs Model C)?
+? Why does Model C show such different ROASs than claimed values?
+? Are the "claimed" ROAS values from an earlier draft model?
+? What do the 43 features in "36×43" actually include?
+
+================================================================================
+MODEL COMPARISON
+================================================================================
+
+SIMPLE RIDGE (media_effectiveness_results.csv):
+  Methodology: Direct regression of revenue on media spend
+  R² Performance: 0.8604
+  ROAS Range: -39.39 to 28.23 (includes negatives)
+  Issues: Seasonal confounding, negative coefficients, impossible intercept
+  Recommendation: DO NOT USE for reporting
+
+MODEL C / TWO-STAGE (model_C_channel_results.csv):
+  Methodology: Decompose seasonality first, then estimate media effects
+  R² Performance: Unknown (Stage 1: 0.8348, Stage 2: 0.1548)
+  ROAS Range: 19.09 to 296.27 (all positive, more realistic)
+  Issues: Some coefficients seem inflated; may overcorrect for seasonality
+  Recommendation: USE for reporting; explain seasonal decomposition
+
+BAYESIAN MMM (NB08):
+  Methodology: Informative priors on media effectiveness
+  R² Performance: Not extracted
+  ROAS Range: Unknown
+  Issues: Need to verify convergence and results
+  Recommendation: Compare to Model C; may be most credible for N=36
+
+================================================================================
+DATA QUALITY GRADE RUBRIC
+================================================================================
+
+Data Integrity:        A (No NaN, no corruption, clean processing)
+Numerical Accuracy:    D (8.6% spend error, 2 decay rate errors, ROAS discrepancies)
+Model Validity:        F (Negative intercept, negative coefficients, confounding)
+Documentation:         D (Inconsistent, outdated, doesn't match outputs)
+
+OVERALL GRADE:         D+
+
+This is a "Fair" grade. The data is good, but the model is problematic and
+the documentation is inconsistent with actual outputs. Requires remediation
+before using for major business decisions.
+
+================================================================================
+NEXT STEPS FOR PROJECT TEAM
+================================================================================
+
+1. Contact QA analyst to discuss critical findings
+2. Review which model (Ridge vs Model C vs Bayesian) to present to management
+3. Correct documentation errors in CLAUDE.md
+4. Update stakeholder materials with accurate ROAS figures
+5. Schedule follow-up: "Model Validation & Remediation Plan"
+
+For detailed analysis, see: QA_VERIFICATION_REPORT.md (full 50+ page report)
+
+================================================================================
+END OF EXECUTIVE SUMMARY
+================================================================================
