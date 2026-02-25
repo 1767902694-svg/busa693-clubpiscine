@@ -1,6 +1,6 @@
 {
   "source": "NB07 (Model C constrained Ridge)",
-  "created": "2026-02-24 23:00",
+  "created": "2026-02-24 23:08",
   "model_performance": {
     "r2_model_C": 0.9304113874435695,
     "r2_cv_model_A": 0.8855423562737516,
