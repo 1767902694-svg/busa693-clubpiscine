@@ -1,15 +1,15 @@
 {
   "source": "NB07 (Model C constrained Ridge)",
-  "created": "2026-02-24 23:08",
+  "created": "2026-02-24 23:54",
   "model_performance": {
     "r2_model_C": 0.9304113874435695,
-    "r2_cv_model_A": 0.8855423562737516,
-    "media_share_pct": 6.145517481022059e-15
+    "r2_cv_model_A": 0.8855423562737514,
+    "media_share_pct": 5.554820791533802e-15
   },
   "optimization": {
-    "current_response": 1753928.7103872197,
-    "optimal_response": 5768612.093209108,
-    "lift_pct": 228.89661130728376,
+    "current_response": 1753928.7103872206,
+    "optimal_response": 5768612.456373521,
+    "lift_pct": 228.89663201305174,
     "current_allocation": {
       "television": 109693.09000000001,
       "radio": 60202.128528528534,
@@ -23,10 +23,10 @@
       "television": 50000.0,
       "radio": 30000.0,
       "panneaux": 5000.0,
-      "social_media": 58075.89643405109,
-      "preroll": 35450.49829338899,
-      "banniere_web": 35072.902944333524,
-      "circulaire_digitale": 8644.767963579814
+      "social_media": 58116.08991000821,
+      "preroll": 35413.39278327986,
+      "banniere_web": 35073.76138656355,
+      "circulaire_digitale": 8640.821555502029
     }
   }
 }

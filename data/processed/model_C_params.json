@@ -16,9 +16,9 @@
   },
   "ridge_alpha": 10.722672220103231,
   "r2": 0.9304170004665001,
-  "media_share_pct": -2.0986771804414517e-14,
-  "base_share_pct": 99.99767970711574,
-  "model_A_media_share_pct": 1.2949888961857943e-14,
+  "media_share_pct": 144.2588597574748,
+  "base_share_pct": -44.261180050359094,
+  "model_A_media_share_pct": 86.78744700906763,
   "model_A_r2_cv": 0.8620599484458337,
   "decay_rates": {
     "television": 0.2,
