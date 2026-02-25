@@ -39,13 +39,31 @@
     }
   },
   "ridge_alphas": {
-    "Total Revenue": 10.722672220103231
+    "Total Revenue": 10.722672220103231,
+    "Above-Ground Pools (HT)": 15.199110829529332,
+    "In-Ground Pools (CR)": 38.53528593710527,
+    "Spas (SP)": 7.56463327554629,
+    "Furniture & Gazebo (ME&GA)": 15.199110829529332,
+    "Fitness (FI)": 19.179102616724887,
+    "BBQ (BQ)": 21.544346900318846
   },
   "ridge_r2": {
-    "Total Revenue": 0.9304170004665001
+    "Total Revenue": 0.9304113874435695,
+    "Above-Ground Pools (HT)": 0.845294638413922,
+    "In-Ground Pools (CR)": 0.6180116789070196,
+    "Spas (SP)": 0.9172405293391712,
+    "Furniture & Gazebo (ME&GA)": 0.9050573517796292,
+    "Fitness (FI)": 0.5616511574848079,
+    "BBQ (BQ)": 0.8413287015306362
   },
   "ridge_r2_cv": {
-    "Total Revenue": 0.8620599484458337
+    "Total Revenue": 0.8855423562737516,
+    "Above-Ground Pools (HT)": 0.7554602845537949,
+    "In-Ground Pools (CR)": 0.487621359753418,
+    "Spas (SP)": 0.8571249462389009,
+    "Furniture & Gazebo (ME&GA)": 0.8506463862953156,
+    "Fitness (FI)": 0.4085117913849061,
+    "BBQ (BQ)": 0.753778296799305
   },
   "feature_cols": [
     "media_television_saturated",
@@ -71,6 +89,12 @@
     "circulaire_digitale"
   ],
   "target_cols": [
-    "total_all_revenue"
+    "total_all_revenue",
+    "piscines_hors_terre_revenue",
+    "piscines_creusees_revenue",
+    "spas_revenue",
+    "meubles_gazebo_revenue",
+    "fitness_revenue",
+    "bbq_revenue"
   ]
 }
