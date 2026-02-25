@@ -1,0 +1,118 @@
+{
+  "intercept": 14233325.3388908,
+  "coefs": {
+    "media_television_saturated": 1740633.799127303,
+    "media_radio_saturated": 1193228.9005947374,
+    "media_panneaux_saturated": 261412.22531105074,
+    "media_social_media_saturated": 1317356.6609310885,
+    "media_preroll_saturated": 2192998.402549066,
+    "media_banniere_web_saturated": 1410943.5630509208,
+    "media_circulaire_digitale_saturated": 762923.6676987616,
+    "sin_1": 625206.6962432299,
+    "cos_1": -1562446.9619485,
+    "total_sunshine_hours_dev_scaled": 525497.0918832393,
+    "total_precipitation_dev_scaled": 284129.8312215196,
+    "days_above_25_dev_scaled": -220475.32220616264
+  },
+  "ridge_alpha": 10.722672220103231,
+  "r2": 0.9304170004665001,
+  "media_share_pct": -2.0986771804414517e-14,
+  "base_share_pct": 99.99767970711574,
+  "model_A_media_share_pct": 1.2949888961857943e-14,
+  "model_A_r2_cv": 0.8620599484458337,
+  "decay_rates": {
+    "television": 0.2,
+    "radio": 0.5,
+    "panneaux": 0.4,
+    "social_media": 0.1,
+    "preroll": 0.3,
+    "banniere_web": 0.2,
+    "circulaire_digitale": 0.3
+  },
+  "saturation_params": {
+    "television": {
+      "type": "log",
+      "scale": 146393.60077383884
+    },
+    "radio": {
+      "type": "power",
+      "beta": 0.5
+    },
+    "panneaux": {
+      "type": "power",
+      "beta": 0.5
+    },
+    "social_media": {
+      "type": "power",
+      "beta": 0.5
+    },
+    "preroll": {
+      "type": "log",
+      "scale": 32334.87549718175
+    },
+    "banniere_web": {
+      "type": "log",
+      "scale": 25146.76186532452
+    },
+    "circulaire_digitale": {
+      "type": "power",
+      "beta": 0.5
+    }
+  },
+  "feature_cols": [
+    "media_television_saturated",
+    "media_radio_saturated",
+    "media_panneaux_saturated",
+    "media_social_media_saturated",
+    "media_preroll_saturated",
+    "media_banniere_web_saturated",
+    "media_circulaire_digitale_saturated",
+    "sin_1",
+    "cos_1",
+    "total_sunshine_hours_dev_scaled",
+    "total_precipitation_dev_scaled",
+    "days_above_25_dev_scaled"
+  ],
+  "media_channels": [
+    "television",
+    "radio",
+    "panneaux",
+    "social_media",
+    "preroll",
+    "banniere_web",
+    "circulaire_digitale"
+  ],
+  "scaler_mean": [
+    0.5519161227361599,
+    307.9883449424778,
+    79.42288116476065,
+    156.73748441900403,
+    0.6646533946062779,
+    0.7229112457553553,
+    118.55715953334182,
+    -6.1679056923619804e-18,
+    -5.2427198385076835e-17,
+    -5.859510407743882e-17,
+    -1.61907524424502e-17,
+    1.2335811384723961e-17
+  ],
+  "scaler_scale": [
+    0.4588776194339166,
+    149.87412725663248,
+    84.97587497440014,
+    30.321972030139996,
+    0.398699835400573,
+    0.2697803135264772,
+    60.414330346967496,
+    0.7071067811865476,
+    0.7071067811865476,
+    0.9860132971832695,
+    0.9860132971832694,
+    0.9860132971832696
+  ],
+  "frisch_waugh_significant": [
+    "television",
+    "preroll",
+    "banniere_web"
+  ]
+}

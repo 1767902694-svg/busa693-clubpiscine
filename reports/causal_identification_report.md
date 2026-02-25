@@ -1,6 +1,6 @@
 # Feature Engineering & Parameter Calibration Report
 
-Generated: 2026-02-23 21:11:10.192699
+Generated: 2026-02-24 20:32:22.018157
 
 36 monthly observations, 7 channels, target: total_all_revenue
 

@@ -1,8 +1,8 @@
-Channel,Adstock-stable,Saturation-stable,LOO-stable,CI-excludes-0
-television,Yes,Yes,Yes,Yes
-radio,Yes,Yes,Yes,Yes
-panneaux,Yes,Yes,No,No
-social_media,Yes,Yes,Yes,Yes
-preroll,Yes,Yes,Yes,Yes
-banniere_web,Yes,Yes,Yes,Yes
-circulaire_digitale,Yes,Yes,Yes,Yes
+Channel,Constrained-positive,CI-excludes-0,De-season-sig,Overall
+television,Yes,No,Yes,LOW
+radio,Yes,No,No,LOW
+panneaux,Yes,No,No,NONE
+social_media,Yes,No,No,NONE
+preroll,Yes,No,Yes,NONE
+banniere_web,Yes,No,Yes,NONE
+circulaire_digitale,Yes,No,No,LOW
