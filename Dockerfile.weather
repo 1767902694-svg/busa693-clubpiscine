@@ -1,0 +1,11 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.ingest.txt .
+RUN pip install --no-cache-dir -r requirements.ingest.txt
+
+COPY src/ src/
+
+# 这里改成你真正要跑的脚本路径
+CMD ["python", "src/open_meteo_export_to_adls.py"]
