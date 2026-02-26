@@ -1,15 +1,18 @@
 {
-  "source": "NB07 (Model C constrained Ridge)",
-  "created": "2026-02-24 23:54",
+  "source": "NB07 (Two-Stage Non-Negative Ridge from NB06B)",
+  "created": "2026-02-26 15:10",
   "model_performance": {
-    "r2_model_C": 0.9304113874435695,
-    "r2_cv_model_A": 0.8855423562737514,
-    "media_share_pct": 5.554820791533802e-15
+    "model_type": "two_stage_nonneg_ridge",
+    "r2_full": 0.8593681034880413,
+    "r2_seasonal_s1": 0.8347681868858572,
+    "r2_media_s2": 0.1488812362374211,
+    "media_share_pct": 10.862020904610466,
+    "seasonal_share_pct": 100.0
   },
   "optimization": {
-    "current_response": 1753928.7103872206,
-    "optimal_response": 5768612.456373521,
-    "lift_pct": 228.89663201305174,
+    "current_response": 980053.3782241641,
+    "optimal_response": 1833660.3987384045,
+    "lift_pct": 87.09801317770652,
     "current_allocation": {
       "television": 109693.09000000001,
       "radio": 60202.128528528534,
@@ -21,12 +24,12 @@
     },
     "optimal_allocation": {
       "television": 50000.0,
-      "radio": 30000.0,
-      "panneaux": 5000.0,
-      "social_media": 58116.08991000821,
-      "preroll": 35413.39278327986,
-      "banniere_web": 35073.76138656355,
-      "circulaire_digitale": 8640.821555502029
+      "radio": 54181.91567567568,
+      "panneaux": 7312.375594594595,
+      "social_media": 15000.0,
+      "preroll": 64586.13132454245,
+      "banniere_web": 20000.0,
+      "circulaire_digitale": 11163.643040540543
     }
   }
 }

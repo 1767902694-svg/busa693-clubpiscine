@@ -1,0 +1,409 @@
+================================================================================
+CLUB PISCINE MMM: NUMERIC AUDIT SUMMARY
+================================================================================
+Date: February 26, 2026
+Status: CRITICAL INCONSISTENCY DETECTED
+
+================================================================================
+1. NB06B EXPECTED COEFFICIENTS (Direct Notebook Output)
+================================================================================
+
+Bootstrap NNLS-Constrained (Total Revenue):
+  television:            354,333   CI=[82,025, 568,346]
+  radio:                 0         CI=[0, 207,512]
+  panneaux:              0         CI=[0, 161,850]
+  social_media:          116,061   CI=[0, 349,621]
+  preroll:               392,616   CI=[203,830, 543,347]  ← HIGHEST
+  banniere_web:          108,779   CI=[0, 290,246]
+  circulaire_digitale:   0         CI=[0, 226,184]
+
+Key Finding: NB06B applies NNLS constraint, zeroing Radio, Panneaux, Circulaire_Digitale
+
+================================================================================
+2. COEFFICIENTS STORED: causal_model_params.json (NB06 Two-Stage Ridge)
+================================================================================
+
+Stage 2 - Standardized Scale:
+  television_saturated:        357,026.87   ✓ Close to NB06B (354K)
+  radio_saturated:             -976.26      ✗ NEGATIVE (NB06B: 0)
+  panneaux_saturated:          -100,167.26  ✗ NEGATIVE (NB06B: 0)
+  social_media_saturated:      121,553.23   ✓ Close to NB06B (116K)
+  preroll_saturated:           400,323.42   ✓ Close to NB06B (393K)
+  banniere_web_saturated:      119,843.31   ✓ Close to NB06B (109K)
+  circulaire_digitale_saturated: -8,252.57  ✗ NEGATIVE (NB06B: 0)
+
+Stage 2 - Original Data Scale:
+  television_saturated:        1,059,960.34
+  radio_saturated:             -3,084.26
+  panneaux_saturated:          -230,479.61
+  social_media_saturated:      697,629.23
+  preroll_saturated:           1,277,797.77
+  banniere_web_saturated:      540,708.85
+  circulaire_digitale_saturated: -24,771.09
+
+STATUS: Unconstrained Ridge solution (not NNLS-constrained as NB06B would produce)
+
+================================================================================
+3. MODEL C PARAMETERS (model_C_params.json - Full Ridge with Controls)
+================================================================================
+
+Model C Media Coefficients:
+  television_saturated:        1,740,633.80  (4.9× higher than Ridge)
+  radio_saturated:             1,193,228.90  (POSITIVE sign flip)
+  panneaux_saturated:          261,412.23    (POSITIVE sign flip)
+  social_media_saturated:       1,317,356.66
+  preroll_saturated:            2,192,998.40
+  banniere_web_saturated:       1,410,943.56
+  circulaire_digitale_saturated: 762,923.67   (POSITIVE sign flip)
+
+Model Metadata:
+  Intercept:            $14,233,325
+  Ridge alpha:          10.7227
+  R²:                   0.9304 (very high)
+  Media share:          144.26% (INVALID — exceeds 100%)
+  Base share:           -44.26% (INVALID — negative)
+  Significant channels: [television, preroll, banniere_web] (Frisch-Waugh)
+
+CRITICAL ISSUE: Model C includes seasonal controls in same equation,
+inflating coefficients and producing implausible media share of 144%
+
+================================================================================
+4. MODEL FIT COMPARISON
+================================================================================
+
+Two-Stage Ridge (causal_model_params.json):
+  Full Model R²:          0.8604
+  Seasonal (Stage 1):     0.8348
+  Media (Stage 2):        0.1548
+  Media Share:            10.5045%
+  Interpretation:         Separable: 89.5% seasonal, 10.5% media
+
+Model C (model_C_params.json):
+  Full Model R²:          0.9304 (+0.07)
+  Media Share:            144.26% (IMPOSSIBLE)
+  Base Share:             -44.26% (IMPOSSIBLE)
+  Interpretation:         Confounded: controls + media effects mixed
+
+NB07 mmm_final_output.json:
+  R² (Model C):           0.9304
+  Media Share:            5.5e-15 ≈ 0% (practically zero)
+  Source Claim:           "NB07 (Model C constrained Ridge)"
+
+================================================================================
+5. OPTIMIZATION RESULTS (mmm_final_output.json)
+================================================================================
+
+Current (Actual Spend):
+  television:            $109,693/month
+  radio:                 $60,202/month
+  preroll:               $25,066/month
+  banniere_web:          $22,989/month
+  social_media:          $22,984/month
+  circulaire_digitale:   $12,404/month
+  panneaux:              $8,125/month
+  ────────────────────────────────────
+  TOTAL:                 $261,464/month
+
+Optimal (Recommended):
+  social_media:          $58,116/month     (+153% change)
+  television:            $50,000/month     (-54% change)
+  preroll:               $35,413/month     (+41% change)
+  banniere_web:          $35,074/month     (+53% change)
+  radio:                 $30,000/month     (-50% change)
+  circulaire_digitale:   $8,641/month      (-30% change)
+  panneaux:              $5,000/month      (-38% change)
+  ────────────────────────────────────
+  TOTAL:                 $222,244/month    (-15% reduction)
+
+Response Impact:
+  Current response:      $1,753,929/month
+  Optimal response:      $5,768,612/month
+  Lift:                  +$4,014,683/month
+  Lift %:                +228.9%
+
+Key Finding: Even with 15% budget cut and optimized allocation,
+              response increases by 229%
+
+================================================================================
+6. CHANNEL ROAS (From NB07 Executive Summary)
+================================================================================
+
+Channel ROAS Summary:
+  Social_Media:          157.8x  (HIGH confidence)
+  Preroll:               119.8x  (HIGH confidence)
+  Banniere_Web:          128.2x  (HIGH confidence)
+  Circulaire_Digitale:   76.8x   (HIGH confidence)
+  Panneaux:              36.2x   (MEDIUM confidence)
+  Radio:                 23.8x   (HIGH confidence)
+  Television:            16.0x   (HIGH confidence)
+
+CRITICAL: All channels show positive ROAS, including Radio and Panneaux.
+This contradicts NB06 stored coefficients (negative for Radio, Panneaux).
+Inference: Response curves use Model C (all positive), not NB06 (mixed signs).
+
+================================================================================
+7. SCENARIO ANALYSIS RESULTS (From NB07 Notebook Output)
+================================================================================
+
+Budget Scenario Optimization:
+
+Cut 15%:
+  Budget:     $222,244/month
+  Response:   $2,401,629/month
+  vs Current: +36.9% (still beats current!)
+
+Cut 10%:
+  Budget:     $235,317/month
+  Response:   $3,583,771/month
+  vs Current: +104.3%
+
+Cut 5%:
+  Budget:     $248,390/month
+  Response:   $4,703,733/month
+  vs Current: +168.2%
+
+Current (1.0×):
+  Budget:     $261,464/month
+  Response:   $5,768,612/month
+  vs Current: +228.9%
+
+Increase 10%:
+  Budget:     $287,610/month
+  Response:   $7,732,921/month
+  vs Current: +340.9%
+
+Increase 20%:
+  Budget:     $313,756/month
+  Response:   $9,218,316/month
+  vs Current: +425.6%
+
+KEY FINDING: Budget can be cut 15% with OPTIMIZED allocation
+             and still exceed current performance by 37%
+
+================================================================================
+8. DECAY RATES (From causal_model_params.json)
+================================================================================
+
+Adstock Decay Rates (θ parameter):
+  television:            0.2  (20% carryover)
+  radio:                 0.5  (50% carryover)
+  panneaux:              0.4  (40% carryover)
+  social_media:          0.1  (10% carryover - very short-lived)
+  preroll:               0.3  (30% carryover)
+  banniere_web:          0.2  (20% carryover)
+  circulaire_digitale:   0.3  (30% carryover)
+
+Interpretation: TV has longest carryover (brand building),
+                Social Media has shortest (tactical, immediate response)
+
+================================================================================
+9. SATURATION PARAMETERS (From causal_model_params.json)
+================================================================================
+
+Hill Saturation Function: S(x) = x^α / (K^α + x^α)
+All use alpha=2 (quadratic saturation)
+
+K Parameter (Half-Saturation Point):
+  television:            $146,393.60
+  radio:                 $109,085.56
+  panneaux:              $4,875.57
+  social_media:          $22,731.11
+  preroll:               $32,334.88
+  banniere_web:          $25,146.76
+  circulaire_digitale:   $13,398.32
+
+Interpretation: Panneaux saturates earliest ($4.9K), TV latest ($146.4K)
+
+================================================================================
+10. RIDGE REGULARIZATION ALPHAS (From causal_model_params.json)
+================================================================================
+
+Ridge Alpha (Stage 2 - by product category):
+  Total Revenue:         89.07
+  Above-Ground Pools:    252.35
+  In-Ground Pools:       821.43
+  Spas:                  16.83
+  Furniture & Gazebo:    191.16
+  Fitness:               10000.0 (maximum)
+  BBQ:                   10000.0 (maximum)
+
+Interpretation: Fitness and BBQ use max regularization (sparse/noisy data),
+                In-Ground Pools require high regularization (sparse category)
+
+================================================================================
+11. MEDIA SHARE OF REVENUE (Three Different Values)
+================================================================================
+
+Source 1: causal_model_params.json (Two-Stage Ridge)
+  Media Share:           10.5045%
+  Seasonal Share:        100.0000%  (Note: > 100% because both measured)
+  Interpretation:        Media explains ~10.5% of 3-year revenue
+
+Source 2: model_C_params.json (Full Ridge with Controls)
+  Media Share:           144.26%
+  Base Share:            -44.26%
+  Interpretation:        INVALID - exceeds 100%
+
+Source 3: mmm_final_output.json (NB07 Output)
+  Media Share:           5.5545e-15 ≈ 0%
+  Interpretation:        Reported as zero; masks true attribution
+
+CRITICAL ISSUE: Three conflicting values due to different model formulations
+
+================================================================================
+12. CONFIDENCE RATINGS (From NB07)
+================================================================================
+
+Statistical Confidence by Channel (from Frisch-Waugh test):
+  television:            HIGH
+  radio:                 HIGH
+  panneaux:              MEDIUM
+  social_media:          HIGH
+  preroll:               HIGH
+  banniere_web:          HIGH
+  circulaire_digitale:   HIGH
+
+Flexibility Bounds (based on confidence):
+  HIGH confidence:       ±100% of current spend range
+  MEDIUM confidence:     ±50% of current spend range
+  LOW confidence:        ±20% of current spend range
+  NONE confidence:       ±10% of current spend range
+
+================================================================================
+13. BUSINESS CONSTRAINTS (Applied by NB07 Optimizer)
+================================================================================
+
+Channel Spend Floors and Ceilings:
+  television:            [$50K, $180K]  (Brand: "TV creates halo effect")
+  radio:                 [$30K, $90K]   (Regional: "3-day promo events")
+  panneaux:              [$5K, $30K]    (Commute: "digital billboards")
+  social_media:          [$15K, $90K]   (Targeting: "ad fatigue ceiling")
+  preroll:               [$15K, $110K]  (Video: "highest ROAS, storytelling")
+  banniere_web:          [$20K, $80K]   (Mid-funnel: "consideration driver")
+  circulaire_digitale:   [$8K, $40K]    (Conversion: "digital flyers")
+
+Production Ratio:
+  Media allocation:      85% of budget
+  Production allocation: 15% of budget
+
+Traditional vs Digital Mix:
+  Traditional:           35-65% range (targeting ~50/50 equilibrium)
+  Digital:               35-65% range
+
+================================================================================
+14. KEY DATES AND TIMESTAMPS
+================================================================================
+
+Model Training Period:
+  Start:     October 31, 2022
+  End:       October 27, 2025
+  Duration:  3 fiscal years (36 monthly observations)
+
+File Timestamps:
+  causal_model_params.json:      Feb 25, 05:47
+  model_C_params.json:           Feb 25, 04:52
+  mmm_final_output.json:         Feb 25, 04:54
+  mmm_executive_summary.csv:     Feb 25, 04:54
+  saturation_curves.csv:         Feb 25, 05:47
+
+NB07 Execution:
+  Created:   2026-02-24 23:54
+  Source:    "NB07 (Model C constrained Ridge)"
+
+================================================================================
+15. REVENUE AND SPEND TOTALS
+================================================================================
+
+3-Year Aggregates:
+  Total Sales Revenue:           $512.4M
+  Total Media Spend:             $10.3M (estimated)
+  Aggregate ROAS:                49.7x (if media-attributed)
+
+Monthly Averages:
+  Current Monthly Revenue:       $14.2M  (from data)
+  Current Monthly Spend:         $261.5K
+  Current Monthly ROAS:          54.4x   (actual spend-to-revenue ratio)
+
+Optimization Impact (per month):
+  Current response estimate:     $1.75M
+  Optimal response estimate:     $5.77M
+  Implied ROAS improvement:      3.3× (from mixed modeling approaches)
+
+================================================================================
+16. DATA FILE STATUS
+================================================================================
+
+READABLE FILES:
+  ✓ causal_model_params.json             (Two-Stage Ridge)
+  ✓ model_C_params.json                  (Full Ridge)
+  ✓ mmm_final_output.json                (Optimization summary)
+  ✓ config/params.yaml                   (Hyperparameters)
+  ✓ Notebooks (06b_causal_inference_improved.ipynb, 07_mmm_roi_optimization.ipynb)
+
+INACCESSIBLE FILES (Resource Deadlock):
+  ✗ media_effectiveness_results.csv      (Channel ROAS details)
+  ✗ saturation_curves.csv                (Interpolation data)
+  ✗ robustness_summary.csv               (Confidence intervals)
+  ✗ mmm_optimization_results.csv         (Detailed reallocation)
+  ✗ mmm_executive_summary.csv            (Summary table)
+  ✗ mmm_scenario_analysis.csv            (Scenario details)
+  ✗ model_B_frisch_waugh.csv             (Statistical tests)
+
+================================================================================
+17. CRITICAL MISMATCHES SUMMARY
+================================================================================
+
+Mismatch #1: Coefficient Magnitude
+  NB06B NNLS (TV):           354,333
+  Stored NB06 Ridge (TV):    1,059,960
+  Model C (TV):              1,740,634
+  Ratio:                     4.9× difference
+
+Mismatch #2: Negative vs Positive (Radio)
+  NB06B NNLS:                0 (zeroed)
+  Stored NB06 Ridge:         -3,084 (negative)
+  Model C:                   1,193,229 (positive)
+  Direction conflict:        All three different
+
+Mismatch #3: Media Share
+  NB06B implied:             ~10%
+  causal_model_params.json:  10.5%
+  model_C_params.json:       144.26% (invalid)
+  mmm_final_output.json:     0% (rounded from ~10%)
+  Variance:                  0% to 144% range
+
+Mismatch #4: R² Value
+  NB06 Stage 2 only:         0.1548
+  NB06 Full model:           0.8604
+  Model C (reported):        0.9304
+  Conflicting reference:     Which is "the" model?
+
+Mismatch #5: Source Attribution
+  Code loads:                causal_model_params.json (NB06)
+  Output claims:             Model C
+  Response curves use:       Model C (inferred from all-positive ROAS)
+  True model:                UNCLEAR
+
+================================================================================
+18. AUDIT CONCLUSION
+================================================================================
+
+Data Quality:         GOOD (verified in prior audits)
+Parameter Consistency: POOR (three models in flight)
+Output Clarity:       POOR (source attribution unclear)
+Client Readiness:     NOT READY (requires model version consolidation)
+
+CRITICAL ACTIONS REQUIRED:
+  1. Determine authoritative model (NB06B NNLS vs Model C Full Ridge)
+  2. Regenerate all output files with consistent metadata
+  3. Update mmm_final_output.json source attribution
+  4. Verify saturation_curves.csv uses correct coefficients
+  5. Resolve media share attribution (10.5% vs 144% vs 0%)
+
+RECOMMENDATION:
+  Do NOT present to client until above issues are resolved.
+  Estimated effort: 2-4 hours to consolidate models and regenerate outputs.
+
+================================================================================
+END OF AUDIT
+================================================================================

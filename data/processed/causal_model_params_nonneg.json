@@ -1,0 +1,170 @@
+{
+  "model_type": "two_stage_nonneg_ridge",
+  "stage1_description": "Revenue ~ Controls (seasonal baseline)",
+  "stage2_description": "Residuals ~ Media (incremental lift)",
+  "decay_rates": {
+    "television": 0.2,
+    "radio": 0.5,
+    "panneaux": 0.4,
+    "social_media": 0.1,
+    "preroll": 0.3,
+    "banniere_web": 0.2,
+    "circulaire_digitale": 0.3
+  },
+  "saturation_params": {
+    "television": {
+      "type": "hill",
+      "K": 146393.60077383884,
+      "alpha": 2
+    },
+    "radio": {
+      "type": "hill",
+      "K": 109085.55508871429,
+      "alpha": 2
+    },
+    "panneaux": {
+      "type": "hill",
+      "K": 4875.570548307369,
+      "alpha": 2
+    },
+    "social_media": {
+      "type": "hill",
+      "K": 22731.110464521313,
+      "alpha": 2
+    },
+    "preroll": {
+      "type": "hill",
+      "K": 32334.87549718175,
+      "alpha": 2
+    },
+    "banniere_web": {
+      "type": "hill",
+      "K": 25146.76186532452,
+      "alpha": 2
+    },
+    "circulaire_digitale": {
+      "type": "hill",
+      "K": 13398.317974184953,
+      "alpha": 2
+    }
+  },
+  "ridge_alphas_s2": {
+    "Total Revenue": 89.0735463861044,
+    "Above-Ground Pools (HT)": 252.3539170434766,
+    "In-Ground Pools (CR)": 821.4343584919421,
+    "Spas (SP)": 16.831803533309568,
+    "Furniture & Gazebo (ME&GA)": 191.16440753856998,
+    "Fitness (FI)": 10000.0,
+    "BBQ (BQ)": 10000.0
+  },
+  "ridge_r2_full": {
+    "Total Revenue": 0.8593681034880413,
+    "Above-Ground Pools (HT)": 0.7509424405703128,
+    "In-Ground Pools (CR)": 0.5575444558583174,
+    "Spas (SP)": 0.8309182989768781,
+    "Furniture & Gazebo (ME&GA)": 0.8473621117879642,
+    "Fitness (FI)": 0.5768454821936336,
+    "BBQ (BQ)": 0.7956018959308819
+  },
+  "ridge_r2_s1": {
+    "Total Revenue": 0.8347681868858572,
+    "Above-Ground Pools (HT)": 0.7164370789997896,
+    "In-Ground Pools (CR)": 0.5503730418057969,
+    "Spas (SP)": 0.7859162342111373,
+    "Furniture & Gazebo (ME&GA)": 0.8378050927998847,
+    "Fitness (FI)": 0.5768454821936337,
+    "BBQ (BQ)": 0.7954015567203986
+  },
+  "ridge_r2_s2": {
+    "Total Revenue": 0.1488812362374211,
+    "Above-Ground Pools (HT)": 0.12168502655005986,
+    "In-Ground Pools (CR)": 0.015949697681211794,
+    "Spas (SP)": 0.21020774088084515,
+    "Furniture & Gazebo (ME&GA)": 0.058923052228070705,
+    "Fitness (FI)": 0.0,
+    "BBQ (BQ)": 0.0009791824770122304
+  },
+  "adj_r2_full": {
+    "Total Revenue": 0.7859949400904975,
+    "Above-Ground Pools (HT)": 0.6209993660852586,
+    "In-Ground Pools (CR)": 0.3266980850017873,
+    "Spas (SP)": 0.7427017593126406,
+    "Furniture & Gazebo (ME&GA)": 0.767724952720815,
+    "Fitness (FI)": 0.35606921203379027,
+    "BBQ (BQ)": 0.688959406851342
+  },
+  "adj_r2_media": {
+    "Total Revenue": -0.06389845470322375,
+    "Above-Ground Pools (HT)": -0.0978937168124252,
+    "In-Ground Pools (CR)": -0.23006287789848523,
+    "Spas (SP)": 0.012759676101056328,
+    "Furniture & Gazebo (ME&GA)": -0.1763461847149117,
+    "Fitness (FI)": -0.25,
+    "BBQ (BQ)": -0.2487760219037347
+  },
+  "intercept_s2_std": -1.8074527016572037e-09,
+  "intercept_s2_orig": -1546062.6469131217,
+  "coefs_s2_std": {
+    "media_television_saturated": 354332.9737808113,
+    "media_radio_saturated": 0.0,
+    "media_panneaux_saturated": 0.0,
+    "media_social_media_saturated": 116061.05335808052,
+    "media_preroll_saturated": 392616.3318877114,
+    "media_banniere_web_saturated": 108778.49196047208,
+    "media_circulaire_digitale_saturated": 0.0
+  },
+  "coefs_s2_orig": {
+    "media_television_saturated": 1051962.5589727934,
+    "media_radio_saturated": 0.0,
+    "media_panneaux_saturated": 0.0,
+    "media_social_media_saturated": 666108.0299447129,
+    "media_preroll_saturated": 1253197.4112043332,
+    "media_banniere_web_saturated": 490786.6360722045,
+    "media_circulaire_digitale_saturated": 0.0
+  },
+  "media_share_pct": 10.862020904610466,
+  "seasonal_share_pct": 100.0,
+  "scaler_media_mean": [
+    0.36829300479014404,
+    0.44836367550088696,
+    0.4045218115012567,
+    0.5189588999447788,
+    0.4535577370419122,
+    0.49828602657634313,
+    0.4685475678646795
+  ],
+  "scaler_media_scale": [
+    0.3368304040467046,
+    0.3165307598876181,
+    0.4346035759454223,
+    0.17423758330568934,
+    0.31329168762837123,
+    0.22164110423020686,
+    0.3331532275640972
+  ],
+  "feature_cols": [
+    "media_television_saturated",
+    "media_radio_saturated",
+    "media_panneaux_saturated",
+    "media_social_media_saturated",
+    "media_preroll_saturated",
+    "media_banniere_web_saturated",
+    "media_circulaire_digitale_saturated"
+  ],
+  "control_cols": [
+    "sin_1",
+    "cos_1",
+    "total_sunshine_hours_dev_scaled",
+    "total_precipitation_dev_scaled",
+    "days_above_25_dev_scaled"
+  ],
+  "media_channels": [
+    "television",
+    "radio",
+    "panneaux",
+    "social_media",
+    "preroll",
+    "banniere_web",
+    "circulaire_digitale"
+  ]
+}
