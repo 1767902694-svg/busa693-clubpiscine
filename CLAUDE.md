@@ -144,15 +144,17 @@ See NB07, cell after `CLIENT_CONSTRAINTS` for full verbatim constraints, media s
 - **Pre-loading**: Media investment deliberately brought forward relative to demand peaks
 
 ## Model Results Summary (NB06)
-- **Ridge R²**: 0.916 in-sample, 0.862 LOOCV (Total Revenue)
-- **Adstock decay rates**: TV=0.2, Radio=0.5, Panneaux=0.4, Social=0.1, Preroll=0.4, Banniere=0.3, Circulaire=0.3
-- **Only Preroll** passes all 4 robustness checks (adstock, saturation, LOO, CI)
-- **Channel ROAS**: Preroll $153.4, Social Media $143.1, Digital Flyers $89.2, Panneaux $88.1, Web Banners $29.1, Radio $23.3, TV $16.8
+- **Two-Stage Non-Negative Ridge R²**: 0.859 full, 0.835 seasonal (S1), 0.149 media (S2)
+- **Adstock decay rates**: TV=0.2, Radio=0.5, Panneaux=0.4, Social=0.1, Preroll=0.3, Banniere=0.2, Circulaire=0.3
+- **TV and Preroll** pass all 4 robustness checks (adstock, saturation, LOO, CI)
+- **Channel ROAS (nonneg)**: Preroll $27.7, Social Media $16.3, Web Banners $12.2, TV $4.5, Radio $0, Panneaux $0, Circulaire $0
+- **Media share of revenue**: ~10.9% ($55.7M of $512.4M over 3 years)
+- **Non-negative constraint**: All media coefficients >= 0 (NNLS)
 
-## Optimization Results (NB07)
-- **Unconstrained**: +526.5% lift (but TV drops to $500 — unrealistic)
-- **Business-constrained**: +265.6% lift with TV at $50K, trad/digital 35.6%/64.4%
-- **Budget cut feasibility**: Even 15% budget cut with optimized allocation exceeds current performance
+## Optimization Results (NB07, updated from NB06B nonneg)
+- **Business-constrained**: +87.1% lift with confidence-aware bounds
+- **Budget cut feasibility**: A 10% budget cut with optimized allocation exceeds current (unoptimized) performance (+17.7%); a 15% cut falls short (-17.5%)
+- **Key recommendation**: Shift spend toward Preroll (+158%), reduce TV to strategic floor ($80K)
 
 ## Known Model Limitations
 - **Small sample**: N=36 months (3 fiscal years); 14 parameters (ratio 2.6:1 vs 5:1 standard)
