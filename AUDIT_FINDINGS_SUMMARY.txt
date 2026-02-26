@@ -1,0 +1,403 @@
+================================================================================
+CLUB PISCINE MMM AUDIT - CRITICAL FINDINGS SUMMARY
+================================================================================
+Date: February 26, 2026
+Scope: Notebooks 06 (Causal Inference) & 07 (Optimization)
+Status: DEFENSIBLE FOR INTERNAL USE WITH MATERIAL QUALIFICATIONS
+
+================================================================================
+TOP 5 CRITICAL ISSUES
+================================================================================
+
+1. SAMPLE SIZE CRITICALLY SMALL (N=36 months)
+   ──────────────────────────────────────────
+   - Only 36 monthly observations across 3 fiscal years
+   - 14 features / 36 obs = 2.6:1 ratio (standard = 5:1)
+   - Effective DoF after Ridge shrinkage ≈ 20
+   - Result: High parameter uncertainty, wide confidence intervals
+
+   Evidence:
+   - Stage 2 R² = 0.149 (media explains only 15% of residual variance)
+   - 4 of 7 channels show zero coefficient (likely collinearity, not true zero)
+   - Bootstrap CIs span 1-2 orders of magnitude (e.g., Radio: [0, 6010])
+   - Preroll CI range: [14372, 38312] = 2.7x spread
+
+   Risk: HIGH
+   Mitigation:
+   - Frame as "internal decision-support tool" not "definitive ROI measurement"
+   - Use relative rankings (Preroll > TV > others) not absolute ROAS values
+   - Acquire weekly data (156 observations available, currently unused)
+   - Test recommendations in phases with monitoring
+
+
+2. TV COEFFICIENT LIKELY UNDERSTATED (Multicollinearity)
+   ─────────────────────────────────────────────────────
+   - TV spend heavily correlated with seasonality (r=0.62)
+   - Ridge regression shrinks collinear predictors to prevent overfitting
+   - Result: TV's measured 4.49x ROAS is likely conservative (understated)
+
+   Evidence:
+   - TV peaks same season as sales peak (Mar-Sep)
+   - Cannot statistically separate TV effect from seasonal demand
+   - TV is only 2 channels (with Preroll) passing all 4 robustness tests
+   - Client narrative emphasizes TV's "halo effect" amplifying other channels
+   - Two-stage design helps but doesn't fully eliminate collinearity
+
+   Risk: MEDIUM
+   Mitigation:
+   - Enforce TV floor ($80K) in optimization (prevents over-cutting)
+   - Document that TV's true ROI likely higher than 4.49x
+   - Use TV coefficient for relative ranking, not absolute ROAS
+   - Monitor brand metrics (awareness, consideration) alongside revenue
+
+
+3. ZERO-ROAS CHANNELS: AMBIGUOUS INTERPRETATION
+   ──────────────────────────────────────────────
+   - Radio (23% of budget): ROAS=0, CI=[0, 6010]
+   - Panneaux (3% of budget): ROAS=0, CI=[0, 63652]
+   - Digital Flyers (5% of budget): ROAS=0, CI=[0, 36194]
+
+   Could be:
+   a) Truly ineffective → justified to cut
+   b) Collinear with TV/Preroll → measured effect hidden by multicollinearity
+   c) Seasonal effect mixed with controls → signal lost
+   d) Insufficient sample size → can't detect weak signal
+
+   Evidence:
+   - Radio has 90% CI that includes zero (cannot rule out true effect)
+   - Client narrative: Radio is "tactical mass medium, 3-day promo events Apr-Jul"
+   - Digital Flyers: "conversion driver from mid-Jun onward" per client strategy
+   - These are NOT evidence of ineffectiveness, but evidence of uncertainty
+
+   Risk: MEDIUM-HIGH (if cuts are implemented without testing)
+   Mitigation:
+   - Label channels as "insufficient evidence of effect" not "proven ineffective"
+   - Implement confidence-aware bounds (±20% of current) to prevent extreme cuts
+   - Test recommendations with controlled experiments before full implementation
+   - Monitor engagement metrics (CTR, visits) not just revenue
+
+
+4. RESPONSE FUNCTIONS ARE POINT ESTIMATES, NOT DISTRIBUTIONS
+   ───────────────────────────────────────────────────────────
+   - Optimization uses single coefficient per channel
+   - Ignores uncertainty in coefficient estimates
+   - Treats Preroll ROAS=27.7x as certain when CI=[14.4, 38.3]
+
+   Result:
+   - Optimizer allocates as if coefficients are known without error
+   - If true Preroll ROAS is 14x (lower CI), 102% increase may be suboptimal
+   - No Monte Carlo sensitivity to coefficient uncertainty
+
+   Risk: MEDIUM
+   Mitigation:
+   - Document that optimization is "based on point estimates with wide uncertainty"
+   - Perform scenario analysis: re-optimize at lower ROAS assumptions
+   - Recommend phased implementation (not all-or-nothing reallocation)
+   - Use confidence bounds to constrain uncertain channels
+
+
+5. NON-NEGATIVE CONSTRAINT MASKS POTENTIAL OVERSATURATION
+   ──────────────────────────────────────────────────────
+   - NNLS forces all coefficients ≥ 0
+   - Assumes advertising cannot reduce sales
+   - Cannot show if channel is saturated or has negative returns
+
+   Example:
+   - If Preroll truly faces diminishing returns above $40K, model shows linear
+   - If creative quality issues exist, model attributes to zero not negative coefficient
+
+   Risk: LOW-MEDIUM (low for new channels, medium for mature ones)
+   Mitigation:
+   - Monitor saturation curves empirically (weekly spend vs ROI)
+   - Test Preroll at increased levels with A/B control
+   - Document that zero coefficient does NOT mean oversaturation, just uncertainty
+
+
+================================================================================
+METHODOLOGY ASSESSMENT
+================================================================================
+
+✅ STRENGTHS
+────────────
+- Two-stage Ridge regression (seasonality-first) follows Robyn/Google best practices
+- TimeSeriesSplit CV appropriate for time series (not random CV)
+- Bootstrap CIs properly implemented (1000 resamples, 90% percentiles)
+- Non-negative constraint (NNLS) mathematically sound
+- Robustness checks comprehensive:
+  * Adstock decay sensitivity (±0.1)
+  * Saturation parameter sensitivity (×0.5 to ×2)
+  * Leave-one-out influence analysis
+  * Permutation feature importance
+  * Bootstrap confidence intervals
+
+- Four robustness checks passed by TV and Preroll (high confidence)
+- Confidence-aware optimization bounds (excellent design)
+  * HIGH confidence: full flexibility within business bounds
+  * NONE confidence: ±20% of current (protects uncertain channels)
+
+✅ CORRECT ELEMENTS
+────────────────────
+- Two-stage decomposition prevents seasonality from inflating media coefficients
+- Residual-based Stage 2 regression isolates incremental media lift
+- Original-space coefficient recovery (unscaling) is mathematically correct
+- ROAS calculation chain (coefficient × derivative × adstock gain) is valid
+- +21.4% lift claim is mathematically correct (optimized vs current allocation)
+- "15% cut = -0.1% performance" claim is verified correct
+- Scenario analysis methodology is sound
+- SLSQP optimizer properly handles all constraints
+
+⚠️  LIMITATIONS (Not Errors)
+────────────────────────────
+- Small N=36 (unavoidable with monthly data and 3-year window)
+- Seasonality collinearity with TV/Preroll (inherent to retail data)
+- Zero-ROAS channels ambiguous due to multicollinearity risk
+- Response functions don't propagate coefficient uncertainty
+- No interaction terms (TV halo effect unmodeled)
+- Province-wide weather proxy for 42 dispersed stores
+- Decay rates imported from NB05 without re-validation
+
+❌ NO MAJOR ERRORS FOUND
+─────────────────────────
+- Code implementation is correct
+- Formulas are correct
+- Optimizer algorithm is correct
+- Bootstrap implementation is correct
+- CSV outputs are correctly computed
+
+
+================================================================================
+CLAIMS VERIFICATION
+================================================================================
+
+CLAIM 1: "+21.4% lift from reallocation at same budget"
+────────────────────────────────────────────────────────
+Status: ✅ VERIFIED CORRECT
+
+Math:
+  Current allocation response:  $1,831,521/month
+  Optimal allocation response:  $2,222,930/month
+  Lift: $391,408 / $1,831,521 = +21.4%
+
+Caveat: This is model's prediction at current spend levels, not guaranteed revenue
+        Assumes channel effectiveness remains stable
+        Requires successful implementation of reallocation strategy
+
+
+CLAIM 2: "15% budget cut with optimization matches current performance (-0.1%)"
+───────────────────────────────────────────────────────────────────────────────
+Status: ✅ VERIFIED CORRECT
+
+Math:
+  Current (1.0x budget):        $1,831,521/month
+  Optimized (0.85x budget):     $1,829,298/month
+  Difference: -$2,223 (-0.12%)
+
+Caveat: This is marginal difference (~0.1%), within model noise
+        Requires aggressive reallocation:
+        - TV cut 27% (to floor)
+        - Preroll raised 72% (within tighter budget)
+        - Radio/Panneaux/Flyers cut 20% (to minimum bounds)
+        Success depends on market elasticity and execution
+
+
+CLAIM 3: "Media attributes 10.9% of revenue"
+─────────────────────────────────────────────
+Status: ✅ VERIFIED, REASONABLE
+
+Calculation:
+  Total 3-year revenue:         $512.4M
+  Total media contribution:     $55.7M
+  Share: 10.9%
+
+Benchmark: Retail median is 10-40% (Club Piscine at lower end = reasonable)
+Interpretation: Conservative attribution (expected with strong seasonality)
+Note: This is relative to residuals AFTER removing 83.5% seasonal demand
+
+
+CLAIM 4: "TV and Preroll are significant (CI excludes zero)"
+────────────────────────────────────────────────────────────
+Status: ✅ VERIFIED CORRECT
+
+TV:       CI=[1040, 7204]        ✅ Excludes zero
+Preroll:  CI=[14372, 38312]      ✅ Excludes zero
+Radio:    CI=[0, 6010]           ❌ Includes zero
+Others:   CI=[0, 36194+]         ❌ Include zero
+
+
+CLAIM 5: "Model R² = 0.859, explains 86% of revenue variance"
+──────────────────────────────────────────────────────────────
+Status: ✅ CORRECT BUT MISLEADING
+
+True decomposition:
+  Stage 1 (Seasonality):        R² = 0.835 (83.5% of variance)
+  Stage 2 (Media):              R² = 0.149 (14.9% of residual)
+  Combined:                     R² = 0.859 (86% of total)
+
+Translation: Seasonality explains 83.5%, media explains 2.4%, noise explains 14.1%
+
+Note: The 0.859 is NOT "86% of media effects are captured" — it's total model quality
+
+
+================================================================================
+DEFENSIBILITY FOR CLIENT PRESENTATION
+================================================================================
+
+✅ CAN PRESENT CONFIDENTLY
+────────────────────────────
+1. "Preroll shows highest measured ROI among all channels"
+   ✅ Robust to specification changes, passes all sensitivity tests
+
+2. "TV shows significant positive effect (90% CI excludes zero)"
+   ✅ Statistically sound, but note collinearity caveat
+
+3. "Scenario analysis shows potential 20-25% revenue lift from optimization"
+   ✅ Mathematically correct, with execution risk caveat
+
+4. "Reallocation strategy: increase Preroll, maintain TV floor, reduce zero-ROAS channels"
+   ✅ Follows logically from model, with testing requirement
+
+5. "Model identifies two high-confidence channels (Preroll, TV) and four uncertain channels"
+   ✅ Appropriately frames statistical uncertainty
+
+
+⚠️  MUST CAVEAT
+────────────────
+1. "TV's measured 4.49x ROAS is likely conservative due to seasonality collinearity"
+   Caveat: "True TV effectiveness may be higher; recommend testing"
+
+2. "Radio/Panneaux/Flyers show zero ROAS"
+   Caveat: "Insufficient evidence to conclude zero effect; model cannot rule out weak effects"
+
+3. "21.4% lift is guaranteed if implemented"
+   Caveat: "Model prediction assuming current channel effectiveness holds; requires phased testing"
+
+4. "These ROAS values are the true return on investment"
+   Caveat: "Point estimates with wide uncertainty ranges; use for ranking, not absolutes"
+
+
+❌ CANNOT PRESENT
+──────────────────
+1. "Radio is proven ineffective, cut completely"
+   Reason: Zero ROAS may be collinearity, not true ineffectiveness
+   Alternative: "Model shows insufficient evidence of Radio effect; recommend A/B test"
+
+2. "Implement optimization exactly as specified"
+   Reason: Assumes no market saturation, price changes, or execution risk
+   Alternative: "Phase implementation (10% at time) and monitor weekly metrics"
+
+3. "This model is the definitive ROI attribution system"
+   Reason: N=36 is too small, seasonality confounding is too strong
+   Alternative: "Internal planning tool subject to ongoing validation"
+
+
+================================================================================
+RISK ASSESSMENT BY STAKEHOLDER
+================================================================================
+
+CFO / Finance Director:
+─────────────────────────
+Risk: MEDIUM
+- Want: Guaranteed ROI numbers
+- Have: Scenario modeling with wide CIs
+- Mitigate: Frame as "decision-support" not "ROI guarantee"; recommend A/B testing
+
+Marketing Director:
+───────────────────
+Risk: MEDIUM-HIGH
+- Want: Clear guidance on channel effectiveness
+- Have: Two clear winners (Preroll, TV), four ambiguous channels
+- Mitigate: Recommend phased reallocation (10-15% at time) with monitoring
+
+Media Agency:
+─────────────
+Risk: LOW
+- Want: Validation of media spending
+- Have: Model supports continuing Preroll/TV, questions others
+- Mitigate: Partner on A/B testing for Radio/Digital Flyers
+
+IT / Analytics Team:
+────────────────────
+Risk: LOW
+- Want: Reproducible, maintainable code
+- Have: Well-structured notebooks with caching/parallelization
+- Mitigate: Recommend modularization into src/models/ packages
+
+
+================================================================================
+RECOMMENDATIONS
+================================================================================
+
+IMMEDIATE (Next 30 days):
+──────────────────────────
+1. Present audit findings to stakeholders with caveats documented
+2. Add metadata to all output CSVs (model version, fit date, parameters, R²)
+3. Create decision tree for budget reallocation:
+   - Do nothing if CEO risk-averse (baseline scenario)
+   - Test Preroll +20% (highest confidence)
+   - Test Radio cut -20% (lowest confidence)
+4. Establish weekly KPI dashboard:
+   - Revenue by channel
+   - Impressions / engagement metrics
+   - Campaign tracking vs. model predictions
+
+
+SHORT-TERM (60-90 days):
+──────────────────────────
+1. Implement phased budget reallocation:
+   - Phase 1 (Months 1-3): Preroll +10%, TV -5%, others unchanged
+   - Phase 2 (Months 4-6): Evaluate results; adjust if performing
+   - Phase 3 (Months 7-12): Full optimization if Phase 1-2 validates model
+
+2. Expand data collection:
+   - Switch to weekly observations (156 total vs current 36 monthly)
+   - Recalibrate model with larger N
+   - Re-validate channel rankings
+
+3. Enrichment projects:
+   - Add creative quality scores per channel
+   - Include promotional timing and depth
+   - Track competitive spending
+   - Incorporate store-level variation (currently aggregated)
+
+
+MEDIUM-TERM (6-12 months):
+───────────────────────────
+1. A/B test hypothesis:
+   - Control stores (maintain current allocation)
+   - Treatment stores (implement optimized allocation)
+   - Measure revenue lift and cost per incremental $ revenue
+
+2. Advanced modeling:
+   - Bayesian MMM (posterior distributions vs point estimates)
+   - Non-linear interaction terms (TV halo effect on other channels)
+   - Hierarchical model (store-level variation)
+   - Weekly-level observations (to improve N and reduce seasonality bias)
+
+3. Governance:
+   - Quarterly model refresh with new data
+   - Automated robustness checks (run sensitivity tests each refresh)
+   - Decision rules based on coefficient stability
+   - Threshold for channel reallocation magnitude
+
+
+================================================================================
+FINAL AUDIT VERDICT
+================================================================================
+
+OVERALL STATUS: DEFENSIBLE FOR INTERNAL USE WITH DOCUMENTED QUALIFICATIONS
+
+Methodology:      ⭐⭐⭐⭐⭐ (Industry best practices, well-executed)
+Code Quality:     ⭐⭐⭐⭐ (Well-commented, logical flow, few issues)
+Data Quality:     ⭐⭐⭐ (Small sample size, strong seasonality bias)
+Output Confidence: ⭐⭐⭐ (Useful for planning, not guarantees)
+Client Ready:     ⭐⭐⭐ (With appropriate caveats and testing plan)
+
+RECOMMENDED NEXT STEP:
+Present findings to leadership with clear statement:
+"The model provides directionally useful insights for budget optimization,
+but is NOT a definitive ROI attribution system. We recommend implementing
+recommendations in phases with rigorous testing and monitoring."
+
+================================================================================
+END AUDIT SUMMARY
+================================================================================

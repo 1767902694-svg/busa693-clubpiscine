@@ -114,7 +114,7 @@ See NB07, cell after `CLIENT_CONSTRAINTS` for full verbatim constraints, media s
 | 7 | Traditional media spill effects | Unmodeled (may undervalue TV/Radio) |
 | 8 | Digital precision & scale limits | Partially Modeled (saturation curves) |
 | 9 | Creative execution unmodeled | Unmodeled (conflated with media efficiency) |
-| 10 | Production vs media ratio (85/15) | **Optimizer Constraint** |
+| 10 | Production vs media ratio (85/15) | Documented (spend data is media-only; production tracked separately) |
 | 11 | Brand positioning & premium environments | Unmodeled (long-term brand building) |
 | 12 | Strategic category visibility (40% furniture, 30% pools, 20% spas, 5% BBQ, 5% other) | **Optimizer Constraint** |
 | 13 | Furniture as growth-led focus | **Optimizer Constraint** |
@@ -125,9 +125,10 @@ See NB07, cell after `CLIENT_CONSTRAINTS` for full verbatim constraints, media s
 | 18 | Competitive pressure (Trevi, Sima, big-box) | Unmodeled |
 
 ### Optimizer Constraints (Implemented in NB07)
-- **Channel floors/ceilings**: TV $50-180K, Radio $30-90K, Panneaux $5-30K, Social $15-90K, Preroll $15-110K, Web Banners $20-80K, Digital Flyers $8-40K
-- **Production ratio**: 85% of budget to media, 15% to production (constraint #10)
+- **Channel floors/ceilings**: TV $80-180K, Radio $30-90K, Panneaux $5-30K, Social $15-90K, Preroll $15-110K, Web Banners $20-80K, Digital Flyers $8-40K
+- **Production ratio**: 85/15 documented but NOT applied as budget reduction (spend data is already media-only)
 - **Traditional/digital mix**: 35-65% traditional (targeting ~50/50 equilibrium)
+- **Confidence-based flexibility**: HIGH=1.0, MEDIUM=0.5, LOW=0.25, NONE=0.2 (constrains low-confidence channels near current spend)
 
 ## Media Strategy Context
 - **Seasonality**: 85% of media budget deployed March-September
@@ -151,10 +152,10 @@ See NB07, cell after `CLIENT_CONSTRAINTS` for full verbatim constraints, media s
 - **Media share of revenue**: ~10.9% ($55.7M of $512.4M over 3 years)
 - **Non-negative constraint**: All media coefficients >= 0 (NNLS)
 
-## Optimization Results (NB07, updated from NB06B nonneg)
-- **Business-constrained**: +87.1% lift with confidence-aware bounds
-- **Budget cut feasibility**: A 10% budget cut with optimized allocation exceeds current (unoptimized) performance (+17.7%); a 15% cut falls short (-17.5%)
-- **Key recommendation**: Shift spend toward Preroll (+158%), reduce TV to strategic floor ($80K)
+## Optimization Results (NB07, corrected response function + full budget)
+- **Business-constrained**: +21.4% lift with confidence-aware bounds (same total budget, better allocation)
+- **Budget cut feasibility**: A 15% cut with optimized allocation matches current performance (-0.1%); a 10% cut beats it (+8.9%)
+- **Key recommendation**: Shift spend toward Preroll (+102% to $51K), Social Media (+56% to $36K), Web Banners (+32% to $30K); reduce TV to strategic floor ($80K), reduce zero-ROAS channels by 20%
 
 ## Known Model Limitations
 - **Small sample**: N=36 months (3 fiscal years); 14 parameters (ratio 2.6:1 vs 5:1 standard)
