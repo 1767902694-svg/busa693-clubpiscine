@@ -1,96 +1,106 @@
 {
   "model_version": "06C_base",
-  "r2_full": 0.8694,
-  "r2_stage1": 0.8492,
-  "r2_stage2": 0.134,
-  "ridge_alpha": 50,
+  "parameter_source": "optimal_transformation_params.json",
+  "r2_full": 0.8809,
+  "r2_stage1": 0.8274,
+  "r2_stage2": 0.3096,
+  "ridge_alpha": 5,
   "n_observations": 36,
-  "media_contribution_pct": 8.23,
+  "media_contribution_pct": 22.9,
   "media_contribution_ci": [
-    3.06,
-    11.94
+    -6.66,
+    50.65
   ],
   "channels": {
     "Television": {
-      "coef_original": 1914867.7081,
+      "coef_original": 2042335.0611,
       "total_spend": 3948951.24,
-      "total_effect": 12942896.54,
-      "roas": 3.28,
-      "ci_low": -0.02,
-      "ci_high": 5.44,
-      "significant": false
+      "total_effect": 40008752.22,
+      "roas": 10.13,
+      "ci_low": 0.62,
+      "ci_high": 21.88,
+      "significant": true
     },
     "Radio": {
-      "coef_original": -1108631.2205,
+      "coef_original": -8942.4319,
       "total_spend": 2167276.63,
-      "total_effect": -11381794.74,
-      "roas": -5.25,
-      "ci_low": -7.77,
-      "ci_high": -0.38,
+      "total_effect": -73608830.96,
+      "roas": -33.96,
+      "ci_low": -57.66,
+      "ci_high": -8.4,
       "significant": false
     },
-    "Panneaux (DOOH)": {
-      "coef_original": 652768.9817,
+    "Panneaux": {
+      "coef_original": -3524.8564,
       "total_spend": 292495.02,
-      "total_effect": 2233128.71,
-      "roas": 7.63,
-      "ci_low": -10.22,
-      "ci_high": 22.24,
+      "total_effect": -8096643.5,
+      "roas": -27.68,
+      "ci_low": -98.92,
+      "ci_high": 54.12,
       "significant": false
     },
     "Social Media": {
-      "coef_original": 974118.3704,
+      "coef_original": 18502.975,
       "total_spend": 827420.6,
-      "total_effect": 11545961.64,
-      "roas": 13.95,
-      "ci_low": -14.64,
-      "ci_high": 35.57,
+      "total_effect": 99448343.07,
+      "roas": 120.19,
+      "ci_low": -70.12,
+      "ci_high": 290.14,
       "significant": false
     },
-    "Preroll (Video)": {
-      "coef_original": 1703631.2722,
+    "Preroll": {
+      "coef_original": 5859572.4726,
       "total_spend": 902393.38,
-      "total_effect": 16869007.53,
-      "roas": 18.69,
-      "ci_low": 1.78,
-      "ci_high": 30.9,
+      "total_effect": 61793044.68,
+      "roas": 68.48,
+      "ci_low": 18.63,
+      "ci_high": 105.73,
       "significant": true
     },
-    "Web Banners": {
-      "coef_original": 1274397.4247,
+    "Banniere Web": {
+      "coef_original": -336751.1549,
       "total_spend": 827607.24,
-      "total_effect": 9700135.33,
-      "roas": 11.72,
-      "ci_low": -3.63,
-      "ci_high": 25.2,
+      "total_effect": -8707188.84,
+      "roas": -10.52,
+      "ci_low": -96.87,
+      "ci_high": 67.62,
       "significant": false
     },
-    "Digital Flyers": {
-      "coef_original": 38078.4377,
+    "Circulaire Digitale": {
+      "coef_original": 250136.3981,
       "total_spend": 446545.72,
-      "total_effect": 277656.52,
-      "roas": 0.62,
-      "ci_low": -20.83,
-      "ci_high": 24.01,
+      "total_effect": 6515954.45,
+      "roas": 14.59,
+      "ci_low": -90.51,
+      "ci_high": 123.35,
       "significant": false
     }
   },
   "decay_rates": {
-    "Television": 0.5,
-    "Radio": 0.5,
-    "Panneaux (DOOH)": 0.4,
-    "Social Media": 0.1,
-    "Preroll (Video)": 0.3,
-    "Web Banners": 0.2,
-    "Digital Flyers": 0.3
+    "Television": 0.1,
+    "Radio": 0.2,
+    "Panneaux": 0.25,
+    "Social Media": 0.01,
+    "Preroll": 0.45,
+    "Banniere Web": 0.15,
+    "Circulaire Digitale": 0.01
+  },
+  "saturation_functions": {
+    "Television": "log",
+    "Radio": "power",
+    "Panneaux": "power",
+    "Social Media": "power",
+    "Preroll": "hill",
+    "Banniere Web": "log",
+    "Circulaire Digitale": "log"
   },
   "saturation_K": {
-    "Television": 484576.53,
-    "Radio": 187275.29,
-    "Panneaux (DOOH)": 58417.69,
-    "Social Media": 35494.51,
-    "Preroll (Video)": 58231.98,
-    "Web Banners": 55720.13,
-    "Digital Flyers": 36775.11
+    "Television": 127905.17,
+    "Radio": 0.5,
+    "Panneaux": 0.5,
+    "Social Media": 0.5,
+    "Preroll": 68770.85,
+    "Banniere Web": 23835.7,
+    "Circulaire Digitale": 7509.5
   }
 }

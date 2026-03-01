@@ -1,5 +1,23 @@
 {
   "decay_rates": {
+    "media_television": 0.1,
+    "media_radio": 0.2,
+    "media_panneaux": 0.25,
+    "media_social_media": 0.01,
+    "media_preroll": 0.45,
+    "media_banniere_web": 0.15,
+    "media_circulaire_digitale": 0.01
+  },
+  "decay_rate_sources": {
+    "media_television": "grid_search",
+    "media_radio": "grid_search",
+    "media_panneaux": "grid_search",
+    "media_social_media": "grid_search",
+    "media_preroll": "grid_search",
+    "media_banniere_web": "grid_search",
+    "media_circulaire_digitale": "grid_search"
+  },
+  "single_channel_decay_rates": {
     "media_television": 0.2,
     "media_radio": 0.5,
     "media_panneaux": 0.4,
@@ -8,14 +26,14 @@
     "media_banniere_web": 0.2,
     "media_circulaire_digitale": 0.3
   },
-  "decay_rate_sources": {
-    "media_television": "data",
-    "media_radio": "industry",
-    "media_panneaux": "industry",
-    "media_social_media": "data",
-    "media_preroll": "data",
-    "media_banniere_web": "data",
-    "media_circulaire_digitale": "industry"
+  "single_channel_data_driven": {
+    "media_television": true,
+    "media_radio": false,
+    "media_panneaux": false,
+    "media_social_media": true,
+    "media_preroll": true,
+    "media_banniere_web": true,
+    "media_circulaire_digitale": false
   },
   "industry_benchmarks": {
     "media_television": 0.7,
@@ -26,18 +44,79 @@
     "media_banniere_web": 0.3,
     "media_circulaire_digitale": 0.3
   },
+  "grid_search_config": {
+    "search_grid": {
+      "media_television": [
+        0.1,
+        0.2,
+        0.35,
+        0.5
+      ],
+      "media_radio": [
+        0.01,
+        0.05,
+        0.1,
+        0.2
+      ],
+      "media_panneaux": [
+        0.01,
+        0.05,
+        0.15,
+        0.25
+      ],
+      "media_social_media": [
+        0.01,
+        0.05,
+        0.1,
+        0.15
+      ],
+      "media_preroll": [
+        0.1,
+        0.2,
+        0.3,
+        0.45
+      ],
+      "media_banniere_web": [
+        0.01,
+        0.05,
+        0.1,
+        0.15
+      ],
+      "media_circulaire_digitale": [
+        0.01,
+        0.05,
+        0.1,
+        0.2
+      ]
+    },
+    "n_combinations": 16384,
+    "ridge_alpha": 10.0,
+    "k_fraction": 0.7,
+    "saturation_alpha": 2,
+    "method": "full_sample_Ridge_R2"
+  },
+  "grid_search_best_r2": 0.9499,
+  "sensitivity_classification": {
+    "media_television": "MODERATE",
+    "media_radio": "ROBUST",
+    "media_panneaux": "ROBUST",
+    "media_social_media": "ROBUST",
+    "media_preroll": "MODERATE",
+    "media_banniere_web": "ROBUST",
+    "media_circulaire_digitale": "ROBUST"
+  },
   "saturation_functions": {
     "media_television": "log",
     "media_radio": "power",
     "media_panneaux": "power",
     "media_social_media": "power",
-    "media_preroll": "log",
+    "media_preroll": "hill",
     "media_banniere_web": "log",
-    "media_circulaire_digitale": "power"
+    "media_circulaire_digitale": "log"
   },
   "saturation_params": {
     "media_television": {
-      "scale": 146393.60077383884
+      "scale": 127905.17055400001
     },
     "media_radio": {
       "beta": 0.5
@@ -49,47 +128,66 @@
       "beta": 0.5
     },
     "media_preroll": {
-      "scale": 32334.87549718175
+      "K": 68770.85061914581,
+      "alpha": 2
     },
     "media_banniere_web": {
-      "scale": 25146.76186532452
+      "scale": 23835.702030996203
     },
     "media_circulaire_digitale": {
-      "beta": 0.5
+      "scale": 7509.500003997701
     }
   },
   "confidence_intervals": {
     "media_television": [
-      0.1,
-      0.3
-    ],
-    "media_radio": [
-      0.4,
-      0.6
-    ],
-    "media_panneaux": [
-      0.3,
-      0.5
-    ],
-    "media_social_media": [
-      0.1,
+      0.01,
       0.2
     ],
-    "media_preroll": [
-      0.2,
-      0.4
-    ],
-    "media_banniere_web": [
+    "media_radio": [
       0.1,
       0.3
     ],
+    "media_panneaux": [
+      0.15,
+      0.35
+    ],
+    "media_social_media": [
+      0.01,
+      0.11
+    ],
+    "media_preroll": [
+      0.35,
+      0.45
+    ],
+    "media_banniere_web": [
+      0.05,
+      0.25
+    ],
     "media_circulaire_digitale": [
-      0.2,
-      0.4
+      0.01,
+      0.11
     ]
   },
-  "calibration_method": "LOOCV_Ridge_cross_val_predict",
-  "calibration_date": "2026-02-24",
+  "spend_column_map": {
+    "media_television": "spend_television",
+    "media_radio": "spend_radio",
+    "media_panneaux": "spend_panneaux",
+    "media_social_media": "spend_social_media",
+    "media_preroll": "spend_preroll",
+    "media_banniere_web": "spend_banniere_web",
+    "media_circulaire_digitale": "spend_circulaire_digitale"
+  },
+  "channel_labels": {
+    "media_television": "Television",
+    "media_radio": "Radio",
+    "media_panneaux": "Panneaux",
+    "media_social_media": "Social Media",
+    "media_preroll": "Preroll",
+    "media_banniere_web": "Banniere Web",
+    "media_circulaire_digitale": "Circulaire Digitale"
+  },
+  "calibration_method": "multi_channel_grid_search + LOOCV_saturation",
+  "calibration_date": "2026-03-01",
   "n_observations": 36,
   "n_bootstrap_samples": 200,
   "target": "total_all_revenue",
