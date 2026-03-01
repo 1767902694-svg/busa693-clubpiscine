@@ -1,0 +1,96 @@
+{
+  "model_version": "06C_base",
+  "r2_full": 0.8694,
+  "r2_stage1": 0.8492,
+  "r2_stage2": 0.134,
+  "ridge_alpha": 50,
+  "n_observations": 36,
+  "media_contribution_pct": 8.23,
+  "media_contribution_ci": [
+    3.06,
+    11.94
+  ],
+  "channels": {
+    "Television": {
+      "coef_original": 1914867.7081,
+      "total_spend": 3948951.24,
+      "total_effect": 12942896.54,
+      "roas": 3.28,
+      "ci_low": -0.02,
+      "ci_high": 5.44,
+      "significant": false
+    },
+    "Radio": {
+      "coef_original": -1108631.2205,
+      "total_spend": 2167276.63,
+      "total_effect": -11381794.74,
+      "roas": -5.25,
+      "ci_low": -7.77,
+      "ci_high": -0.38,
+      "significant": false
+    },
+    "Panneaux (DOOH)": {
+      "coef_original": 652768.9817,
+      "total_spend": 292495.02,
+      "total_effect": 2233128.71,
+      "roas": 7.63,
+      "ci_low": -10.22,
+      "ci_high": 22.24,
+      "significant": false
+    },
+    "Social Media": {
+      "coef_original": 974118.3704,
+      "total_spend": 827420.6,
+      "total_effect": 11545961.64,
+      "roas": 13.95,
+      "ci_low": -14.64,
+      "ci_high": 35.57,
+      "significant": false
+    },
+    "Preroll (Video)": {
+      "coef_original": 1703631.2722,
+      "total_spend": 902393.38,
+      "total_effect": 16869007.53,
+      "roas": 18.69,
+      "ci_low": 1.78,
+      "ci_high": 30.9,
+      "significant": true
+    },
+    "Web Banners": {
+      "coef_original": 1274397.4247,
+      "total_spend": 827607.24,
+      "total_effect": 9700135.33,
+      "roas": 11.72,
+      "ci_low": -3.63,
+      "ci_high": 25.2,
+      "significant": false
+    },
+    "Digital Flyers": {
+      "coef_original": 38078.4377,
+      "total_spend": 446545.72,
+      "total_effect": 277656.52,
+      "roas": 0.62,
+      "ci_low": -20.83,
+      "ci_high": 24.01,
+      "significant": false
+    }
+  },
+  "decay_rates": {
+    "Television": 0.5,
+    "Radio": 0.5,
+    "Panneaux (DOOH)": 0.4,
+    "Social Media": 0.1,
+    "Preroll (Video)": 0.3,
+    "Web Banners": 0.2,
+    "Digital Flyers": 0.3
+  },
+  "saturation_K": {
+    "Television": 484576.53,
+    "Radio": 187275.29,
+    "Panneaux (DOOH)": 58417.69,
+    "Social Media": 35494.51,
+    "Preroll (Video)": 58231.98,
+    "Web Banners": 55720.13,
+    "Digital Flyers": 36775.11
+  }
+}
