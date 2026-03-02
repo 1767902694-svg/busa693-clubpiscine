@@ -1,0 +1,8 @@
+Channel,Type,Best Metric,Verdict,Reason,Impr%,PEB%,Click%,CPM_CV
+Television,Traditional,GRP/PEB,SWITCH when 36mo available,PEB 80% filled; GRP captures audience delivery,80.0,80.0,0.0,0.2910138136118984
+Radio,Traditional,GRP/PEB,SWITCH when 36mo available,PEB 78% filled; GRP captures audience delivery,77.77777777777779,77.77777777777779,0.0,0.28708726155038966
+Panneaux (DOOH),Outdoor/DOOH,Impressions (traffic),SWITCH when 36mo available,DOOH impressions 100% filled,100.0,20.0,0.0,0.653267451597114
+Social Media,Digital,Impressions,SWITCH when 36mo available,"Impr 100% filled, CPM CV=0.48 (moderate variance = signal)",100.0,0.0,100.0,0.483220289662346
+Preroll (Video),Digital,Impressions,STAY with spend,CPM CV=0.19 (extremely stable); impressions redundant with spend,100.0,0.0,100.0,0.1934059421807247
+Web Banners,Digital,Impressions,SWITCH when 36mo available,"Impr 100% filled, CPM CV=0.60 (high variance = signal)",100.0,0.0,100.0,0.5964746051135648
+Digital Flyers,Digital,Impressions,STAY with spend,CPM CV=0.15 (extremely stable); impressions redundant with spend,100.0,0.0,100.0,0.1526777628838468

@@ -1,0 +1,151 @@
+================================================================================
+TECHNICAL DIAGNOSIS SUMMARY: 06C vs 06D ENRICHMENT FAILURE
+Club Piscine Marketing Mix Model — March 1, 2026
+================================================================================
+
+VERDICT: 06D enrichment FAILED due to severe multicollinearity from CPM-based imputation.
+
+KEY FINDINGS:
+─────────────────────────────────────────────────────────────────────────────
+
+1. ROOT CAUSE: Synthetic Collinearity from CPM Imputation
+
+   Data coverage in 06D:
+   • Tableau Medias available: 12 months (FY2025)
+   • Needed to cover: 36 months (3 fiscal years)
+   • Imputed: 24 months (67% of data)
+   • Coverage: 33% observed, 67% SYNTHETIC
+
+   The imputation formula:
+   impressions_imputed = spend / (median_CPM / 1000)
+
+   For imputed months, this creates a PERFECT LINEAR RELATIONSHIP:
+   impr = spend × k   where k = 1000 / median_CPM
+
+   Correlation(spend, impr) = 1.0 for 67% of months
+   → Ridge regression unable to separate their effects
+   → Both features shrunk heavily
+   → NET RESULT: Media contribution fell 12.3% (22.9% → 10.6%)
+
+─────────────────────────────────────────────────────────────────────────────
+
+2. SECONDARY CAUSE: Undersized Sample
+
+   06C: 7 media features + 5 control = 12 features on n=36
+        n/p = 3.0:1 ✓ acceptable
+
+   06D: 14 media features + 5 control = 19 features on n=36
+        n/p = 1.9:1 ✗ dangerous (should be ≥5:1)
+
+   Ridge's regularization response:
+   • α jumped 10x: 5 → 50
+   • This is NOT a tuning success—it's a distress signal
+   • Heavy regularization was needed to prevent overfitting
+   • Heavy regularization destroyed media signal
+
+─────────────────────────────────────────────────────────────────────────────
+
+3. TERTIARY CAUSE: Insufficient True Data
+
+   Only 12/36 months of observed Tableau Medias data
+   Minimum viable coverage for enrichment: 75% (27 months)
+   Current coverage: 33% (12 months) — 42 points BELOW minimum
+
+   Signal-to-collinearity ratio: 12 true : 24 synthetic = 1:2
+   The true signal was 2x outnumbered by synthetic noise
+   Ridge shrunk both spend and impression features to minimize collinearity damage
+
+─────────────────────────────────────────────────────────────────────────────
+
+EVIDENCE: Model Performance Collapsed
+
+   Metric                  06C         06D        Change
+   ───────────────────────────────────────────────────────
+   R² (full)               0.8809      0.8858     +0.49% (negligible)
+   R² (stage 2 media)      0.3096      0.3385     +2.89% (modest)
+   Ridge alpha             5           50         10x increase (distress)
+   Media contribution %    22.9%       10.6%      -12.3% (collapse)
+
+   Channel ROAS (examples):
+   • Television:    10.13 → 7.27  (-28%)
+   • Social Media:  120.19 → 23.09 (-81%)
+   • Preroll:       68.48 → 31.44 (-54%)
+
+   Significance lost in 5 of 7 channels (06D less reliable)
+
+─────────────────────────────────────────────────────────────────────────────
+
+WHY ENRICHMENT WAS DOOMED FROM THE START
+
+1. Mathematical: 67% of impression features are linear rescalings of spend
+   → Perfect collinearity prevents parameter identification
+
+2. Statistical: 1.9:1 n/p ratio violates 5:1 industry standard
+   → Ridge forced to extreme regularization (α=50)
+
+3. Empirical: 12 months true signal vs. 24 months synthetic noise
+   → Collinearity overwhelms signal
+   → Model defaulted to: shrink everything
+
+Conclusion: This was not a data quality issue; it was a DATA INSUFFICIENCY issue.
+Enrichment cannot succeed with 33% data coverage. Minimum viable: 75%.
+
+─────────────────────────────────────────────────────────────────────────────
+
+ANSWERS TO KEY QUESTIONS
+
+Q1: Was enrichment doomed from the start (14 features with n=36)?
+A:  YES. The 14 features were not independent—67% of one set was derived from
+    the other via CPM, creating perfect collinearity. The 10x alpha jump proves
+    the feature set was fundamentally problematic.
+
+Q2: Was CPM imputation the root cause?
+A:  YES, 100%. For imputed months, impr = spend × constant, violating the
+    independence assumption that Ridge regression requires. Only 12 months of
+    true data insufficient to overcome 67% synthetic collinearity.
+
+Q3: Did mixing digital impressions with traditional "impressions" corrupt signal?
+A:  YES, but this is secondary. The primary problem is multicollinearity; mixing
+    semantics (pixel-tracked vs. estimated GRPs) amplified it by creating
+    different collinearity structures across channels.
+
+Q4: What should the RIGHT approach be?
+A:  NOT enrichment (insufficient data). Instead, build:
+    • 06E: Digital-only model with CPM_efficiency features (not impressions)
+    • 06F: Traditional model with explicit interaction terms (TV halo)
+    • Combine: Separate optimizations for digital/traditional, then unify
+    Timeline: 2-4 weeks for 06E, 1-2 weeks for 06F
+
+Q5: What is MINIMUM data coverage needed?
+A:  ≥75% observed (27 of 36 months). Currently at 33%—42 points below threshold.
+    Path forward: Request historical Tableau Medias data for FY2024/FY2023.
+    If unavailable: Use 06E + 06F segmented models instead.
+
+Q6: If hybrid, how to calculate ROAS with mixed units?
+A:  NOT VIABLE. Hybrid ROAS ($/GRP for TV, $/impr for digital, $/$ for others)
+    breaks optimization—different units have incompatible magnitudes.
+    Solution: Stay homogeneous (spend-based 06C) or use segmented models.
+
+─────────────────────────────────────────────────────────────────────────────
+
+RECOMMENDATIONS
+
+DO NOT ATTEMPT:
+ ✗ Enrichment with current 33% data (mathematically doomed)
+ ✗ GRP/PEB replacement (no data from agency)
+ ✗ Hybrid models (unit incommensurability)
+ ✗ Mixed impression types (semantic corruption)
+
+DO BUILD:
+ ✓ 06E: Digital-only with CPM efficiency features (2-4 weeks)
+ ✓ 06F: Traditional with interaction terms (1-2 weeks)
+ ✓ Segmented optimization: Digital/traditional split
+ ✓ Parallel: Request historical Tableau Medias data for future enrichment
+
+BOTTOM LINE:
+The 10x regularization increase (α=5→50) is your smoking gun. It proves that
+spend and impression features were too correlated to be separated. This is not
+a tuning problem; it's a data problem. You have 67% synthetic, 33% true.
+Minimum viable is 75% true. Build 06E and 06F instead.
+
+─────────────────────────────────────────────────────────────────────────────

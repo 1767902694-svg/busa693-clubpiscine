@@ -1,0 +1,169 @@
+{
+  "metadata": {
+    "analysis_date": "2026-03-01",
+    "current_model": "NB06c (Base MMM)",
+    "current_features": 43,
+    "current_rows": 36,
+    "recommended_additions": 20
+  },
+  "priority_1_high_impact": {
+    "feature_set_a_monthly_impressions": {
+      "description": "Raw impressions by channel, monthly (in millions)",
+      "columns": [
+        "impr_banniere_web",
+        "impr_circulaire_digitale",
+        "impr_panneaux",
+        "impr_preroll",
+        "impr_radio",
+        "impr_social_media",
+        "impr_television"
+      ],
+      "data_type": "float64",
+      "source": "tableau_medias_performance.csv, aggregated by (year, month, channel_group)",
+      "coverage": "52/36 months have data (14% of model period)",
+      "implementation": "Monthly sum of impressions_reel per channel, scaled by 1/1M",
+      "missing_data_handling": "Fill with 0 (no impressions = no campaign)",
+      "model_usage": "Apply same adstock and saturation as spend; compare coefficients",
+      "expected_impact": "HIGH - separates media volume from cost; r(spend,impressions) = 0.58-0.82"
+    },
+    "feature_set_b_cost_per_click": {
+      "description": "Engagement efficiency: cost to generate one click (digital channels only)",
+      "columns": [
+        "cpc_banniere_web",
+        "cpc_social_media",
+        "cpc_preroll",
+        "cpc_circulaire_digitale"
+      ],
+      "data_type": "float64",
+      "unit": "USD per click",
+      "source": "tableau_medias_performance.csv (cost_net / clics_reel)",
+      "coverage": "36 months (complete)",
+      "calculation": "Monthly CPC = monthly_cost / monthly_clicks",
+      "missing_data_handling": "Rolling 3-month median CPC when current month has 0 clicks",
+      "typical_values": {
+        "banniere_web": 0.98,
+        "social_media": 1.05,
+        "preroll": 9.99,
+        "circulaire_digitale": 5.68
+      },
+      "expected_impact": "MEDIUM-HIGH - diagnoses engagement quality; complements spend"
+    },
+    "feature_set_c_cpm_index": {
+      "description": "Cost efficiency index: current CPM / channel median CPM (normalized)",
+      "columns": [
+        "cpm_index_television",
+        "cpm_index_radio",
+        "cpm_index_panneaux",
+        "cpm_index_social_media",
+        "cpm_index_banniere_web",
+        "cpm_index_circulaire_digitale",
+        "cpm_index_preroll"
+      ],
+      "data_type": "float64",
+      "unit": "Ratio (1.0 = median, 0.8 = 20% below median)",
+      "source": "tableau_medias_performance.csv (monthly CPM / channel_median_CPM)",
+      "calculation": "CPM_index = (monthly_cost / monthly_impressions * 1000) / channel_median_CPM",
+      "interpretation": {
+        "0.8": "20% cheaper than channel average (good rate negotiation)",
+        "1.0": "At channel average",
+        "1.2": "20% premium (peak season or premium placements)"
+      },
+      "expected_impact": "MEDIUM - reveals seasonal rate negotiation success"
+    }
+  },
+  "priority_2_medium_impact": {
+    "feature_set_d_ctr": {
+      "description": "Click-through rate for digital channels (clicks / impressions %)",
+      "columns": [
+        "ctr_banniere_web",
+        "ctr_social_media",
+        "ctr_preroll",
+        "ctr_circulaire_digitale"
+      ],
+      "data_type": "float64",
+      "unit": "Percentage (%)",
+      "source": "tableau_medias_performance.csv (clics_reel / impressions_reel)",
+      "coverage": "36 months",
+      "typical_range": "0.003% to 0.07%",
+      "note": "DIAGNOSTIC ONLY - not correlated with sales; use for creative quality assessment"
+    },
+    "feature_set_e_media_composition": {
+      "description": "Media budget composition as % of total spend",
+      "columns": [
+        "pct_traditional_media",
+        "pct_digital_media"
+      ],
+      "calculation": {
+        "pct_traditional": "(spend_television + spend_radio) / spend_total * 100",
+        "pct_digital": "(spend_social_media + spend_banniere_web + spend_preroll + spend_circulaire_digitale + spend_panneaux) / spend_total * 100"
+      },
+      "rationale": "Client constraint #1: structural media mix evolution (traditional\u2192digital shift)",
+      "trend": "FY2023: 45% trad / 55% digital \u2192 FY2025: 35% trad / 65% digital"
+    }
+  },
+  "implementation_steps": {
+    "step_1_aggregate_impressions": {
+      "input_file": "data/processed/tableau_medias_performance.csv",
+      "groupby": [
+        "year",
+        "month",
+        "channel_group"
+      ],
+      "aggregate": "impressions_reel.sum()",
+      "output_cols": 7,
+      "expected_rows": 36,
+      "code_snippet": "impressions_monthly = tableau.groupby(['year', 'month', 'channel_group'])['impressions_reel'].sum().pivot_table(...)"
+    },
+    "step_2_calculate_cpc": {
+      "formula": "monthly_cost_net / monthly_clics_reel",
+      "handling_zeros": "Use rolling 3-month median when clics_reel = 0",
+      "output_cols": 4
+    },
+    "step_3_calculate_cpm_index": {
+      "formula": "(monthly_cost / monthly_impressions * 1000) / channel_median_cpm",
+      "channel_medians": {
+        "television": 28835000,
+        "radio": 8064958,
+        "panneaux": 1.55,
+        "social_media": 6.64,
+        "banniere_web": 11.36,
+        "circulaire_digitale": 24.84,
+        "preroll": 25.72
+      }
+    },
+    "step_4_merge_with_model": {
+      "target_file": "data/processed/sales_spend_weather.csv",
+      "merge_keys": [
+        "year",
+        "month_num"
+      ],
+      "new_total_cols": "43 + 20 = 63",
+      "new_total_rows": "36 (unchanged)"
+    },
+    "step_5_rerun_model": {
+      "notebook": "notebooks/06c_base_model.ipynb",
+      "comparison": "Compare R\u00b2, coefficients, ROAS with baseline",
+      "robustness": "LOOCV, bootstrap CI, saturation curves"
+    }
+  },
+  "data_quality_assessment": {
+    "strengths": [
+      "Digital impressions complete (Web, Social: 12 months)",
+      "Rich click data: 756K clicks total",
+      "GRP data for traditional media (142 radio placements)",
+      "CPM calculated for 77% of records"
+    ],
+    "limitations": [
+      "TV impressions sparse (4 months seasonal)",
+      "Preroll data limited (small sample)",
+      "Single province weather proxy for 42 stores",
+      "No store-level media targeting data"
+    ],
+    "recommended_mitigations": [
+      "Use GRP\u2194impressions conversion for TV (formula: GRP = CPM basis)",
+      "Create TV impressions estimate from GRP if needed",
+      "Document data sparseness in model caveats",
+      "Future: collect store-level media exposure (IP-based, geotargeting data)"
+    ]
+  }
+}

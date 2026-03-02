@@ -1,0 +1,76 @@
+{
+  "model_version": "06D_enriched",
+  "approach": "spend + impressions (14 features)",
+  "r2_full": 0.8858,
+  "r2_stage1": 0.8274,
+  "r2_stage2": 0.3385,
+  "ridge_alpha": 50,
+  "n_observations": 36,
+  "n_media_features": 14,
+  "media_contribution_pct": 10.61,
+  "channels": {
+    "Television": {
+      "roas": 7.27,
+      "ci_low": 3.45,
+      "ci_high": 9.97,
+      "significant": true,
+      "spend_effect": 15285095.29,
+      "impression_effect": 13420103.67,
+      "impression_share_pct": 46.8
+    },
+    "Radio": {
+      "roas": -10.41,
+      "ci_low": -17.43,
+      "ci_high": -0.97,
+      "significant": false,
+      "spend_effect": -9836090.93,
+      "impression_effect": -12729150.23,
+      "impression_share_pct": 56.4
+    },
+    "Panneaux (DOOH)": {
+      "roas": -1.78,
+      "ci_low": -15.17,
+      "ci_high": 19.57,
+      "significant": false,
+      "spend_effect": 330207.49,
+      "impression_effect": -850771.65,
+      "impression_share_pct": 72.0
+    },
+    "Social Media": {
+      "roas": 23.09,
+      "ci_low": -20.58,
+      "ci_high": 60.32,
+      "significant": false,
+      "spend_effect": 10835356.96,
+      "impression_effect": 8267678.81,
+      "impression_share_pct": 43.3
+    },
+    "Preroll (Video)": {
+      "roas": 31.44,
+      "ci_low": 13.57,
+      "ci_high": 42.01,
+      "significant": true,
+      "spend_effect": 14543594.48,
+      "impression_effect": 13823308.36,
+      "impression_share_pct": 48.7
+    },
+    "Web Banners": {
+      "roas": 2.22,
+      "ci_low": -11.94,
+      "ci_high": 21.77,
+      "significant": false,
+      "spend_effect": 6523677.13,
+      "impression_effect": -4686048.84,
+      "impression_share_pct": 41.8
+    },
+    "Digital Flyers": {
+      "roas": -1.27,
+      "ci_low": -34.09,
+      "ci_high": 40.64,
+      "significant": false,
+      "spend_effect": 759042.61,
+      "impression_effect": -1324638.94,
+      "impression_share_pct": 63.6
+    }
+  }
+}

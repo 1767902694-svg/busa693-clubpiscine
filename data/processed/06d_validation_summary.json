@@ -1,0 +1,91 @@
+{
+  "model_version": "06D_validation_layer",
+  "purpose": "Validate 06C spend-based model using Tableau Medias data",
+  "base_model": {
+    "version": "06C",
+    "r2_full": 0.8809,
+    "ridge_alpha": 5,
+    "status": "FROZEN (not refitted)"
+  },
+  "reconstruction_r2": 0.8809,
+  "tableau_coverage": {
+    "observed_months": 12,
+    "total_months": 36,
+    "fiscal_years_covered": [
+      2025
+    ]
+  },
+  "quality_assessment": {
+    "Television": {
+      "verdict": "SWITCH when 36mo available",
+      "best_metric": "GRP/PEB"
+    },
+    "Radio": {
+      "verdict": "SWITCH when 36mo available",
+      "best_metric": "GRP/PEB"
+    },
+    "Panneaux (DOOH)": {
+      "verdict": "SWITCH when 36mo available",
+      "best_metric": "Impressions (traffic)"
+    },
+    "Social Media": {
+      "verdict": "SWITCH when 36mo available",
+      "best_metric": "Impressions"
+    },
+    "Preroll (Video)": {
+      "verdict": "STAY with spend",
+      "best_metric": "Impressions"
+    },
+    "Web Banners": {
+      "verdict": "SWITCH when 36mo available",
+      "best_metric": "Impressions"
+    },
+    "Digital Flyers": {
+      "verdict": "STAY with spend",
+      "best_metric": "Impressions"
+    }
+  },
+  "cpm_cross_validation": {
+    "Social Media": {
+      "correlation": -0.023,
+      "p_value": 0.943,
+      "n_observations": 12,
+      "underpowered": false,
+      "interpretation": "No signal: spend model is sufficient"
+    },
+    "Preroll (Video)": {
+      "correlation": 0.64,
+      "p_value": 0.245,
+      "n_observations": 5,
+      "underpowered": true,
+      "interpretation": "SUGGESTIVE (r=0.64) but underpowered (N=5<8)"
+    },
+    "Web Banners": {
+      "correlation": 0.436,
+      "p_value": 0.156,
+      "n_observations": 12,
+      "underpowered": false,
+      "interpretation": "Weak signal: borderline (needs more data)"
+    },
+    "Digital Flyers": {
+      "correlation": 0.144,
+      "p_value": 0.785,
+      "n_observations": 6,
+      "underpowered": true,
+      "interpretation": "Inconclusive: underpowered (N=6<8)"
+    }
+  },
+  "residual_analysis": {
+    "observed_mae": 2272456.0,
+    "imputed_mae": 2838216.0,
+    "t_test_p": 0.3861,
+    "mann_whitney_p": 0.6266,
+    "verdict": "No significant difference (both tests agree). Spend-based model is robust across all periods."
+  },
+  "spend_reconciliation": {
+    "base_model_total": 3025110.0,
+    "tableau_total": 3169064.0,
+    "discrepancy_pct": 4.8
+  },
+  "recommendation": "Stay with 06C. Request 36-month GRP (TV/Radio) and impression (digital) data from agency."
+}
