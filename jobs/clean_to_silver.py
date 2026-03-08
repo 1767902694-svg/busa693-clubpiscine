@@ -395,7 +395,7 @@ def clean_soumissions(raw, label):
         .str.replace(r'[^\w]', '', regex=True)
     )
     for col in df.columns:
-        if 'date' in col or 'semaine' in col:
+        if isinstance(col, str) and ('date' in col or 'semaine' in col):
             try:
                 df[col] = pd.to_datetime(df[col], errors='coerce')
             except Exception:
@@ -440,7 +440,7 @@ def main():
 
     # ── 2. Budget media spend ─────────────────────────────────────────────────
     log.info('\n[2/6] Budget media spend')
-    b2023 = clean_budget_grouped(dl('Budget 2023.xlsx'), 2023)
+    b2023 = clean_budget_grouped(dl('Budget 2023 .xlsx'), 2023)
     b2024 = clean_budget_grouped(dl('Budget 2024 - REEL au 5 novembre.xlsx'), 2024)
     b2025 = clean_budget_grouped(dl('Budget 2025 - 21 août.xlsx'), 2025)
     budget_combined = pd.concat([b2023, b2024, b2025], ignore_index=True)
