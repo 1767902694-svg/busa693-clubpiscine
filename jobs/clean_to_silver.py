@@ -1,421 +1,516 @@
-# Data Cleaning - Club Piscine MMM
-# Bronze (raw excel) -> Silver (processed csv + pkl)
+"""
+clean_to_silver.py
+Bronze → Silver cleaning job for ClubPiscine MMM.
 
-import os
+Direct conversion of NB02 (02_data_cleaning.ipynb).
+Reads 9 raw Excel files from Azure Blob (bronze container),
+cleans them, and writes CSVs to silver container.
+
+Bronze inputs  (bronze/Mix_Media_Modeling/):
+  - Historical sales by store and by division for 2023-2024-2025.xlsx
+  - Budget 2023 .xlsx
+  - Budget 2024 - REEL au 5 novembre.xlsx
+  - Budget 2025 - 21 août.xlsx
+  - Preroll 2025.xlsx
+  - Recap_Tableau_Medias_2025.xlsx
+  - CalendrierFiscal.xlsx
+  - Rapport de soumissions 2024.xlsx
+  - Rapport de soumissions 2025.xlsx
+
+Silver outputs (silver/Mix_Media_Modeling/processed/):
+  - sales_data.csv
+  - budget_media_spend.csv
+  - budget_media_spend_wide.csv
+  - tableau_medias_performance.csv
+  - calendrier_fiscal.csv
+  - soumissions_2024.csv
+  - soumissions_2025.csv
+  - sales_spend_merged.csv
+
+Environment variables required:
+  AZURE_STORAGE_ACCOUNT_NAME
+  AZURE_STORAGE_ACCOUNT_KEY
+  BRONZE_CONTAINER      (default: bronze)
+  SILVER_CONTAINER      (default: silver)
+  BRONZE_INPUT_DIR      (default: Mix_Media_Modeling/)
+  SILVER_OUTPUT_DIR     (default: Mix_Media_Modeling/processed/)
+"""
+
 import io
-import re
+import os
+import logging
 import warnings
-from pathlib import Path
-import pickle
 
 import pandas as pd
 import numpy as np
-from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient
-from azure.storage.blob import ContentSettings
 
-warnings.filterwarnings("ignore")
+warnings.filterwarnings('ignore')
 
-# Display options
-pd.set_option("display.max_columns", None)
-pd.set_option("display.max_rows", 100)
-pd.set_option("display.width", None)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s  %(levelname)-8s  %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+log = logging.getLogger(__name__)
 
-# =========================
-# Azure Storage (Bronze/Silver)
-# =========================
-STORAGE_ACCOUNT = os.environ.get("STORAGE_ACCOUNT", "mcgillclubpiscine")
-BRONZE_CONTAINER = os.environ.get("BRONZE_CONTAINER", "bronze")
-SILVER_CONTAINER = os.environ.get("SILVER_CONTAINER", "silver")
 
-# Optional: keep the same names as in Bronze. These match your screenshot.
-BRONZE_FILES = {
-    "soumissions_2024": os.environ.get("BRONZE_SOUMISSIONS_2024", "Rapport de soumissions 2024.xlsx"),
-    "soumissions_2025": os.environ.get("BRONZE_SOUMISSIONS_2025", "+Rapport de soumissions 2025.xlsx"),
-    "budget_2024": os.environ.get("BRONZE_BUDGET_2024", "Budget 2024 - REEL au 5 novembre.xlsx"),
-    "budget_2025": os.environ.get("BRONZE_BUDGET_2025", "Budget 2025 - 21 août.xlsx"),
-    "tableau_2025": os.environ.get("BRONZE_TABLEAU_2025", "Recap_Tableau_Medias_2025.xlsx"),
-    "calendrier": os.environ.get("BRONZE_CALENDRIER", "CalendrierFiscal.xlsx"),
+# ─── Azure helpers ─────────────────────────────────────────────────────────────
+
+def get_client():
+    name = os.environ['AZURE_STORAGE_ACCOUNT_NAME']
+    key  = os.environ['AZURE_STORAGE_ACCOUNT_KEY']
+    conn = (f"DefaultEndpointsProtocol=https;AccountName={name};"
+            f"AccountKey={key};EndpointSuffix=core.windows.net")
+    return BlobServiceClient.from_connection_string(conn)
+
+def download(client, container, path):
+    log.info(f'  ↓  {container}/{path}')
+    return client.get_blob_client(container=container, blob=path).download_blob().readall()
+
+def upload_csv(client, container, path, df):
+    data = df.to_csv(index=False).encode('utf-8')
+    client.get_blob_client(container=container, blob=path).upload_blob(data, overwrite=True)
+    log.info(f'  ↑  {container}/{path}  ({len(df):,} rows)')
+
+def read_excel(raw, **kwargs):
+    return pd.read_excel(io.BytesIO(raw), **kwargs)
+
+
+# ─── 1. Sales data (NB02 Cell 2) ───────────────────────────────────────────────
+
+def extract_sales_data(raw):
+    """
+    Aggregate weekly store-level data → monthly company-level totals.
+    6,336 rows × 42 stores → 36 monthly rows.
+    6 product categories: HT, CR, SP (units+revenue), ME&GA, FI, BQ (revenue only).
+    """
+    df = read_excel(raw, sheet_name='Ventes cumulatives par magasin', header=1)
+    log.info(f'    Raw sales: {df.shape[0]:,} rows × {df.shape[1]} cols')
+
+    monthly = df.groupby(['Année fiscale', 'Month']).agg({
+        'U-HT': 'sum', '$-HT': 'sum',
+        'U-CR': 'sum', '$-CR': 'sum',
+        'U-SP': 'sum', '$-SP': 'sum',
+        '$-ME & $-GA': 'sum',
+        '$-FI': 'sum',
+        '$-BQ': 'sum'
+    }).reset_index()
+
+    monthly = monthly.rename(columns={
+        'Année fiscale':  'year',
+        'Month':          'month_num',
+        'U-HT':           'piscines_hors_terre_units',
+        '$-HT':           'piscines_hors_terre_revenue',
+        'U-CR':           'piscines_creusees_units',
+        '$-CR':           'piscines_creusees_revenue',
+        'U-SP':           'spas_units',
+        '$-SP':           'spas_revenue',
+        '$-ME & $-GA':    'meubles_gazebo_revenue',
+        '$-FI':           'fitness_revenue',
+        '$-BQ':           'bbq_revenue'
+    })
+
+    monthly['total_all_revenue'] = (
+        monthly['piscines_hors_terre_revenue'] +
+        monthly['piscines_creusees_revenue'] +
+        monthly['spas_revenue'] +
+        monthly['meubles_gazebo_revenue'] +
+        monthly['fitness_revenue'] +
+        monthly['bbq_revenue']
+    )
+    monthly['total_units'] = (
+        monthly['piscines_hors_terre_units'] +
+        monthly['piscines_creusees_units'] +
+        monthly['spas_units']
+    )
+
+    # Derive calendar year from fiscal year + month
+    # Nov-Dec of FY X → calendar year X-1; Jan-Oct of FY X → calendar year X
+    monthly['calendar_year'] = monthly.apply(
+        lambda r: int(r['year']) - 1 if r['month_num'] >= 11 else int(r['year']), axis=1
+    )
+    monthly['date'] = pd.to_datetime(
+        monthly['calendar_year'].astype(str) + '-' +
+        monthly['month_num'].astype(str) + '-01'
+    )
+    monthly = monthly.sort_values('date').reset_index(drop=True)
+    monthly['month'] = monthly['month_num'].map({
+        1: 'Janvier',   2: 'Février',  3: 'Mars',     4: 'Avril',
+        5: 'Mai',       6: 'Juin',     7: 'Juillet',  8: 'Août',
+        9: 'Septembre', 10: 'Octobre', 11: 'Novembre', 12: 'Décembre'
+    })
+
+    log.info(f'    → {len(monthly)} monthly rows | FYs: {sorted(monthly["year"].unique())}')
+    return monthly
+
+
+# ─── 2. Budget media spend (NB02 Cell 3) ───────────────────────────────────────
+
+CHANNEL_GROUPS = {
+    # 1. Television
+    'TELEVISION': 'Television',
+    # 2. Radio
+    'RADIO': 'Radio',
+    'RADIO NUMÉRIQUE': 'Radio',
+    # 3. Panneaux
+    'PANNEAUX': 'Panneaux',
+    'PANNEAUX ET AFFICHAGES NUMÉRIQUES': 'Panneaux',
+    # 4. Social Media
+    'FACEBOOK': 'Social_Media',
+    'FACEBOOK + INSTAGRAM (PROMO)': 'Social_Media',
+    'FACEBOOK + INSTAGRAM (PRODUIT)': 'Social_Media',
+    'PINTEREST': 'Social_Media',
+    'TIKTOK': 'Social_Media',
+    # 5. Preroll
+    'PREROLL - PREMIUM': 'Preroll',
+    'PREROLL - YOUTUBE': 'Preroll',
+    # 6. Banniere_Web
+    'BANNIÈRES WEB - PREMIUM': 'Banniere_Web',
+    'BANNIERES WEB - PREMIUM': 'Banniere_Web',
+    'BANNIERES WEB': 'Banniere_Web',
+    'BANNIÈRES WEB': 'Banniere_Web',
+    'LAPRESSE+': 'Banniere_Web',
+    'LAPRESSE (LP+, PREROLL, DISPLAY)': 'Banniere_Web',
+    'CONTENU DE MARQUE': 'Banniere_Web',
+    # 7. Circulaire Digitale
+    'CIRCULAIRE DIGITAL': 'Circulaire_Digitale',
+    'CIRCULAIRE DIGITALE': 'Circulaire_Digitale',
 }
 
-def _blob_service_client() -> BlobServiceClient:
-    url = f"https://{STORAGE_ACCOUNT}.blob.core.windows.net"
-    cred = DefaultAzureCredential()
-    return BlobServiceClient(account_url=url, credential=cred)
+EXCLUDE = [
+    'PROGRAMMATIQUE', 'AUDIO ET PODCAST', 'ENVOIS POSTAUX',
+    'COMMANDITES', 'GOOGLE SHOPPING', 'RECHERCHE DE MOTS',
+]
 
-def read_excel_from_bronze(blob_name: str, **read_excel_kwargs) -> pd.DataFrame:
+SKIP_EXACT = {'FR', 'EN', 'ENG', 'TRADITIONNEL', 'NUMÉRIQUE', 'NUMERIQUE', 'AUTRES'}
+
+SKIP_CONTAINS = [
+    'TOTAL', 'DIFFÉRENCE', '% VS',
+    'SEMAINE', 'CAMPAGNE', 'MEDIA', 'COOP', 'PRODUCTION', 'RÉSERVE',
+    'CONTINGENCE', 'CIRCULAIRE PAPIER',
+    'VIDEO ( PORTÉE', 'PERFORMANCE ( SOUMISSIONS',
+    'GOOGLE DISPLAY + PREROLL',
+]
+
+MONTHS_INFO = [
+    ('NOVEMBRE', 11), ('DECEMBRE', 12), ('JANVIER', 1),  ('FEVRIER', 2),
+    ('MARS', 3),      ('AVRIL', 4),     ('MAI', 5),       ('JUIN', 6),
+    ('JUILLET', 7),   ('AOUT', 8),      ('SEPTEMBRE', 9), ('OCTOBRE', 10),
+]
+
+
+def clean_budget_grouped(raw, year):
     """
-    Download an Excel blob from Bronze and read with pandas.
+    Parse one annual budget Excel file into long-format channel × month data.
+    Key fix from NB02: take LAST matching month column (event sub-columns appear
+    before the actual monthly total column).
     """
-    bsc = _blob_service_client()
-    bronze = bsc.get_container_client(BRONZE_CONTAINER)
-    data = bronze.get_blob_client(blob_name).download_blob().readall()
-    return pd.read_excel(io.BytesIO(data), **read_excel_kwargs)
+    df_raw = read_excel(raw, sheet_name=0, header=None)
 
-def upload_bytes_to_silver(blob_path: str, content: bytes, content_type: str | None = None) -> None:
-    """
-    Upload raw bytes to Silver.
-    """
-    bsc = _blob_service_client()
-    silver = bsc.get_container_client(SILVER_CONTAINER)
-    blob_client = silver.get_blob_client(blob_path)
-
-    if content_type:
-        blob_client.upload_blob(
-            content,
-            overwrite=True,
-            content_settings=ContentSettings(content_type=content_type)
-        )
-    else:
-        blob_client.upload_blob(
-            content,
-            overwrite=True
-        )
-def save_df_to_silver_csv(df: pd.DataFrame, blob_path: str) -> None:
-    csv_bytes = df.to_csv(index=False).encode("utf-8")
-    upload_bytes_to_silver(blob_path, csv_bytes, content_type="text/csv")
-
-def save_df_to_silver_pickle(df, blob_path: str) -> None:
-    """
-    Save dataframe as a pickle file into Silver container.
-    """
-    pkl_bytes = pickle.dumps(df)
-    upload_bytes_to_silver(blob_path, pkl_bytes, content_type="application/octet-stream")
-
-def list_bronze_files() -> None:
-    bsc = _blob_service_client()
-    bronze = bsc.get_container_client(BRONZE_CONTAINER)
-    print("\nBronze blobs (first 50):")
-    count = 0
-    for blob in bronze.list_blobs():
-        print(f"  - {blob.name}")
-        count += 1
-        if count >= 50:
-            break
-
-print(f"Storage account: {STORAGE_ACCOUNT}")
-print(f"Bronze container: {BRONZE_CONTAINER}")
-print(f"Silver container: {SILVER_CONTAINER}")
-list_bronze_files()
-
-# ============================================================
-# 1. Rapport de Soumissions (Quote Requests) - 2024 & 2025
-# ============================================================
-
-def clean_soumissions(blob_name, year, start_row, end_row):
-    """
-    Clean the Rapport de Soumissions file.
-
-    Extracts monthly quote data from the RECAP sheet.
-    """
-    df_raw = read_excel_from_bronze(blob_name, sheet_name="RECAP", header=None)
-
-    months = [
-        "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-        "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
-    ]
-
-    data = []
-    for i, row_idx in enumerate(range(start_row, end_row)):
-        if i < len(months):
-            row_data = {
-                "year": year,
-                "month": months[i],
-                "month_num": i + 1,
-                "piscines_hors_terre": df_raw.iloc[row_idx, 2],  # Column C
-                "piscines_creusees": df_raw.iloc[row_idx, 6],    # Column G
-                "spas": df_raw.iloc[row_idx, 10],                # Column K
-            }
-
-            if year == 2025:
-                row_data["autres_produits"] = df_raw.iloc[row_idx, 18]  # Column S
-                row_data["services"] = df_raw.iloc[row_idx, 22]         # Column W
-                row_data["autre"] = df_raw.iloc[row_idx, 26]            # Column AA
-            else:  # 2024
-                row_data["autres_produits"] = df_raw.iloc[row_idx, 14]  # Column O
-                row_data["services"] = df_raw.iloc[row_idx, 18]         # Column S
-                row_data["autre"] = df_raw.iloc[row_idx, 22]            # Column W
-
-            data.append(row_data)
-
-    df_clean = pd.DataFrame(data)
-
-    numeric_cols = [
-        "piscines_hors_terre", "piscines_creusees", "spas",
-        "autres_produits", "services", "autre"
-    ]
-
-    for col in numeric_cols:
-        if col in df_clean.columns:
-            df_clean[col] = pd.to_numeric(df_clean[col], errors="coerce")
-
-    main_cols = ["piscines_hors_terre", "piscines_creusees", "spas"]
-    df_clean["total_main_quotes"] = df_clean[main_cols].sum(axis=1, skipna=True)
-    df_clean["total_all_quotes"] = df_clean[numeric_cols].sum(axis=1, skipna=True)
-
-    return df_clean
-
-soumissions_2024 = clean_soumissions(
-    BRONZE_FILES["soumissions_2024"], year=2024, start_row=17, end_row=29
-)
-
-soumissions_2025 = clean_soumissions(
-    BRONZE_FILES["soumissions_2025"], year=2025, start_row=20, end_row=32
-)
-
-soumissions_combined = pd.concat([soumissions_2024, soumissions_2025], ignore_index=True)
-
-print("=" * 70)
-print("SOUMISSIONS COMBINED")
-print("=" * 70)
-print(soumissions_combined.head(5).to_string(index=False))
-print(f"\nMissing values: {soumissions_combined.isna().sum().to_dict()}")
-
-# ============================================================
-# 2. Budget Media Spend - 2024 & 2025
-# ============================================================
-
-def clean_budget(blob_name, year):
-    df_raw = read_excel_from_bronze(blob_name, sheet_name=0, header=None)
-
-    exclude_patterns = ["PROGRAMMATIQUE", "AUDIO ET PODCAST", "ENVOIS POSTAUX"]
-    social_media_patterns = ["FACEBOOK", "INSTAGRAM", "PINTEREST", "TIKTOK"]
-
-    skip_exact = ["FR", "EN", "TRADITIONNEL", "NUMÉRIQUE", "AUTRES"]
-    skip_contains = [
-        "TOTAL", "DIFFÉRENCE", "% VS",
-        "SEMAINE", "CAMPAGNE", "MEDIA", "COOP", "PRODUCTION", "RÉSERVE",
-        "CONTINGENCE", "CIRCULAIRE PAPIER",
-        "RECHERCHE DE MOTS CLÉS",
-        "PREROLL - YOUTUBE",
-    ]
-
-    months_info = [
-        ("NOVEMBRE", 11), ("DECEMBRE", 12), ("JANVIER", 1), ("FEVRIER", 2),
-        ("MARS", 3), ("AVRIL", 4), ("MAI", 5), ("JUIN", 6),
-        ("JUILLET", 7), ("AOUT", 8), ("SEPTEMBRE", 9), ("OCTOBRE", 10),
-    ]
-
+    # Detect month columns from row 6 — take LAST match to skip event sub-columns
     row6 = df_raw.iloc[6, :].tolist()
     month_cols = {}
     for i, val in enumerate(row6[:70]):
         if pd.notna(val):
-            val_upper = str(val).upper().strip()
-            for month_name, month_num in months_info:
-                if val_upper == month_name and month_name not in month_cols:
-                    month_cols[month_name] = (i, month_num)
-                    break
+            v = str(val).upper().strip()
+            for mname, mnum in MONTHS_INFO:
+                if v == mname:
+                    month_cols[mname] = (i, mnum)  # always overwrite → takes last
 
-    print(f"  Found {len(month_cols)} months for {year}")
-    data_rows = list(range(10, 37))
+    log.info(f'    Budget {year}: {len(month_cols)} month columns found')
 
     media_data = []
-    for row_idx in data_rows:
-        media_name = df_raw.iloc[row_idx, 3]  # Column D
+    for row_idx in range(10, 42):
+        media_name = df_raw.iloc[row_idx, 3]
         if pd.isna(media_name) or not str(media_name).strip():
             continue
 
-        media_name_str = str(media_name).strip()
-        media_name_upper = media_name_str.upper()
+        name_u = str(media_name).strip().upper()
 
-        if media_name_upper in skip_exact:
+        if name_u in SKIP_EXACT:
             continue
-        if any(skip in media_name_upper for skip in skip_contains):
+        if any(s in name_u for s in SKIP_CONTAINS):
             continue
-        if year == 2024 and media_name_upper == "BANNIÈRES WEB":
-            continue
-        if any(excl.upper() in media_name_upper for excl in exclude_patterns):
+        if any(e.upper() in name_u for e in EXCLUDE):
             continue
 
-        if any(sm.upper() in media_name_upper for sm in social_media_patterns):
-            channel_category = "SOCIAL MEDIA"
-        elif "GOOGLE" in media_name_upper and "SHOPPING" not in media_name_upper:
-            channel_category = "GOOGLE ADS"
-        else:
-            channel_category = media_name_upper
+        # Skip plain BANNIÈRES WEB parent row — allow Google Display sub-row (col0='DISPLAY')
+        if name_u == 'BANNIÈRES WEB':
+            col0 = str(df_raw.iloc[row_idx, 0]).strip().upper() if pd.notna(df_raw.iloc[row_idx, 0]) else ''
+            if col0 != 'DISPLAY':
+                continue
 
-        for month_name, (col_idx, month_num) in month_cols.items():
-            spend = df_raw.iloc[row_idx, col_idx]
-            spend_value = pd.to_numeric(spend, errors="coerce")
+        # Skip GOOGLE parent rows — use sub-rows to avoid Shopping contamination
+        if name_u in ('GOOGLE ADS', 'GOOGLE'):
+            continue
 
-            if pd.notna(spend_value) and spend_value != 0:
-                media_data.append(
-                    {
-                        "year": year,
-                        "month": month_name,
-                        "month_num": month_num,
-                        "media_channel": channel_category,
-                        "spend": spend_value,
-                    }
-                )
+        channel = None
+        for pattern, group in CHANNEL_GROUPS.items():
+            if pattern == name_u or pattern in name_u:
+                channel = group
+                break
+        if channel is None:
+            continue
 
-    df_clean = pd.DataFrame(media_data)
-    if df_clean.empty:
-        return df_clean
+        for mname, (col_idx, mnum) in month_cols.items():
+            spend = pd.to_numeric(df_raw.iloc[row_idx, col_idx], errors='coerce')
+            if pd.notna(spend) and spend != 0:
+                media_data.append({
+                    'year': year, 'month': mname, 'month_num': mnum,
+                    'channel_group': channel, 'spend': spend
+                })
 
-    df_agg = df_clean.groupby(
-        ["year", "month", "month_num", "media_channel"], as_index=False
-    )["spend"].sum()
+    df = pd.DataFrame(media_data)
+    if df.empty:
+        log.warning(f'    Budget {year}: no data extracted — check file name/structure')
+        return df
 
-    return df_agg
+    return df.groupby(['year', 'month', 'month_num', 'channel_group'], as_index=False)['spend'].sum()
 
-print("Processing Budget 2024...")
-budget_2024 = clean_budget(BRONZE_FILES["budget_2024"], 2024)
 
-print("Processing Budget 2025...")
-budget_2025 = clean_budget(BRONZE_FILES["budget_2025"], 2025)
+def load_preroll_breakdown(raw):
+    """
+    Parse Preroll 2025.xlsx — Google Ads split file.
+    Display_Cost → Banniere_Web
+    Video_Cost   → Preroll
+    Search, Shopping, PerfMax → excluded from MMM
+    """
+    df = read_excel(raw, header=2)
+    df.columns = ['Month', 'Currency', 'Search_Cost', 'Display_Cost',
+                  'Shopping_Cost', 'Video_Cost', 'PerfMax_Cost']
+    for col in ['Display_Cost', 'Video_Cost']:
+        df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
 
-budget_combined = pd.concat([budget_2024, budget_2025], ignore_index=True)
-
-# ============================================================
-# 3. Tableau Medias 2025 - Campaign Performance
-# ============================================================
-
-def clean_tableau_medias(blob_name):
-    df_raw = read_excel_from_bronze(blob_name, sheet_name="MASTER-TOTAL", header=0)
-
-    cols_to_extract = {
-        1: "date_debut",
-        2: "date_fin",
-        3: "media_type",
-        5: "support",
-        11: "cost_net",
-        19: "occasions_reel",
-        20: "impressions_reel",
-        21: "peb_reel",
-        27: "vues_completees",
-        28: "taux_vues",
-        29: "clics_reel",
-        30: "taux_clics",
+    mmap = {
+        'january': 1, 'february': 2, 'march': 3, 'april': 4,
+        'may': 5, 'june': 6, 'july': 7, 'august': 8,
+        'september': 9, 'october': 10, 'november': 11, 'december': 12
+    }
+    mfr = {
+        1: 'JANVIER', 2: 'FEVRIER',   3: 'MARS',      4: 'AVRIL',
+        5: 'MAI',     6: 'JUIN',      7: 'JUILLET',   8: 'AOUT',
+        9: 'SEPTEMBRE', 10: 'OCTOBRE', 11: 'NOVEMBRE', 12: 'DECEMBRE'
     }
 
-    df_clean = df_raw.iloc[:, list(cols_to_extract.keys())].copy()
-    df_clean.columns = list(cols_to_extract.values())
+    records = []
+    for _, row in df.iterrows():
+        parts = str(row['Month']).strip().split()
+        if len(parts) < 2:
+            continue
+        mnum = mmap.get(parts[0].lower())
+        if mnum is None:
+            continue
+        cal_year = int(parts[1])
+        fy = cal_year + 1 if mnum >= 11 else cal_year
+        if row['Display_Cost'] > 0:
+            records.append({'year': fy, 'month': mfr[mnum], 'month_num': mnum,
+                            'channel_group': 'Banniere_Web', 'spend': row['Display_Cost']})
+        if row['Video_Cost'] > 0:
+            records.append({'year': fy, 'month': mfr[mnum], 'month_num': mnum,
+                            'channel_group': 'Preroll', 'spend': row['Video_Cost']})
+    return pd.DataFrame(records)
 
-    df_clean = df_clean.dropna(how="all")
-    df_clean = df_clean.dropna(subset=["date_debut", "date_fin"], how="all")
 
-    df_clean["date_debut"] = pd.to_datetime(df_clean["date_debut"], errors="coerce")
-    df_clean["date_fin"] = pd.to_datetime(df_clean["date_fin"], errors="coerce")
+# ─── 3. Tableau Medias (NB02 Cell 4) ───────────────────────────────────────────
 
-    numeric_cols = [
-        "cost_net",
-        "occasions_reel",
-        "impressions_reel",
-        "peb_reel",
-        "vues_completees",
-        "taux_vues",
-        "clics_reel",
-        "taux_clics",
-    ]
-    for col in numeric_cols:
-        df_clean[col] = pd.to_numeric(df_clean[col], errors="coerce")
+def clean_tableau_medias(raw):
+    """Extract campaign-level KPIs from Recap_Tableau_Medias_2025.xlsx"""
+    df_raw = read_excel(raw, sheet_name='MASTER-TOTAL', header=0)
 
-    df_clean["year"] = df_clean["date_debut"].dt.year
-    df_clean["month"] = df_clean["date_debut"].dt.month
+    cols = {
+        1: 'date_debut', 2: 'date_fin', 3: 'media_type', 5: 'support',
+        11: 'cost_net', 19: 'occasions_reel', 20: 'impressions_reel',
+        21: 'peb_reel', 27: 'vues_completees', 28: 'taux_vues',
+        29: 'clics_reel', 30: 'taux_clics'
+    }
+    df = df_raw.iloc[:, list(cols.keys())].copy()
+    df.columns = list(cols.values())
+    df = df.dropna(how='all').dropna(subset=['date_debut', 'date_fin'], how='all')
+    df['date_debut'] = pd.to_datetime(df['date_debut'], errors='coerce')
+    df['date_fin']   = pd.to_datetime(df['date_fin'],   errors='coerce')
 
-    mask = (df_clean["impressions_reel"] > 0) & df_clean["cost_net"].notna()
-    df_clean.loc[mask, "cpm_calculated"] = (
-        df_clean.loc[mask, "cost_net"] / df_clean.loc[mask, "impressions_reel"]
+    for col in ['cost_net', 'occasions_reel', 'impressions_reel', 'peb_reel',
+                'vues_completees', 'taux_vues', 'clics_reel', 'taux_clics']:
+        df[col] = pd.to_numeric(df[col], errors='coerce')
+
+    def map_channel(row):
+        mt = str(row['media_type']).upper() if pd.notna(row['media_type']) else ''
+        sp = str(row['support']).upper()     if pd.notna(row['support'])     else ''
+        if mt == 'TÉLÉVISION': return 'Television'
+        if mt == 'RADIO':      return 'Radio'
+        if mt == 'AFFICHAGE':  return 'Panneaux'
+        if mt == 'NUMÉRIQUE':
+            if 'CIRCULAIRE' in sp or 'FLIPP' in sp:                                  return 'Circulaire_Digitale'
+            if any(x in sp for x in ['FACEBOOK', 'INSTAGRAM', 'PINTEREST', 'TIKTOK']): return 'Social_Media'
+            if any(x in sp for x in ['PREROLL', 'YOUTUBE']):                          return 'Preroll'
+            return 'Banniere_Web'
+        return 'Other'
+
+    df['channel_group'] = df.apply(map_channel, axis=1)
+    df['year']  = df['date_debut'].dt.year
+    df['month'] = df['date_debut'].dt.month
+
+    mask = (df['impressions_reel'] > 0) & df['cost_net'].notna()
+    df.loc[mask, 'cpm_calculated'] = (
+        df.loc[mask, 'cost_net'] / df.loc[mask, 'impressions_reel']
     ) * 1000
 
-    df_clean = df_clean.reset_index(drop=True)
-    return df_clean
+    log.info(f'    → {len(df):,} campaign rows')
+    return df.reset_index(drop=True)
 
-tableau_medias = clean_tableau_medias(BRONZE_FILES["tableau_2025"])
 
-# ============================================================
-# 4. Calendrier Fiscal (Fiscal Calendar)
-# ============================================================
+# ─── 4. Calendrier Fiscal (NB02 Cell 5) ────────────────────────────────────────
 
-def clean_calendrier_fiscal(blob_name):
-    df_raw = read_excel_from_bronze(blob_name, sheet_name="CalendrierFiscal", header=0)
-
-    columns_to_keep = [
-        "Date",
-        "Année",
-        "Mois",
-        "Nom Mois",
-        "Jour de la semaine",
-        "Année fiscale",
-        "Trimestre",
-        "Semaine fiscale",
-        "Formule",
-        "Semaine débutant le",
-        "Ordre du mois fiscal",
-        "Ordre semaine",
-        "MoisFiscal",
-        "AnnéeNUM",
-        "Date début semaine",
+def clean_calendrier_fiscal(raw):
+    """Parse CalendrierFiscal.xlsx fiscal calendar reference table."""
+    df = read_excel(raw, sheet_name='CalendrierFiscal', header=0)
+    keep = [
+        'Date', 'Année', 'Mois', 'Nom Mois', 'Jour de la semaine',
+        'Année fiscale', 'Trimestre', 'Semaine fiscale', 'Formule',
+        'Semaine débutant le', 'Ordre du mois fiscal', 'Ordre semaine',
+        'MoisFiscal', 'AnnéeNUM', 'Date début semaine'
     ]
+    df = df[[c for c in keep if c in df.columns]].copy()
+    df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
+    df = df.dropna(subset=['Date'])
+    log.info(f'    → {len(df):,} calendar rows')
+    return df
 
-    columns_to_keep = [c for c in columns_to_keep if c in df_raw.columns]
-    df_clean = df_raw[columns_to_keep].copy()
 
-    df_clean["Date"] = pd.to_datetime(df_clean["Date"], errors="coerce")
-    df_clean = df_clean[df_clean["Année"].isin([2021, 2022, 2023, 2024, 2025, 2026])]
-    return df_clean
+# ─── 5. Rapport de soumissions (new files not in original NB02) ────────────────
 
-calendrier_fiscal = clean_calendrier_fiscal(BRONZE_FILES["calendrier"])
+def clean_soumissions(raw, label):
+    """
+    Light cleaning for Rapport de soumissions files.
+    Standardises column names and parses date columns.
+    Missing values preserved as per client instructions.
+    """
+    df = read_excel(raw, sheet_name=0, header=0)
+    df.columns = (
+        df.columns
+        .str.strip()
+        .str.lower()
+        .str.replace(r'[\s\-\/\(\)]+', '_', regex=True)
+        .str.replace(r'[^\w]', '', regex=True)
+    )
+    for col in df.columns:
+        if 'date' in col or 'semaine' in col:
+            try:
+                df[col] = pd.to_datetime(df[col], errors='coerce')
+            except Exception:
+                pass
+    df = df.dropna(how='all').reset_index(drop=True)
+    log.info(f'    → Soumissions {label}: {len(df):,} rows × {df.shape[1]} cols')
+    return df
 
-# ============================================================
-# 5. Save Cleaned DataFrames -> Silver
-# ============================================================
 
-# CSV
-save_df_to_silver_csv(soumissions_combined, "processed/soumissions_quotes.csv")
-save_df_to_silver_csv(budget_combined, "processed/budget_media_spend.csv")
-save_df_to_silver_csv(tableau_medias, "processed/tableau_medias_performance.csv")
-save_df_to_silver_csv(calendrier_fiscal, "processed/calendrier_fiscal.csv")
+# ─── MAIN ──────────────────────────────────────────────────────────────────────
 
-# Pickle
-save_df_to_silver_pickle(soumissions_combined, "processed/soumissions_quotes.pkl")
-save_df_to_silver_pickle(budget_combined, "processed/budget_media_spend.pkl")
-save_df_to_silver_pickle(tableau_medias, "processed/tableau_medias_performance.pkl")
-save_df_to_silver_pickle(calendrier_fiscal, "processed/calendrier_fiscal.pkl")
+def main():
+    log.info('=' * 60)
+    log.info('ClubPiscine MMM  —  Job 1: Bronze → Silver')
+    log.info('=' * 60)
 
-print("=" * 60)
-print("FILES SAVED TO SILVER")
-print("=" * 60)
-print("Saved to: silver/processed/")
-print("Created:")
-print("  - processed/soumissions_quotes.csv / .pkl")
-print("  - processed/budget_media_spend.csv / .pkl")
-print("  - processed/tableau_medias_performance.csv / .pkl")
-print("  - processed/calendrier_fiscal.csv / .pkl")
+    bronze     = os.environ.get('BRONZE_CONTAINER',  'bronze')
+    silver     = os.environ.get('SILVER_CONTAINER',  'silver')
+    bronze_dir = os.environ.get('BRONZE_INPUT_DIR',  'Mix_Media_Modeling/').rstrip('/') + '/'
+    silver_dir = os.environ.get('SILVER_OUTPUT_DIR', 'Mix_Media_Modeling/processed/').rstrip('/') + '/'
 
-# ============================================================
-# 6. Data Quality Summary
-# ============================================================
+    client = get_client()
+    log.info(f'Account : {os.environ["AZURE_STORAGE_ACCOUNT_NAME"]}')
+    log.info(f'Bronze  : {bronze}/{bronze_dir}')
+    log.info(f'Silver  : {silver}/{silver_dir}')
 
-print("=" * 70)
-print("DATA QUALITY SUMMARY")
-print("=" * 70)
+    def dl(name):
+        return download(client, bronze, f'{bronze_dir}{name}')
 
-datasets = {
-    "Soumissions (Quotes)": soumissions_combined,
-    "Budget (Media Spend)": budget_combined,
-    "Tableau Medias": tableau_medias,
-    "Calendrier Fiscal": calendrier_fiscal,
-}
+    def dl_opt(name):
+        try:
+            return dl(name)
+        except Exception:
+            log.warning(f'  Optional file not found: {name} — skipping')
+            return None
 
-for name, df in datasets.items():
-    print(f"\n{'-' * 40}")
-    print(name)
-    print(f"{'-' * 40}")
-    print(f"  Rows: {len(df):,}")
-    print(f"  Columns: {len(df.columns)}")
+    # ── 1. Sales ──────────────────────────────────────────────────────────────
+    log.info('\n[1/6] Sales data')
+    sales_data = extract_sales_data(
+        dl('Historical sales by store and by division for 2023-2024-2025.xlsx')
+    )
 
-    total_cells = df.size
-    missing_cells = df.isna().sum().sum()
-    missing_pct = (missing_cells / total_cells) * 100
-    print(f"  Missing values: {missing_cells:,} ({missing_pct:.1f}%)")
+    # ── 2. Budget media spend ─────────────────────────────────────────────────
+    log.info('\n[2/6] Budget media spend')
+    b2023 = clean_budget_grouped(dl('Budget 2023.xlsx'), 2023)
+    b2024 = clean_budget_grouped(dl('Budget 2024 - REEL au 5 novembre.xlsx'), 2024)
+    b2025 = clean_budget_grouped(dl('Budget 2025 - 21 août.xlsx'), 2025)
+    budget_combined = pd.concat([b2023, b2024, b2025], ignore_index=True)
 
-    missing_cols = df.columns[df.isna().any()].tolist()
-    if missing_cols:
-        print(f"  Columns with NaN: {missing_cols}")
+    preroll_raw = dl_opt('Preroll 2025.xlsx')
+    if preroll_raw:
+        preroll = load_preroll_breakdown(preroll_raw)
+        fy25 = preroll[preroll['year'] == 2025]
+        budget_combined = pd.concat([budget_combined, fy25], ignore_index=True)
+        budget_combined = budget_combined.groupby(
+            ['year', 'month', 'month_num', 'channel_group'], as_index=False
+        )['spend'].sum()
+        log.info(f'    Preroll 2025 integrated ({len(fy25)} rows)')
 
-print("\n" + "=" * 70)
-print("NOTE: Missing values (NaN) are intentionally preserved as per client")
-print("instructions - they represent data that was not available/collected.")
-print("=" * 70)
+    # Wide format for merging (NB02 Cell 3b)
+    budget_wide = budget_combined.pivot_table(
+        index=['year', 'month', 'month_num'],
+        columns='channel_group',
+        values='spend',
+        aggfunc='sum',
+        fill_value=0
+    ).reset_index()
+    budget_wide.columns = (
+        ['year', 'month', 'month_num'] +
+        [f'spend_{c.lower()}' for c in budget_wide.columns[3:]]
+    )
+    spend_cols = [c for c in budget_wide.columns if c.startswith('spend_')]
+    budget_wide['spend_total'] = budget_wide[spend_cols].sum(axis=1)
+
+    # ── 3. Tableau Medias ─────────────────────────────────────────────────────
+    log.info('\n[3/6] Tableau Medias 2025')
+    tableau_medias = clean_tableau_medias(dl('Recap_Tableau_Medias_2025.xlsx'))
+
+    # ── 4. Calendrier Fiscal ──────────────────────────────────────────────────
+    log.info('\n[4/6] Calendrier Fiscal')
+    calendrier_fiscal = clean_calendrier_fiscal(dl('CalendrierFiscal.xlsx'))
+
+    # ── 5. Soumissions ────────────────────────────────────────────────────────
+    log.info('\n[5/6] Rapports de soumissions')
+    soumissions_2024 = clean_soumissions(dl('Rapport de soumissions 2024.xlsx'), '2024')
+    soumissions_2025 = clean_soumissions(dl('Rapport de soumissions 2025.xlsx'), '2025')
+
+    # ── 6. Merge sales + media spend (NB02 Cell 6b) ───────────────────────────
+    log.info('\n[6/6] Merging sales + media spend')
+    merge_cols = ['year', 'month_num'] + [c for c in budget_wide.columns if c.startswith('spend_')]
+    merged = sales_data.merge(budget_wide[merge_cols], on=['year', 'month_num'], how='inner')
+    merged['fiscal_month_pos'] = merged['month_num'].apply(
+        lambda m: m - 10 if m >= 11 else m + 2
+    )
+    log.info(f'    → {len(merged):,} merged rows')
+
+    # ── Upload to silver ──────────────────────────────────────────────────────
+    log.info('\n  Uploading to silver...')
+    outputs = {
+        'sales_data.csv':                 sales_data,
+        'budget_media_spend.csv':         budget_combined,
+        'budget_media_spend_wide.csv':    budget_wide,
+        'tableau_medias_performance.csv': tableau_medias,
+        'calendrier_fiscal.csv':          calendrier_fiscal,
+        'soumissions_2024.csv':           soumissions_2024,
+        'soumissions_2025.csv':           soumissions_2025,
+        'sales_spend_merged.csv':         merged,
+    }
+    for filename, df in outputs.items():
+        upload_csv(client, silver, f'{silver_dir}{filename}', df)
+
+    log.info('\n' + '=' * 60)
+    log.info('✅  Bronze → Silver complete')
+    log.info('=' * 60)
+
+
+if __name__ == '__main__':
+    main()

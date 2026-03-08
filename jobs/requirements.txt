@@ -1,0 +1,21 @@
+# ClubPiscine MMM — production requirements for Azure
+
+# Data
+pandas==2.2.2
+numpy==1.26.4
+openpyxl==3.1.2
+
+# ML (silver_to_gold)
+scikit-learn==1.4.2
+scipy==1.13.1
+
+# HTTP (weather_to_silver — Open-Meteo API)
+requests==2.32.3
+
+# Holidays (weather_to_silver — optional but included)
+holidays==0.46
+
+# Azure
+azure-storage-blob==12.19.1
+azure-identity==1.16.0
+python-dotenv==1.0.1
