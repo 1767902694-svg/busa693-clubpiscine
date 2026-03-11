@@ -1,21 +1,21 @@
 {
   "decay_rates": {
-    "media_television": 0.2134393616019503,
-    "media_radio": 0.04972103023468241,
-    "media_panneaux": 0.018919940332909578,
-    "media_social_media": 0.018919940332909578,
-    "media_preroll": 0.04972103023468241,
-    "media_banniere_web": 0.005444212055886945,
-    "media_circulaire_digitale": 0.005444212055886945
+    "media_television": 0.1,
+    "media_radio": 0.2,
+    "media_panneaux": 0.25,
+    "media_social_media": 0.01,
+    "media_preroll": 0.45,
+    "media_banniere_web": 0.15,
+    "media_circulaire_digitale": 0.01
   },
   "decay_rate_sources": {
-    "media_television": "industry_benchmark_monthly",
-    "media_radio": "industry_benchmark_monthly",
-    "media_panneaux": "industry_benchmark_monthly",
-    "media_social_media": "industry_benchmark_monthly",
-    "media_preroll": "industry_benchmark_monthly",
-    "media_banniere_web": "industry_benchmark_monthly",
-    "media_circulaire_digitale": "industry_benchmark_monthly"
+    "media_television": "grid_search",
+    "media_radio": "grid_search",
+    "media_panneaux": "grid_search",
+    "media_social_media": "grid_search",
+    "media_preroll": "grid_search",
+    "media_banniere_web": "grid_search",
+    "media_circulaire_digitale": "grid_search"
   },
   "single_channel_decay_rates": {
     "media_television": 0.2,
@@ -187,7 +187,7 @@
     "media_circulaire_digitale": "Circulaire Digitale"
   },
   "calibration_method": "multi_channel_grid_search + LOOCV_saturation",
-  "calibration_date": "2026-03-07",
+  "calibration_date": "2026-03-01",
   "n_observations": 36,
   "n_bootstrap_samples": 200,
   "target": "total_all_revenue",

@@ -1,0 +1,441 @@
+================================================================================
+CLUB PISCINE MMM: CLIENT PRESENTATION PACKAGE
+START HERE - Complete Guide
+================================================================================
+
+WHAT YOU'VE BEEN GIVEN
+================================================================================
+
+A comprehensive, consultant-ready presentation strategy package for pitching 
+the Club Piscine Marketing Mix Model (Notebook 06C) to the Marketing Director 
+and Finance Partner.
+
+FIVE STRATEGIC DOCUMENTS, 2,000+ lines of guidance, designed to help you:
+  1. Understand the narrative you're telling
+  2. Answer tough questions confidently
+  3. Build the actual PowerPoint deck
+  4. Practice and refine before the meeting
+  5. Implement and iterate post-approval
+
+================================================================================
+THE FIVE DOCUMENTS (READ IN THIS ORDER)
+================================================================================
+
+DOCUMENT 1: README_PRESENTATION_PACKAGE.md
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Master index. Start here if you have 2 minutes.
+  • What you have (overview of all 4 documents)
+  • 3 preparation scenarios (1-day prep, 1-week prep, coaching)
+  • Quick reference table (which doc answers which question)
+  • 5 critical talking points (memorize these)
+  • Checklist of what to print & bring
+  • Next steps after the meeting
+Location: /SESSIONS/.../README_PRESENTATION_PACKAGE.md
+Read time: 15 minutes
+Print: Yes, handout checklist
+
+DOCUMENT 2: EXECUTIVE_SUMMARY_1PAGE.md
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+One-page summary of findings. Start here if you have 30 minutes.
+  • 4 key numbers (R²=88.5%, Media=10%, TV=5.85x, Optimization=+21%)
+  • Full channel ROAS table with confidence intervals
+  • Why Radio negative (and why it's OK)
+  • Why wide CIs are good (not bad)
+  • Why media contribution 10% is huge
+  • Budget cut scenarios (10%, 15%, 20%)
+  • 5 key wins to highlight
+  • Risk matrix
+  • Model spec for skeptics
+Location: /SESSIONS/.../EXECUTIVE_SUMMARY_1PAGE.md
+Read time: 20 minutes
+Print: Yes, this is your client handout
+
+DOCUMENT 3: CLIENT_PRESENTATION_FRAMEWORK.md
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Deep strategic guide. Read this before you build the deck.
+11 sections covering:
+  1. The narrative arc (what you're telling the client)
+  2. "Only TV Is Significant" Problem (reframe)
+  3. Radio Negative ROAS Problem (reframe)
+  4. Wide Confidence Intervals (reframe)
+  5. Media 10% Contribution (reframe)
+  6. The WINS to highlight (5 key findings)
+  7. What to soften or reframe (language guidance)
+  8. Additional analyses to offer (Phase 2 work)
+  9. Risk assessment (5 prepared Q&A answers)
+  10. Presentation flow (60-minute structure)
+  11. Deeper narrative for Finance/Board (CFO version)
+Location: /SESSIONS/.../CLIENT_PRESENTATION_FRAMEWORK.md
+Read time: 60 minutes (skim once, deep-read twice)
+Print: No, reference only (too long)
+
+DOCUMENT 4: CONSULTANT_QA_PLAYBOOK.md
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Word-for-word answers to tough questions. Read before Q&A.
+16 Q&A pairs in 7 categories:
+  • Category A: Sample size & methodology (Q1–Q3)
+  • Category B: "Only TV matters" (Q4–Q5)
+  • Category C: Wide confidence intervals (Q6–Q7)
+  • Category D: Radio negative (Q8–Q9)
+  • Category E: Optimization & action (Q10–Q11)
+  • Category F: Strategic & political (Q12–Q13)
+  • Category G: Risk & pushback (Q14–Q16)
+Each Q&A is 300–500 words, detailed and consultant-ready.
+Location: /SESSIONS/.../CONSULTANT_QA_PLAYBOOK.md
+Read time: 90 minutes (once before meeting, reference during)
+Print: Yes, speaker notes (key answers)
+
+DOCUMENT 5: PRESENTATION_SLIDE_GUIDE.md
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Slide-by-slide blueprint. Use to build your actual deck.
+15 slides + speaker notes for each:
+  • Slide 1: Title
+  • Slide 2: The Question
+  • Slide 3: The Model in One Picture (diagram)
+  • Slide 4: R² and Model Fit (pie chart)
+  • Slide 5: Channel Results (ROAS table)
+  • Slide 6: Why TV Is Significant (CI chart)
+  • Slide 7: Why Other Channels Matter (reframe)
+  • Slide 8: Radio Problem (3-panel explanation)
+  • Slide 9: Media 10% (two narratives)
+  • Slide 10: Optimization (+21% waterfall)
+  • Slide 11: Budget Cut Scenarios
+  • Slide 12: 5 Key Wins (summary)
+  • Slide 13: Risks & Mitigations
+  + Visual style guide & speaker checklist
+Location: /SESSIONS/.../PRESENTATION_SLIDE_GUIDE.md
+Read time: 45 minutes (once to understand, then reference while building)
+Print: Yes, as speaker notes
+
+BONUS DOCUMENT: PRESENTATION_PACKAGE_INDEX.txt
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Quick reference card with ASCII art tree of all documents.
+Best for: Quick navigation, "which doc has the answer to X?"
+Location: /SESSIONS/.../PRESENTATION_PACKAGE_INDEX.txt
+Read time: 5 minutes
+
+================================================================================
+HOW TO USE (PICK YOUR SCENARIO)
+================================================================================
+
+SCENARIO A: You have 1 day to prepare
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Timeline: Today (4 hours prep) → Tomorrow (meeting)
+
+(1) TODAY, 30 MIN:
+    Read EXECUTIVE_SUMMARY_1PAGE.md (get the numbers in your head)
+
+(2) TODAY, 45 MIN:
+    Skim CLIENT_PRESENTATION_FRAMEWORK.md sections 1–5 
+    (understand the 5 reframes: TV, Radio, CIs, 10%, Wins)
+
+(3) TODAY, 45 MIN:
+    Read CONSULTANT_QA_PLAYBOOK.md
+    (especially Q8–Q9 on Radio, Q4–Q5 on TV)
+
+(4) TODAY, 2 HOURS:
+    Build your PowerPoint deck using PRESENTATION_SLIDE_GUIDE.md as template
+    (Copy the 13 slides, add your branding, populate with data)
+
+(5) TODAY, 30 MIN:
+    Practice your talk once (aloud, in front of mirror)
+
+(6) TOMORROW, 30 MIN BEFORE MEETING:
+    Review your speaker notes (SLIDE GUIDE + key Q&A answers)
+    Test tech (adapters, projector, clicker)
+
+Materials to bring:
+  ✓ Presentation deck (printed 3 copies + digital backup)
+  ✓ EXECUTIVE_SUMMARY_1PAGE.md (handout)
+  ✓ Speaker notes (Slide Guide + QA answers, 5–10 pages)
+  ✓ Laptop + USB backup
+  ✓ Adapters
+  ✓ Timer
+
+SCENARIO B: You have 1 week to prepare
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Timeline: Days 1–2 (reading) → Days 3–5 (building & practicing) → Day 6–7 (refinement)
+
+(1) DAYS 1–2 (4–5 HOURS):
+    Read all 4 documents in full
+    Take 1-page notes on:
+      • 5 key reframes (TV, Radio, CIs, 10%, Wins)
+      • 5 anticipated objections from your client
+      • 3 tone traps to avoid
+
+(2) DAYS 3–4 (4 HOURS):
+    Build polished PowerPoint deck
+    Add visuals (charts, icons, professional design)
+    Write full speaker notes for each slide
+    Print and review
+
+(3) DAYS 5–7 (3 HOURS):
+    Practice 1x daily (5 run-throughs, 30 min each)
+    Record yourself, watch back, refine
+    Deep-dive on Q&A category most relevant to your client
+    Create 1-page "cheat sheet" (key talking points + anticipated objections)
+
+(4) DAY 7 (1 HOUR):
+    Final run-through
+    Tech setup rehearsal
+    Sleep well
+
+Materials to bring: Same as Scenario A, but with more polish
+
+SCENARIO C: You're coaching another analyst
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+(1) YOU (2–3 HOURS):
+    Read all 4 documents
+    Flag 5 anticipated objections
+    Flag 3 "tone traps" where they might sound defensive
+
+(2) COACH SESSION 1 (1 HOUR):
+    Walk them through EXECUTIVE_SUMMARY_1PAGE.md (context)
+    Explain the 3 core reframes (TV significance, Radio negative, wide CIs)
+    Role-play 2 tough questions
+
+(3) COACH SESSION 2 (1 HOUR, DAY BEFORE):
+    Full run-through of their deck
+    Give feedback on tone (confident, not arrogant; transparent, not defensive)
+    Role-play all 5 anticipated objections
+
+(4) DAY OF MEETING:
+    You attend (sit in back for support)
+    Help with tech, take notes
+    Jump in if a curve-ball question catches them off-guard
+
+================================================================================
+THE CORE NARRATIVE (MEMORIZE THIS)
+================================================================================
+
+ELEVATOR PITCH (30 seconds):
+"Club Piscine's $10.3M media investment drives approximately $50M in revenue—
+a 4.9x return. Our analysis shows TV is proven and reliable. Preroll shows 
+exceptional potential but is underinvested. By reallocating to higher-ROAS 
+channels without spending more money, we can unlock 21% additional revenue—
+roughly $110–130M annually. Implementation is low-risk if phased as A/B tests 
+over 3 months."
+
+THE FIVE REFRAMES (These are your mental model):
+
+1. TV SIGNIFICANCE
+   What it looks like: "Only TV is significant, so other channels don't matter"
+   The reframe: "TV is our most confident channel. The other 6 have wider CIs,
+   but their combined ROAS (9.8x) is better than TV's (5.85x). Confidence ≠ value."
+
+2. RADIO NEGATIVE
+   What it looks like: "Radio has -7.06x ROAS, so we should cut it"
+   The reframe: "The negative coefficient is seasonality confounding, not
+   business reality. Your own strategy says Radio is essential for 3-day promo
+   events. Monthly data can't isolate that effect. Keep Radio; use weekly data
+   to measure it properly."
+
+3. WIDE CIS
+   What it looks like: "Social CI is [-26%, +40%]—you have no idea what you're
+   doing"
+   The reframe: "Wide CIs are transparency, not weakness. We're admitting what
+   we're uncertain about. TV's tighter CI is because of larger spend, longer
+   effects, and seasonality alignment. All channels are measurable; some need
+   more data to pin down exactly."
+
+4. MEDIA 10% CONTRIBUTION
+   What it looks like: "90% of revenue comes without ads. Advertising is
+   pointless."
+   The reframe: "The 10% is the *controllable margin*. 85% is exogenous
+   (weather, season, brand legacy). Media drives the other 10%—and that's where
+   the ROI is (4.9x). You're not explaining all revenue through media; you're
+   optimizing the margin you control."
+
+5. OPTIMIZATION +21%
+   What it looks like: "We need $260M in new budget to achieve this"
+   The reframe: "Same budget ($261K/month), better allocation. Shift dollars
+   from lower-ROAS channels (TV baseline, tactical Radio) to higher-ROAS
+   channels (Preroll +102%, Social +56%, Web Banners +32%). Phase 1 is a 2-month
+   pilot to validate. No full commitment until you see real-world results."
+
+THE FIVE WINNING FINDINGS:
+
+1. TV is Proven. ROAS 5.85x, statistically significant (CI [1.67, 7.77]).
+   Message: "You can defend this investment with confidence."
+
+2. Preroll Opportunity. ROAS 17.78x, lowest current spend ($902K/$10.3M).
+   Message: "We can scale this; validation opportunity."
+
+3. Exceptional Model Fit. R²=88.5% (top decile globally).
+   Message: "We can trust the directional findings."
+
+4. Optimization Path. +21.4% revenue lift from reallocation, no new spend.
+   Message: "Implementable; low risk; high reward."
+
+5. Budget Cut Feasibility. 10% cut + reallocation = +8.9% revenue.
+   Message: "Flexible; gives CFO a path if budget pressure emerges."
+
+================================================================================
+KEY TALKING POINTS (Memorize These 5)
+================================================================================
+
+1. "Our model explains 88.5% of revenue variance—top decile globally. This
+   means the directional findings are reliable."
+
+2. "TV is the only statistically significant channel, but that doesn't mean
+   other channels don't work. It means TV's effect is so clear we're 90%
+   confident it's positive. The others have wider CIs, but their combined
+   ROAS (9.8x) is better than TV's (5.85x)."
+
+3. "Radio's negative coefficient is seasonality confounding—our monthly model
+   can't isolate Radio's true effect. Your own strategy says Radio is essential
+   for 3-day promo events. We recommend maintaining Radio and running a
+   weekly-level follow-up to measure it properly."
+
+4. "The 10% media contribution is the *controllable margin*. 85% of revenue is
+   exogenous (season, weather, brand legacy). Media drives the other 10%—and
+   that's where the ROI is (4.9x on $10.3M spend). You're not being asked to
+   explain all revenue through media; you're being asked to optimize the margin
+   you control."
+
+5. "Same budget, smarter allocation = +21% revenue lift. We're not asking for
+   more spend. We're asking you to shift dollars from lower-ROAS channels to
+   higher-ROAS channels. Phase 1 is a 2-month pilot to validate. No commitment
+   until you see real-world results."
+
+================================================================================
+WHAT TO PRINT & BRING (CHECKLIST)
+================================================================================
+
+For each client attendee (print 3 of each):
+  [ ] Full presentation deck (color, 13 slides)
+  [ ] EXECUTIVE_SUMMARY_1PAGE.md (1-page PDF)
+  [ ] Channel ROAS table (tear-out card)
+  [ ] Optimization reallocation table (tear-out card)
+
+For you:
+  [ ] Speaker notes (PRESENTATION_SLIDE_GUIDE.md + key Q&A answers, 5–10 pages)
+  [ ] 1-page cheat sheet (5 critical talking points + anticipated objections)
+  [ ] Full CLIENT_PRESENTATION_FRAMEWORK.md (reference only, in a folder)
+  [ ] Laptop + USB backup (deck in 3 formats: .pptx, .pdf, Google Slides)
+  [ ] Adapters (HDMI, USB-C, whatever the room uses)
+  [ ] Timer (phone is fine; aim 35 min presentation, 25 min Q&A)
+
+================================================================================
+CRITICAL SUCCESS FACTORS (DO THIS, NOT THAT)
+================================================================================
+
+DO:
+  ✓ Lead with confidence, not arrogance
+    ("This model is sound" not "This model is perfect")
+  ✓ Acknowledge limitations early
+    ("36 months is tight; we're transparent with CIs")
+  ✓ Make it about THEIR decision-making
+    ("Phase 1 pilots will show you if the forecast holds")
+  ✓ Sell optimization as LOW-RISK
+    ("Same budget, smarter allocation; Phase 1 is 2-month validation")
+  ✓ Handle Radio with empathy
+    ("Measurement artifact, not business failure. We'll measure it properly.")
+
+DON'T:
+  ✗ Claim the model is perfect
+  ✗ Hide uncertainty (be transparent with CIs)
+  ✗ Make it about defending your analysis
+  ✗ Ask for buy-in before pilots validate
+  ✗ Act defensive about Radio or wide CIs
+
+================================================================================
+TIMELINE (From "START" to "DONE")
+================================================================================
+
+Week 1: APPROVAL
+  Day 1: Present findings (60 min)
+  Days 2–3: Address questions; get verbal buy-in for Phase 1
+  Day 4: Sign off on Phase 1 plan
+
+Week 2–3: PILOT SETUP
+  Week 2: Design Phase 1 with media agency
+    • Increase Preroll $25K → $35K (in 2–3 pilot markets)
+    • Decrease TV $109K → $95K (in same markets)
+    • Set up daily ROAS tracking
+  Week 3: Launch Phase 1 pilots
+
+Week 4–10: PILOT EXECUTION
+  Weekly sync calls to monitor ROAS vs. forecast
+  Track daily sales by market
+  Adjust if needed (should be on track)
+
+Week 11–14: ANALYSIS & DECISION
+  Analyze Phase 1 results
+  Compare actual ROAS to model forecast
+  Decide: Green light Phase 2 (full reallocation) or recalibrate
+  Likely outcome: Green light (if you followed the forecast)
+
+Week 15–52: FULL IMPLEMENTATION
+  Execute optimal reallocation across all channels
+  Quarterly model refits
+  Track performance vs. forecast
+  Design Phase 2 analyses (weekly refit, category segmentation, halo effects)
+
+Expected total timeline: 15 weeks (Q2–Q3 for FY2026 budget planning)
+
+================================================================================
+THE DOCUMENTS AT A GLANCE (Quick Reference)
+================================================================================
+
+Question You Have              → Document to Read
+──────────────────────────────────────────────────────────────────
+"What are the numbers?"        → EXECUTIVE_SUMMARY_1PAGE
+"How do I explain TV?"         → CLIENT_PRESENTATION_FRAMEWORK (Sec 1)
+"How do I explain Radio?"      → Q&A Playbook (Q8–Q9)
+"How do I handle wide CIs?"    → FRAMEWORK (Sec 3) or Q&A (Q6–Q7)
+"30-second pitch?"             → Q&A Playbook (Q16)
+"What's on Slide 5?"           → PRESENTATION_SLIDE_GUIDE (Slide 5)
+"Structure for 60 min?"        → FRAMEWORK (Sec 9) or SLIDE GUIDE
+"CFO asks about budget cuts?"  → EXECUTIVE_SUMMARY_1PAGE (Scenarios)
+"What visuals?"                → PRESENTATION_SLIDE_GUIDE (Visual Notes)
+"Skeptical of 36 months?"      → Q&A Playbook (Q1–Q3)
+"CMO says only TV works?"      → FRAMEWORK (Sec 1) or Q&A (Q4–Q5)
+"Should we implement now?"     → Q&A Playbook (Q11)
+
+================================================================================
+FINAL CONFIDENCE BUILDER
+================================================================================
+
+You are NOT claiming:
+  ✗ The model is perfect
+  ✗ The ROAS numbers are exact
+  ✗ The optimization is guaranteed
+  ✗ You have all the answers
+
+You ARE claiming:
+  ✓ The model is methodologically sound (88.5% R², industry-standard, auditable)
+  ✓ The findings are actionable (TV proven, Preroll promising, optimization
+     feasible)
+  ✓ The risks are managed (phase-in approach, quarterly refits, weekly follow-up)
+  ✓ The client will benefit ($110M+ incremental value, OR $930K+ savings, OR
+     defensible justification for current spend)
+
+The data backs all of this up.
+The client will feel your confidence.
+Now go present.
+
+================================================================================
+END OF "START HERE" GUIDE
+================================================================================
+
+You are fully equipped. These 5 documents + 1 index contain everything you need
+to present the Club Piscine MMM model to a CMO and finance partner with
+confidence, honesty, and strategic clarity.
+
+Read README_PRESENTATION_PACKAGE.md for detailed navigation.
+Read EXECUTIVE_SUMMARY_1PAGE.md for the headlines.
+Read CLIENT_PRESENTATION_FRAMEWORK.md for the narrative.
+Read CONSULTANT_QA_PLAYBOOK.md for the hard questions.
+Read PRESENTATION_SLIDE_GUIDE.md to build your deck.
+Reference PRESENTATION_PACKAGE_INDEX.txt when you need quick answers.
+
+Questions? Check the "Questions? USE THIS REFERENCE TABLE" section in
+README_PRESENTATION_PACKAGE.md.
+
+Good luck. You've got this.
+
+================================================================================

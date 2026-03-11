@@ -77,13 +77,13 @@
     }
   },
   "decay_rates": {
-    "Television": 0.2134,
-    "Radio": 0.0497,
-    "Panneaux": 0.0189,
-    "Social Media": 0.0189,
-    "Preroll": 0.0497,
-    "Banniere Web": 0.0054,
-    "Circulaire Digitale": 0.0054
+    "Television": 0.1,
+    "Radio": 0.2,
+    "Panneaux": 0.25,
+    "Social Media": 0.01,
+    "Preroll": 0.45,
+    "Banniere Web": 0.15,
+    "Circulaire Digitale": 0.01
   },
   "saturation_functions": {
     "Television": "log",
@@ -102,14 +102,5 @@
     "Preroll": 68770.85,
     "Banniere Web": 23835.7,
     "Circulaire Digitale": 7509.5
-  },
-  "previous_decay_rates": {
-    "Television": 0.2134,
-    "Radio": 0.0497,
-    "Panneaux": 0.0189,
-    "Social Media": 0.0189,
-    "Preroll": 0.0497,
-    "Banniere Web": 0.0054,
-    "Circulaire Digitale": 0.0054
   }
 }
