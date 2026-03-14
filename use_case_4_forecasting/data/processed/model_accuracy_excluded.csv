@@ -1,0 +1,65 @@
+store_code,city,division_code,model_type,MAPE,MAPE_flag,wMAPE,RMSSE,MAE,Train_Mean,Test_Mean,Train_Weeks,Test_Weeks,Regressors,weather_tier,is_collapse,is_surge,is_unreliable_div,eval_seasonal
+CP02 - Blainville,Blainville,LO,weekly_prophet,5.4733,ok,4.8559,1.0139,46.13,79.63,9.5,100,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP02 - Blainville,Blainville,ME,weekly_prophet,3.1641,ok,1.8377,0.3669,14.01,102.68,7.62,92,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP02 - Blainville,Blainville,PC,weekly_prophet,1.7225,ok,1.9205,0.6785,165.4,713.82,86.12,100,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP04 - Drummondville,Drummondville,ME,weekly_prophet,,suppressed_low_test_mean_3.6,4.7099,0.7717,17.07,52.87,3.62,100,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP04 - Drummondville,Drummondville,PC,weekly_prophet,0.8394,ok,0.8606,0.2979,73.79,604.04,85.75,108,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP06 - Granby,Granby,PC,weekly_prophet,0.6524,ok,0.6006,0.1966,67.64,923.44,112.62,108,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP07 - Laval,Laval,LO,weekly_prophet,0.9093,ok,0.9508,0.2811,21.04,148.65,22.12,108,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP07 - Laval,Laval,PC,weekly_prophet,0.9008,ok,0.9272,0.2308,111.27,1188.54,120.0,108,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP08 - Longueuil,Longueuil,LO,weekly_prophet,4.1831,ok,1.4203,0.2279,12.43,62.41,8.75,102,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP08 - Longueuil,Longueuil,ME,weekly_prophet,5.1045,ok,3.0894,0.4578,16.99,82.98,5.5,100,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP08 - Longueuil,Longueuil,PC,weekly_prophet,0.8933,ok,0.8674,0.2019,71.24,705.78,82.12,106,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP10 - Saint-Jérôme,Saint-Jérôme,IN,weekly_prophet,1.5083,ok,0.8422,0.0474,16.42,163.98,19.5,87,8,has_holiday,neutral,True,False,False,True
+CP10 - Saint-Jérôme,Saint-Jérôme,LO,weekly_prophet,0.8847,ok,0.9014,0.1951,11.04,92.22,12.25,104,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP10 - Saint-Jérôme,Saint-Jérôme,ME,weekly_prophet,5.5025,ok,3.5057,0.4006,28.05,131.99,8.0,100,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP11 - Vaudreuil-Dorion,Vaudreuil-Dorion,ME,weekly_prophet,0.9789,ok,0.9716,0.2135,10.08,107.22,10.38,59,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP11 - Vaudreuil-Dorion,Vaudreuil-Dorion,PC,weekly_prophet,1.0,ok,1.0,0.299,113.38,772.28,113.38,72,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP12 - St-Georges-de-Beauce,St-Georges-de-Beauce,PC,weekly_prophet,5.4909,ok,5.0348,2.1265,179.99,250.16,35.75,55,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP13 - Victoriaville,Victoriaville,ME,weekly_prophet,17.5257,ok,7.1877,1.4356,40.43,55.12,5.62,92,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP15 - Repentigny,Repentigny,ME,weekly_prophet,4.8434,ok,3.7825,0.3618,22.22,87.01,5.88,98,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP15 - Repentigny,Repentigny,PC,weekly_prophet,1.0,ok,1.0,0.1636,59.38,697.07,59.38,108,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP16 - Chicoutimi,Chicoutimi,ME,weekly_prophet,,suppressed_low_test_mean_4.5,9.7697,1.3659,43.96,80.96,4.5,96,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP16 - Chicoutimi,Chicoutimi,PC,weekly_prophet,0.8319,ok,0.8371,0.2148,74.29,696.67,88.75,105,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP16 - Chicoutimi,Chicoutimi,SEC,weekly_prophet,39.6132,ok,10.2542,2.6775,55.56,36.51,5.42,98,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP17 - Trois-Rivières,Trois-Rivières,ME,weekly_prophet,7.7661,ok,2.4794,0.5779,16.74,67.43,6.75,94,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP17 - Trois-Rivières,Trois-Rivières,PC,weekly_prophet,0.6894,ok,0.7215,0.273,74.68,718.91,103.5,103,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP202 - Nepean,Nepean,ME,weekly_prophet,2.2471,ok,2.0492,0.6892,15.62,55.93,7.62,91,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP28 - Pointe-aux-Trembles,Pointe-aux-Trembles,PC,weekly_prophet,1.0,ok,1.0,0.0939,32.0,637.98,32.0,108,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP29 - Lévis,Lévis,ME,weekly_prophet,,suppressed_low_test_mean_3.0,183.5106,23.4131,550.53,45.32,3.0,53,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP29 - Lévis,Lévis,PC,weekly_prophet,2.269,ok,2.6107,1.3683,131.51,349.8,50.38,56,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP32 - St-Hyacinthe,St-Hyacinthe,ME,weekly_prophet,,suppressed_low_test_mean_4.4,4.0627,0.5463,17.77,61.1,4.38,101,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP32 - St-Hyacinthe,St-Hyacinthe,PC,weekly_prophet,0.9187,ok,0.9145,0.1483,48.7,685.01,53.25,108,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP33 - Sorel-Tracy,Sorel-Tracy,ME,weekly_prophet,,suppressed_low_test_mean_3.2,3.7909,1.0902,12.32,26.05,3.25,91,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP35 - Saint-Jean-sur-Richelieu,Saint-Jean-sur-Richelieu,LO,weekly_prophet,1.1348,ok,1.0533,0.2115,14.88,111.61,14.12,105,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP35 - Saint-Jean-sur-Richelieu,Saint-Jean-sur-Richelieu,ME,weekly_prophet,,suppressed_low_test_mean_3.2,3.0454,0.5945,9.9,54.89,3.25,100,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP35 - Saint-Jean-sur-Richelieu,Saint-Jean-sur-Richelieu,PC,weekly_prophet,0.8093,ok,0.738,0.192,93.64,1037.32,126.88,105,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP36 - Saint-Eustache,Saint-Eustache,BQ,weekly_prophet,,suppressed_low_test_mean_2.5,3.6925,0.4824,9.23,20.05,2.5,91,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP36 - Saint-Eustache,Saint-Eustache,ME,weekly_prophet,9.0575,ok,6.1766,0.6622,35.52,79.55,5.75,102,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP36 - Saint-Eustache,Saint-Eustache,PC,weekly_prophet,0.5755,ok,0.5884,0.0846,41.56,858.94,70.62,108,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP43 - Ste-Foy,Ste-Foy,ME,weekly_prophet,,suppressed_low_test_mean_3.1,245.3299,30.8408,766.66,53.08,3.12,59,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP43 - Ste-Foy,Ste-Foy,PC,weekly_prophet,1.4918,ok,1.5496,0.57,140.05,614.14,90.38,58,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP44 - St-Constant,St-Constant,PC,weekly_prophet,1.0,ok,1.0,0.1587,32.12,398.09,32.12,106,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP45 - Cowansville,Cowansville,IN,weekly_prophet,61.4069,ok,26.1809,1.9542,235.63,69.24,9.0,90,8,has_holiday,neutral,True,False,False,True
+CP45 - Cowansville,Cowansville,ME,weekly_prophet,,suppressed_low_test_mean_4.8,1.9611,0.4616,9.32,36.75,4.75,99,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP46 - Sainte-Agathe-des-Monts,Sainte-Agathe-des-Monts,ME,weekly_prophet,,suppressed_low_test_mean_2.9,7.8066,1.0787,22.44,45.12,2.88,86,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP47 - Riviere-du-Loup,Riviere-du-Loup,DI,weekly_prophet,,suppressed_low_test_mean_1.8,205.7696,8.9666,379.39,50.69,1.84,63,8,has_holiday,neutral,True,False,False,True
+CP48 - Beloeil,Beloeil,LO,weekly_prophet,3.3996,ok,1.5,0.3594,12.75,64.31,8.5,103,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP48 - Beloeil,Beloeil,ME,weekly_prophet,2.0555,ok,1.6591,0.5183,10.16,60.17,6.12,96,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP48 - Beloeil,Beloeil,PC,weekly_prophet,0.828,ok,0.7857,0.1206,39.19,684.57,49.88,106,8,"avg_temp, temp_above_25, bad_weather_days, snow_days, sunshine_hours, has_holiday",strong,True,False,False,True
+CP44 - St-Constant,St-Constant,HT,weekly_prophet,0.9014,ok,0.9198,3.6838,12.88,4.42,14.0,60,8,"avg_temp, has_holiday",weak,False,True,False,True
+CP01 - Québec,Québec,TO,weekly_prophet,39.3751,ok,27.4703,37.9031,154.52,14.06,5.62,54,8,has_holiday,neutral,False,False,True,True
+CP02 - Blainville,Blainville,TO,weekly_prophet,1.2912,ok,0.7892,0.7423,4.74,9.42,6.0,74,8,has_holiday,neutral,False,False,True,True
+CP06 - Granby,Granby,TO,weekly_prophet,,suppressed_low_test_mean_4.0,8.0378,6.9762,32.15,9.22,4.0,87,8,has_holiday,neutral,False,False,True,True
+CP07 - Laval,Laval,TO,weekly_prophet,0.7682,ok,0.7762,1.3637,9.22,15.51,11.88,83,8,has_holiday,neutral,False,False,True,True
+CP08 - Longueuil,Longueuil,TO,weekly_prophet,0.9418,ok,0.922,1.2102,4.61,7.29,5.0,45,8,has_holiday,neutral,False,False,True,True
+CP10 - Saint-Jérôme,Saint-Jérôme,TO,weekly_prophet,,suppressed_low_test_mean_3.8,1.0,0.1986,3.75,10.56,3.75,82,8,has_holiday,neutral,False,False,True,True
+CP11 - Vaudreuil-Dorion,Vaudreuil-Dorion,TO,weekly_prophet,,suppressed_low_test_mean_3.5,0.9967,1.0808,3.49,7.49,3.5,51,8,has_holiday,neutral,False,False,True,True
+CP13 - Victoriaville,Victoriaville,TO,weekly_prophet,,suppressed_low_test_mean_3.1,43.2138,49.4366,135.04,7.22,3.12,45,8,has_holiday,neutral,False,False,True,True
+CP16 - Chicoutimi,Chicoutimi,TO,weekly_prophet,,suppressed_low_test_mean_2.0,0.9043,0.4417,1.81,8.63,2.0,52,8,has_holiday,neutral,False,False,True,True
+CP17 - Trois-Rivières,Trois-Rivières,TO,weekly_prophet,,suppressed_low_test_mean_4.1,113.5078,155.2951,468.22,9.3,4.12,46,8,has_holiday,neutral,False,False,True,True
+CP29 - Lévis,Lévis,TO,weekly_prophet,,suppressed_low_test_mean_2.4,189.07,122.7115,449.04,6.19,2.38,47,8,has_holiday,neutral,False,False,True,True
+CP32 - St-Hyacinthe,St-Hyacinthe,TO,weekly_prophet,,suppressed_low_test_mean_3.6,0.6111,0.6321,2.22,4.62,3.62,74,8,has_holiday,neutral,False,False,True,True
+CP35 - Saint-Jean-sur-Richelieu,Saint-Jean-sur-Richelieu,TO,weekly_prophet,,suppressed_low_test_mean_3.1,23.5826,21.7648,73.7,10.24,3.12,45,8,has_holiday,neutral,False,False,True,True
+CP36 - Saint-Eustache,Saint-Eustache,TO,weekly_prophet,,suppressed_low_test_mean_3.8,0.796,0.7929,2.98,8.01,3.75,76,8,has_holiday,neutral,False,False,True,True
+CP37 - Gatineau,Gatineau,TO,weekly_prophet,,suppressed_low_test_mean_4.4,0.9133,0.8242,4.0,11.56,4.38,89,8,has_holiday,neutral,False,False,True,True

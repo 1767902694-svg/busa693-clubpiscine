@@ -1,30 +1,33 @@
-store_code,city,province
-CP01 - Québec,Québec,QC
-CP02 - Blainville,Blainville,QC
-CP04 - Drummondville,Drummondville,QC
-CP06 - Granby,Granby,QC
-CP07 - Laval,Laval,QC
-CP08 - Longueuil,Longueuil,QC
-CP10 - Saint-Jérôme,Saint-Jérôme,QC
-CP11 - Vaudreuil-Dorion,Vaudreuil-Dorion,QC
-CP12 - St-Georges-de-Beauce,St-Georges-de-Beauce,QC
-CP13 - Victoriaville,Victoriaville,QC
-CP15 - Repentigny,Repentigny,QC
-CP16 - Chicoutimi,Chicoutimi,QC
-CP17 - Trois-Rivières,Trois-Rivières,QC
-CP18 - Val-d'Or,Val-d'Or,QC
-CP202 - Nepean,Nepean,ON
-CP28 - Pointe-aux-Trembles,Pointe-aux-Trembles,QC
-CP29 - Lévis,Lévis,QC
-CP32 - St-Hyacinthe,St-Hyacinthe,QC
-CP33 - Sorel-Tracy,Sorel-Tracy,QC
-CP35 - Saint-Jean-sur-Richelieu,Saint-Jean-sur-Richelieu,QC
-CP36 - Saint-Eustache,Saint-Eustache,QC
-CP37 - Gatineau,Gatineau,QC
-CP39 - Joliette,Joliette,QC
-CP43 - Ste-Foy,Ste-Foy,QC
-CP44 - St-Constant,St-Constant,QC
-CP45 - Cowansville,Cowansville,QC
-CP46 - Sainte-Agathe-des-Monts,Sainte-Agathe-des-Monts,QC
-CP47 - Riviere-du-Loup,Riviere-du-Loup,QC
-CP48 - Beloeil,Beloeil,QC
+store_code,city,province,franchise_group,franchise_name,pos_system
+CP01 - Québec,Québec,QC,CP01,CP01 - Québec,Home made
+CP02 - Blainville,Blainville,QC,CP07,CP07 - Laval,Meublex V27 (Informat)
+CP04 - Drummondville,Drummondville,QC,CP04,CP04 - Drummondville,NAV
+CP05 - Sherbrooke,Sherbrooke,QC,CP05,CP05 - Sherbrooke,Accomba
+CP06 - Granby,Granby,QC,CP06,CP06 - Granby,Meublex V27 (Informat)
+CP07 - Laval,Laval,QC,CP07,CP07 - Laval,Meublex V27 (Informat)
+CP08 - Longueuil,Longueuil,QC,CP08,CP08 - Longueuil,NAV
+CP10 - Saint-Jérôme,Saint-Jérôme,QC,CP10,CP10 - Saint-Jérôme,Meublex V27 (Informat)
+CP11 - Vaudreuil-Dorion,Vaudreuil-Dorion,QC,CP11,CP11 - Vaudreuil-Dorion,Integratik
+CP12 - St-Georges-de-Beauce,St-Georges-de-Beauce,QC,CP12,CP12 - St-Georges-de-Beauce,Accomba
+CP13 - Victoriaville,Victoriaville,QC,CP13,CP13 - Victoriaville,NAV
+CP15 - Repentigny,Repentigny,QC,CP15,CP15 - Aquavitae,NAV
+CP16 - Chicoutimi,Chicoutimi,QC,CP16,CP16 - Chicoutimi,NAV
+CP17 - Trois-Rivières,Trois-Rivières,QC,CP17,CP17 - Trois-Rivières,NAV
+CP18 - Val-d'Or,Val-d'Or,QC,CP18,CP18 - Val-d'Or,Accomba
+CP20 - Valleyfield,Valleyfield,QC,CP11,CP11 - Vaudreuil-Dorion,Integratik
+CP202 - Nepean,Nepean,ON,CP37,CP37 - Gatineau,Meublex V27 (Informat)
+CP28 - Pointe-aux-Trembles,Pointe-aux-Trembles,QC,CP15,CP15 - Aquavitae,NAV
+CP29 - Lévis,Lévis,QC,CP01,CP01 - Québec,Home made
+CP32 - St-Hyacinthe,St-Hyacinthe,QC,CP06,CP06 - Granby,Meublex V27 (Informat)
+CP33 - Sorel-Tracy,Sorel-Tracy,QC,CP15,CP15 - Aquavitae,NAV
+CP35 - Saint-Jean-sur-Richelieu,Saint-Jean-sur-Richelieu,QC,CP35,CP35 - Saint-Jean-sur-Richelieu,NAV
+CP36 - Saint-Eustache,Saint-Eustache,QC,CP36,CP36 - Saint-Eustache,Meublex V27 (Informat)
+CP37 - Gatineau,Gatineau,QC,CP37,CP37 - Gatineau,Meublex V27 (Informat)
+CP39 - Joliette,Joliette,QC,CP15,CP15 - Aquavitae,NAV
+CP40 - Thetford Mines,Thetford Mines,QC,CP40,CP40 - Thetford Mines,Accomba
+CP43 - Ste-Foy,Ste-Foy,QC,CP01,CP01 - Québec,Home made
+CP44 - St-Constant,St-Constant,QC,CP08,CP08 - Longueuil,NAV
+CP45 - Cowansville,Cowansville,QC,CP06,CP06 - Granby,Meublex V27 (Informat)
+CP46 - Sainte-Agathe-des-Monts,Sainte-Agathe-des-Monts,QC,CP46,CP46 - Sainte-Agathe-des-Monts,NAV
+CP47 - Riviere-du-Loup,Riviere-du-Loup,QC,CP47,CP47 - Riviere-du-Loup,Accomba
+CP48 - Beloeil,Beloeil,QC,CP08,CP08 - Longueuil,NAV
