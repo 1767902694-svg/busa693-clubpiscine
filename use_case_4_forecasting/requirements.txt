@@ -2,3 +2,11 @@ fastapi
 uvicorn[standard]
 gunicorn
 pandas
+numpy
+matplotlib
+seaborn
+statsmodels
+scipy
+scikit-learn
+requests
+holidays
