@@ -1,15 +1,4 @@
 fastapi
 uvicorn[standard]
 gunicorn
-
 pandas
-numpy
-scikit-learn
-
-python-dotenv
-requests
-
-azure-identity
-azure-storage-blob
-
-openpyxl
