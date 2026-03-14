@@ -1,6 +1,6 @@
 {
   "source": "NB07 (Two-Stage Non-Negative Ridge from NB06B)",
-  "created": "2026-03-07 16:36",
+  "created": "2026-03-08 23:29",
   "model_performance": {
     "model_type": "two_stage_nonneg_ridge",
     "r2_full": 0.8593681034880413,
