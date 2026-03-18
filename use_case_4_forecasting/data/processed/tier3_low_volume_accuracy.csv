@@ -1,0 +1,17 @@
+store_code,city,division_code,wMAPE,Avg_Sales,CV,model
+CP08,Longueuil,AZ,0.0898,462.48,2.16,Simple_Avg
+CP08,Longueuil,MK,1.0,10.77,0.46,Simple_Avg
+CP202,Nepean,DI,54962500.0,77.64,1.5,Simple_Avg
+CP202,Nepean,IN,778747500.0,1351.16,1.19,Simple_Avg
+CP202,Nepean,MK,55.5,74.04,1.81,Simple_Avg
+CP37,Gatineau,DI,0.078,82.44,0.74,Simple_Avg
+CP37,Gatineau,MK,1.2263,170.67,1.25,Simple_Avg
+CP37,Gatineau,SE,0.9926,407.83,0.9,Simple_Avg
+CP44,St-Constant,AM,8.9849,229.23,0.77,Simple_Avg
+CP44,St-Constant,AZ,0.2482,252.63,1.33,Simple_Avg
+CP44,St-Constant,MK,3750000.0,1.75,1.73,Simple_Avg
+CP44,St-Constant,SE,125610000.0,354.7,0.88,Simple_Avg
+CP48,Beloeil,AM,0.488,336.87,0.8,Simple_Avg
+CP48,Beloeil,AZ,0.0132,491.04,1.46,Simple_Avg
+CP48,Beloeil,MK,0.25,2.27,0.33,Simple_Avg
+CP48,Beloeil,SE,0.2672,378.18,0.58,Simple_Avg
