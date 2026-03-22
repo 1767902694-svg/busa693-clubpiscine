@@ -1,0 +1,162 @@
+================================================================================
+CLUB PISCINE FORECASTING PIPELINE VERIFICATION — QUICK REFERENCE
+================================================================================
+
+VERIFICATION COMPLETED: Full trace of columns/features across NB01 → NB02 → NB03 → NB04
+
+================================================================================
+KEY FINDINGS
+================================================================================
+
+✓ PASS: Data successfully flows through all 4 notebooks (no crashes)
+⚠ MESSY: Duplicate store_code columns (store_code_x, store_code_y, store_code)
+❌ BREAKING: 25+ valuable features created by NB03 silently excluded from NB04 model
+
+================================================================================
+DETAILED ISSUES
+================================================================================
+
+1. NB02 → NB03 HANDOFF (Duplicate Columns)
+   Location: NB02 Cell 21 merge operations
+   Problem: Merge with weather_weekly creates store_code_x and store_code_y
+            Safety logic adds clean store_code but doesn't remove _x/_y versions
+   Output: weekly_units_weather.csv has all THREE store_code columns
+   Impact: MESSY but FUNCTIONAL—NB03 uses correct 'store_code' column
+   Severity: LOW (cleanup issue, not functional)
+   Fix: NB02 Cell 21 should drop(['store_code_x', 'store_code_y'], errors='ignore')
+
+2. NB03 → NB04 HANDOFF (Missing Lag Features)
+   Location: NB04 Cell 2 hardcoded LAG_FEATURES list
+   
+   NB03 Creates 16 lag features:
+   - units_lag_1w, units_lag_2w, units_lag_4w, units_lag_52w
+   - units_roll4_mean, units_roll4_std, units_roll8_mean, units_roll8_std,
+     units_roll12_mean, units_roll12_std, units_volatility
+   - revenue_lag_1w, revenue_lag_4w, revenue_roll4_mean
+   - avg_price_per_unit, price_lag_1w
+   
+   NB04 Expects Only 5 LAG_FEATURES:
+   - units_lag_1w, units_lag_2w, units_lag_4w, units_roll4_mean, units_roll4_std
+   
+   Missing in NB04: 11 features
+   - units_lag_52w, units_roll8_mean/std, units_roll12_mean/std, units_volatility
+   - revenue_lag_1w/4w, revenue_roll4_mean, avg_price_per_unit, price_lag_1w
+   
+   Impact: SILENT FEATURE LOSS—These features exist in modeling_dataset.csv
+           but NB04's hardcoded LAG_FEATURES list excludes them from
+           ALL_FEATURE_CANDIDATES, so they're never passed to XGBoost
+   Severity: HIGH (model loses 11 features)
+   Fix: Update NB04 Cell 2 LAG_FEATURES list to include all 16 features
+
+3. NB03 → NB04 HANDOFF (Missing Weather Features)
+   Location: NB04 Cell 2 hardcoded WEATHER_FEATURES list
+   
+   NB03 Creates 27 weather features including:
+   - 6 raw weather values
+   - 6 dev_z (normalized deviations)
+   - 5 threshold flags (temp_above_20, temp_above_25, temp_below_0, CDD, HDD)
+   - 4 lags/shocks (avg_temp_lag_1w/2w, temp_shock, temp_warming)
+   - 6 interactions (precip_x_summer, bad_wx_x_summer, sunshine_x_summer,
+                    temp_above_25_x_sum, precip_x_spring, temp_warming_x_spr)
+   
+   NB04 Expects Only 12 WEATHER_FEATURES:
+   - avg_temp, total_precip, sunshine_hours, rain_days, snow_days, bad_weather_days
+   - temp_above_20, temp_above_25, cooling_degree_days, heating_degree_days
+   - avg_temp_dev_z, total_precip_dev_z
+   
+   Missing in NB04: 15 features
+   - temp_below_0
+   - avg_temp_lag_1w, avg_temp_lag_2w, temp_shock, temp_warming
+   - precip_x_summer, bad_wx_x_summer, sunshine_x_summer, temp_above_25_x_sum,
+     precip_x_spring, temp_warming_x_spr
+   - sunshine_hours_dev_z, rain_days_dev_z, snow_days_dev_z, bad_weather_days_dev_z
+   
+   Impact: SILENT FEATURE LOSS—15 weather features silently excluded
+   Severity: HIGH (model loses 15 features, including high-impact interactions)
+   Fix: Update NB04 Cell 2 WEATHER_FEATURES list to include all 27 features
+
+4. NB03 Revenue Handling (inf Values)
+   Location: NB03 Cell 13 add_lag_features function
+   Problem: avg_price_per_unit = revenue / units
+            When units=0 but revenue>0 (service fees), creates inf
+            No downstream handling of inf values
+   Impact: MEDIUM—inf values passed to NB04 where fillna(0) converts them
+           incorrectly (inf should be handled explicitly, not as 0)
+   Severity: MEDIUM (data quality issue)
+   Fix: Add inf handling in NB03: avg_price_per_unit.replace([np.inf, -np.inf], np.nan)
+
+================================================================================
+IMPACT ASSESSMENT
+================================================================================
+
+Current Pipeline Behavior:
+- NB04 Cell 8 builds ALL_FEATURE_CANDIDATES from hardcoded lists
+- Features not in hardcoded lists are silently excluded
+- NB04 uses only 32 features (5 lag + 6 seasonal + 9 calendar + 12 weather)
+- NB03 creates 59+ features but only 32 are used
+
+Model Impact:
+- XGBoost misses 27+ valuable features
+- No error/warning—code runs successfully
+- Model quality suffers due to missing features
+- Year-over-year patterns (units_lag_52w) not captured
+- Multi-week rolling windows (8w, 12w) not used
+- Weather interactions (temp × season) not used
+- Price/revenue features not used
+- Demand volatility not captured
+
+================================================================================
+RECOMMENDED FIXES (Priority Order)
+================================================================================
+
+IMMEDIATE (Before next model run):
+1. Update NB04 Cell 2:
+   LAG_FEATURES list → add the 11 missing features from NB03
+   WEATHER_FEATURES list → add the 15 missing features from NB03
+
+2. Verify NB04 Cell 8 now includes 50+ features in FINAL_FEATURES
+   
+3. Retrain XGBoost model with expanded feature set
+
+4. Compare model performance:
+   - New model (with 50+ features) vs old model (with 32 features)
+   - Should see improvement in accuracy/RMSE
+
+SOON (Before production deployment):
+1. Fix NB02 Cell 21 to drop duplicate store_code columns
+2. Add inf handling to NB03 for avg_price_per_unit
+3. Test all notebooks end-to-end again
+
+LATER (Refactoring):
+1. Extract all feature definitions to shared config/constants file
+2. Have both NB03 and NB04 import feature lists from same source
+3. Prevents future sync issues
+
+================================================================================
+FILES AFFECTED
+================================================================================
+
+READ ONLY (No modifications needed for verification):
+- /sessions/upbeat-wizardly-heisenberg/mnt/busa693-clubpiscine/use_case_4_forecasting/notebooks/01_eda.ipynb
+- /sessions/upbeat-wizardly-heisenberg/mnt/busa693-clubpiscine/use_case_4_forecasting/notebooks/03_feature_engineering.ipynb
+
+NEED FIXES:
+- /sessions/upbeat-wizardly-heisenberg/mnt/busa693-clubpiscine/use_case_4_forecasting/notebooks/02_weather_integration.ipynb (Cell 21)
+- /sessions/upbeat-wizardly-heisenberg/mnt/busa693-clubpiscine/use_case_4_forecasting/notebooks/04_forecast_model.ipynb (Cell 2)
+
+SHOULD ENHANCE:
+- /sessions/upbeat-wizardly-heisenberg/mnt/busa693-clubpiscine/use_case_4_forecasting/notebooks/03_feature_engineering.ipynb (Cell 13)
+
+================================================================================
+VERIFICATION ARTIFACTS
+================================================================================
+
+Generated by this verification:
+
+1. pipeline_verification.md — Full detailed report with code quotes and examples
+2. detailed_findings.txt — Question-by-question analysis with answers
+3. VERIFICATION_SUMMARY.txt — This file (quick reference)
+
+All files located in: /sessions/upbeat-wizardly-heisenberg/mnt/busa693-clubpiscine/use_case_4_forecasting/
+
+================================================================================

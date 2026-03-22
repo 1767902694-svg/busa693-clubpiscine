@@ -1,0 +1,463 @@
+================================================================================
+COMPREHENSIVE AUDIT: USE CASE 4 — FORECASTING FOR CLUB PISCINE
+================================================================================
+Auditor: Claude Code Agent
+Date: 2026-03-22
+Notebook: 04_forecast_model.ipynb (29 cells)
+Files audited: 7 output CSVs + 1 inventory gap analysis
+
+================================================================================
+1. MODEL CHOICE & APPROPRIATENESS
+================================================================================
+
+PRIMARY MODEL:  XGBoost (Gradient Boosting Regression)
+TIER STRUCTURE: 3-tier approach
+  - Tier 1: XGBoost global model (high-volume, stable series)
+  - Tier 2: Prophet (medium-volume, seasonal patterns) — NOT IMPLEMENTED
+  - Tier 3: Simple Moving Average (low-volume, sparse data)
+
+✓ STRENGTHS:
+  - XGBoost is appropriate for demand forecasting with non-linear patterns
+  - Global model leverages cross-store patterns (smart pooling)
+  - Expanding-window CV prevents look-ahead bias
+  - Tiered approach handles data scarcity for low-volume stores
+  - Feature-rich (48 features after pruning)
+
+✗ WEAKNESSES:
+  - PROPHET NOT ACTUALLY USED: Only 0 groups are Tier 2; all are XGBoost or Tier 3
+  - No explicit handling of hierarchical structure (store → division → category)
+  - Model retrains fully each forecast (no incremental learning)
+  - Single global model may not capture store-specific patterns well
+  - No ensemble methods despite having multiple candidate models
+
+VERDICT: XGBoost is solid but Prophet fallback never materializes. Tiered 
+strategy is conservative but leaves 2/3 of the architecture unused.
+
+================================================================================
+2. TARGET VARIABLE: UNITS vs REVENUE
+================================================================================
+
+CRITICAL ISSUE: Client requested BOTH units and revenue forecasting.
+
+✓ DATA AVAILABLE:
+  - 'units' column: Present, used for training
+  - 'revenue' column: Present in dataset BUT NEVER USED FOR FORECASTING
+  - Correlation: 0.418 (moderate positive, suggests different drivers)
+
+✗ IMPLEMENTATION:
+  - XGBoost trained ONLY on 'units'
+  - Revenue available but completely ignored
+  - Forecast outputs labeled "Forecast_Sales" (ambiguous: are these units or $?)
+  - No separate revenue forecasting model
+  - Inventory gap analysis uses revenue (but from sample data, not forecast)
+
+VERDICT: MAJOR GAP. Model forecasts units only. Revenue forecasting 
+completely absent. Client requirement NOT MET.
+
+ACTION NEEDED: Build separate revenue model or train model on revenue 
+directly, then use revenue-to-units ratio for inventory planning.
+
+================================================================================
+3. ACCURACY METRICS: ACTUAL NUMBERS & INTERPRETATION
+================================================================================
+
+METRICS COMPUTED:
+  ✓ wMAPE (Weighted Mean Absolute Percentage Error)
+  ✓ RMSE (Root Mean Squared Error)
+  ✓ MAE (Mean Absolute Error)
+  ✓ Bias (mean prediction error)
+
+XGBOOST GLOBAL MODEL (Tier 1 only, n=17 store-division groups):
+
+  wMAPE Distribution:
+    Median: 43.2%  ← CRITICAL METRIC
+    Mean: 53.9%
+    Min: 23.5% (CP04 Drummondville)
+    Max: 178.4% (CP28 Pointe-aux-Trembles)
+    Std Dev: 47.7%
+
+  RMSE Distribution:
+    Median: 45.5 units
+    Mean: 46.5 units
+    Range: 25.1–114.4
+
+  MAE Distribution:
+    Median: 42.3 units
+    Mean: 43.3 units
+    Range: 17.2–109.5
+
+INTERPRETATION FOR RETAIL FORECASTING:
+  - 43.2% median wMAPE is MODERATE-TO-HIGH
+  - Industry benchmarks for retail:
+    * <10%: Excellent
+    * 10-20%: Very good
+    * 20-40%: Acceptable
+    * 40-60%: Poor
+    * >60%: Very poor
+  
+  - This model falls in the POOR range (43% median)
+  - High variability (std 47.7%) indicates inconsistent performance
+
+BASELINE COMPARISON (model_accuracy.csv):
+  XGBoost wMAPE:  Median 43.2%
+  Naive wMAPE:    Median 90.9%
+  Moving Avg:     Median 1,606%  ← Highly unstable
+
+  ✓ XGBoost beats naive in 13/17 cases
+  ✓ Naive wins in 4 cases (seasonal patterns override model)
+
+VERDICT: Model is BETTER THAN BASELINES but absolute accuracy is 
+MEDIOCRE. Useful for directional signals but risky for precise 
+inventory allocation.
+
+================================================================================
+4. BASELINE COMPARISON DETAILS
+================================================================================
+
+Three baselines computed on same holdout period:
+
+NAIVE BASELINE (last 4 weeks average):
+  - Median: 90.9% error
+  - Range: 0.01% (CP02) to 213%
+  - Wins: 4 cases (CP02, CP15, CP28, CP48)
+
+MOVING AVERAGE (full history average):
+  - Median: 1,606% error
+  - Range: 7.5% to 20,543%
+  - ✗ TERRIBLE: Average dilutes seasonal peaks
+
+MODEL WINNER BY GROUP:
+  - XGBoost wins: 13/17 cases (76%)
+  - Naive wins: 4/17 cases (24%)
+  
+  Naive wins when:
+    - Highly seasonal (CP02, CP28) — last-year-same-week effect
+    - Series has strong memory (CP15, CP48)
+
+VERDICT: XGBoost is convincingly better than moving average; competitive 
+with naive. Naive's 4 wins suggest model may underfit seasonality.
+
+================================================================================
+5. STORE-LEVEL RESULTS: ACCURACY VARIATION
+================================================================================
+
+BEST PERFORMERS (wMAPE <25%):
+  1. CP04 (Drummondville): 23.5% — Stable, predictable demand
+  2. CP37 (Gatineau): 24.2% — Good feature correlation
+  3. CP35 (Saint-Jean-sur-Richelieu): 24.9% — Consistent patterns
+
+POOR PERFORMERS (wMAPE >60%):
+  1. CP28 (Pointe-aux-Trembles): 178.4% — Highly volatile, sparse data
+  2. CP15 (Repentigny): 109.6% — Demand surges unpredictable
+  3. CP32 (St-Hyacinthe): 69.8% — Weak lag signals
+
+PATTERN ANALYSIS:
+  - Stores with higher volumes generally have lower error (correlation: -0.45)
+  - Small stores (CP28, CP15) have 6x higher error than large stores
+  - Seasonal sensitivity varies wildly (some need last-year weighting)
+
+VERDICT: Performance is highly store-dependent. Small, volatile stores 
+are problematic. Model may need store-specific tuning or stratified 
+training.
+
+================================================================================
+6. FORECAST HORIZON & PRACTICAL UTILITY
+================================================================================
+
+FORECAST HORIZON:  4 weeks (March 29 - April 19, 2026)
+
+Configuration (from code):
+  FORECAST_HORIZON = 4    # weeks ahead
+  EVAL_HORIZON = 1        # 1-week holdout per CV fold
+  
+Forecast approach:
+  - Recursive (multi-step): Predict t+1, feed back as lag for t+2, etc.
+  - Point estimates ONLY (no confidence intervals)
+  - 4-week window per store-division
+
+USEFULNESS FOR INVENTORY PLANNING:
+  ✓ 4 weeks is reasonable for seasonal retail (allows 2 reorder cycles)
+  ✓ Weekly granularity allows just-in-time adjustments
+  ✓ Multi-store forecasts enable centralized allocation
+  
+  ✗ No upper/lower bounds for safety stock calculations
+  ✗ Recursive error accumulation over 4 steps (may compound)
+  ✗ Only covers next 4 weeks; no medium-term planning (8-12 weeks)
+
+VERDICT: Horizon is adequate for tactical planning but insufficient 
+for strategic inventory positioning. Safety stock must be calculated 
+manually using 43% error rate.
+
+================================================================================
+7. INVENTORY OPTIMIZATION: CRITICAL GAP
+================================================================================
+
+What was built:
+  ✓ forecast_output.csv: 4-week demand forecasts by store-division
+  ✓ inventory_gap_analysis.csv: Forecast demand vs current stock
+
+What is MISSING:
+  ✗ Inventory optimization model (EOQ, safety stock, reorder points)
+  ✗ No service level constraint optimization
+  ✗ No multi-echelon allocation (store ← central warehouse)
+  ✗ No cost-of-stockout vs cost-of-holding calculation
+  ✗ No ABC analysis (high-value vs bulk products)
+
+Code snippet from Cell 12 (inventory gap):
+  gap['demand_vs_stock'] = forecast_demand - inventory_value
+  gap['gap_flag'] = '⚠️ Potential gap' if gap > 0 else '✅ OK'
+  
+  This is NAIVE: Just flag if forecast > current stock, no optimization.
+
+Output: inventory_gap_analysis.csv
+  - 293 rows (store-division-product combos)
+  - Simply flags gaps; does NOT compute optimal inventory levels
+  - Does NOT account for lead times, holding costs, or service targets
+
+VERDICT: MAJOR MISSING PIECE. Model provides demand forecasts but NO 
+inventory optimization. Clients cannot directly implement without 
+additional work (safety stock formulas, reorder point calculations, etc.).
+
+================================================================================
+8. CROSS-VALIDATION: TIME-SERIES DONE CORRECTLY
+================================================================================
+
+CV Strategy: Expanding-window (walk-forward)
+
+Configuration:
+  N_CV_FOLDS = 3
+  EVAL_HORIZON = 1 week
+  MIN_HISTORY = 6 weeks
+
+Implementation:
+  Fold 1: Train weeks 1-8,   Test week 9
+  Fold 2: Train weeks 1-9,   Test week 10
+  Fold 3: Train weeks 1-10,  Test week 11
+  
+  (All training on Tier 1 groups with 14+ weeks history)
+
+✓ STRENGTHS:
+  - No look-ahead bias (strictly historical training)
+  - Respects temporal order (no shuffling)
+  - Expanding window simulates production scenario
+  - Conservative 1-week holdout (tight evaluation)
+  - Multiple folds provide robust estimates
+
+✗ WEAKNESSES:
+  - Only 3 folds (could use 8+ for longer series)
+  - 1-week holdout is very tight (limits test signal)
+  - No stratification by store/season (seasonal stores mixed)
+  - No stability testing (fold-to-fold variation not reported)
+
+VERDICT: PROPER implementation. CV is rigorous and follows time-series 
+best practices. More folds would be even better but 3 is acceptable.
+
+================================================================================
+9. CONFIDENCE INTERVALS: CRITICAL MISSING FEATURE
+================================================================================
+
+State of implementation:
+  - CONFIDENCE_LEVEL = 0.95 defined in config
+  - Prophet model CAN generate intervals (not used in output)
+  - XGBoost model: ✗ ZERO support for prediction intervals
+  - Forecast output: Point estimates ONLY
+
+What's missing:
+  ✗ No upper/lower bounds in forecast_output.csv
+  ✗ No quantile regression (median ± percentiles)
+  ✗ No bootstrap CIs (resampling-based)
+  ✗ No heteroskedasticity modeling (error varies by group)
+  ✗ No safety stock calculations for inventory
+
+Consequences:
+  - Can't set reorder points (need P95 demand, not mean)
+  - Can't compute service level targets
+  - Can't evaluate forecast reliability
+  - Risk of stockouts when demand spikes
+
+Code to add (not present):
+  ```python
+  # Quantile regression or bootstrap needed:
+  lower_bound = forecast * 0.7  # Ad-hoc (BAD)
+  upper_bound = forecast * 1.3  # Not statistically grounded
+  
+  # Better approach:
+  from sklearn.ensemble import RandomForestQuantileRegressor
+  model = RandomForestQuantileRegressor(quantile=[0.05, 0.5, 0.95])
+  ```
+
+VERDICT: MAJOR OMISSION. Point forecasts are useless for inventory 
+management without intervals. This must be added for production.
+
+================================================================================
+10. CRITICAL GAPS & MISSING FEATURES
+================================================================================
+
+FUNCTIONAL GAPS:
+  ✗ 1. Revenue forecasting (units only)
+  ✗ 2. Inventory optimization (gap flagging only, no optimization)
+  ✗ 3. Confidence intervals (point estimates only)
+  ✗ 4. Prophet tier never activated (0 groups assigned)
+  ✗ 5. Store-specific models (global model may not capture local effects)
+  ✗ 6. Long-term forecasts (4 weeks is tactical, not strategic)
+  ✗ 7. Seasonal adjustment (some stores need explicit seasonality)
+  ✗ 8. External variables (no promotions, competitor activity, economic data)
+
+ANALYTICAL GAPS:
+  ✗ 1. No uncertainty quantification (no PIs, no confidence bands)
+  ✗ 2. No forecast bias correction (Bias column shows systematic shifts)
+  ✗ 3. No store clustering (small vs large stores treated identically)
+  ✗ 4. No error analysis by season (in-season vs off-season separately)
+  ✗ 5. No feature importance explanation per store
+  ✗ 6. No backtesting on multiple years (only 14-week evaluation window)
+
+DATA GAPS:
+  ✗ 1. Weather used (province-wide point) but not store-specific microclimate
+  ✗ 2. No promotional calendars linked to demand spikes
+  ✗ 3. No inventory lead times (forecast vs procurement timing mismatch)
+  ✗ 4. No product-level forecasts (only divisions, not SKUs)
+  ✗ 5. No customer count / transaction-level features beyond n_transactions
+
+MODEL GAPS:
+  ✗ 1. No hyperparameter optimization (XGBoost params may be suboptimal)
+  ✗ 2. No outlier detection/removal (extreme demand weeks not flagged)
+  ✗ 3. No ensemble (multiple models, not just XGBoost)
+  ✗ 4. No causal inference (MMM model ignored in forecasting)
+
+================================================================================
+11. DOCUMENTATION & COMMUNICATION
+================================================================================
+
+Outputs delivered:
+  ✓ model_accuracy.csv (17 groups, wMAPE/RMSE/MAE/Bias)
+  ✓ model_accuracy_clean.csv (192 rows, detailed Prophet + XGBoost breakdowns)
+  ✓ baseline_comparison.csv (Naive, MA, XGBoost side-by-side)
+  ✓ forecast_output.csv (1,172 rows, 4-week forecasts by store-division)
+  ✓ forecast_output_by_store.csv (108 rows, aggregated by store)
+  ✓ tier3_low_volume_accuracy.csv (276 rows, simple average baseline)
+  ✓ inventory_gap_analysis.csv (293 rows, naive gap flagging)
+
+Documentation issues:
+  ✗ No README explaining outputs (file purposes not documented)
+  ✗ No metadata about forecast timing (when was this produced?)
+  ✗ No assumptions file (seasonality handling, lag definitions, etc.)
+  ✗ No validation checklist (how to verify forecast quality?)
+  ✗ No user guide for practitioners (how to use these forecasts?)
+
+Notebook clarity:
+  ✓ Well-structured (29 cells, clear headings)
+  ✓ Code is readable (good variable names, comments)
+  ✓ Diagnostics included (bias check, baseline comparison)
+  
+  ✗ Some outputs are cryptic (what does "collapse" and "surge" mean?)
+  ✗ No EDA of model residuals
+  ✗ No section explaining tiering logic to business users
+
+================================================================================
+12. SUMMARY TABLE: REQUIREMENTS vs IMPLEMENTATION
+================================================================================
+
+Requirement                        Status      Notes
+─────────────────────────────────────────────────────────────────────
+Units forecasting                  ✓ DONE      XGBoost global model
+Revenue forecasting                ✗ MISSING   Data available but unused
+Inventory optimization             ✗ MISSING   Gap analysis only, no EOQ
+Confidence intervals               ✗ MISSING   Point estimates only
+Multiple models (Prophet)          ✗ UNUSED    Tier 2 never activated
+Store-level accuracy              ✓ DONE      wMAPE reported per group
+4-week horizon                     ✓ DONE      Recursive XGBoost
+Time-series CV                     ✓ DONE      Expanding window, proper
+Baseline comparison                ✓ DONE      Naive, MA, XGBoost
+Bias analysis                      ✓ DONE      Reported in metrics
+Feature importance                 ✓ DONE      Shown in Cell 7
+Weather integration                ✓ DONE      6 temperature/precip features
+Holidays/special events            ✓ PARTIAL   Holiday flags only, no promo
+SKU-level detail                   ✗ MISSING   Only division level
+Product mix optimization           ✗ MISSING   Not addressed
+External variables (MMM)           ✗ MISSING   MMM available but not used
+Safety stock formulas              ✗ MISSING   Inventory gap only
+Reorder point calculations         ✗ MISSING   Not implemented
+Lead time integration              ✗ MISSING   Not modeled
+
+COVERAGE: 9/19 requirements addressed (47%)
+
+================================================================================
+13. RECOMMENDATIONS FOR IMPROVEMENT
+================================================================================
+
+TIER 1 (Critical — Must fix):
+  1. Add revenue forecasting: Train separate model on revenue OR output 
+     both units and corresponding revenue conversion rates.
+  
+  2. Implement confidence intervals: Use quantile regression (LightGBM) 
+     or bootstrap-based PIs. Compute P05/P50/P95 demand per week.
+  
+  3. Build inventory optimization: Calculate EOQ, reorder points, safety 
+     stock using demand forecast + lead times + holding/stockout costs.
+  
+  4. Extend forecast horizon: Add 8-week and 12-week forecasts for 
+     strategic planning.
+
+TIER 2 (Important — Should fix):
+  5. Activate Prophet tier: For low-volume groups with partial data, 
+     Prophet's built-in seasonality could improve accuracy.
+  
+  6. Add store-specific models: Test pooled vs store-specific XGBoost 
+     to see if store effects matter.
+  
+  7. Incorporate promotions: Link forecast_output.csv to promotional 
+     calendar to capture demand spikes.
+  
+  8. Extend backtesting: Validate on 24+ months (not just 14 weeks) 
+     to assess seasonal robustness.
+
+TIER 3 (Nice-to-have):
+  9. Add ensemble methods: Blend XGBoost + Prophet + ARIMA for 
+     robustness.
+  
+  10. Implement causal inference: Use MMM elasticities to adjust 
+      forecasts for planned marketing changes.
+  
+  11. Product-level SKU forecasts: Decompose division forecasts to 
+      individual products using historical mix.
+  
+  12. Develop dashboard: Visualize forecasts, actuals, residuals per 
+      store in real-time.
+
+================================================================================
+FINAL VERDICT
+================================================================================
+
+OVERALL SCORE: 6/10 (FUNCTIONAL BUT INCOMPLETE)
+
+STRENGTHS:
+  + Solid XGBoost implementation with proper time-series CV
+  + Tiered approach handles data scarcity elegantly
+  + Outperforms baselines (76% of cases)
+  + Weekly forecasts enable tactical adjustments
+  + Clean code, readable, reproducible
+
+WEAKNESSES:
+  - Revenue forecasting completely absent (client requirement)
+  - NO confidence intervals (critical for inventory safety stock)
+  - NO inventory optimization (just gap flagging)
+  - Accuracy is moderate-to-poor (43% median wMAPE)
+  - Only 4-week horizon (insufficient for strategic planning)
+  - High variation across stores (some unfit for automation)
+
+USE CASE FIT:
+  ✓ Can support: Weekly tactical inventory adjustments for high-volume stores
+  ✓ Cannot support: Revenue planning, optimal reorder quantities, service level targets
+  ✗ Ready for production: No (needs confidence intervals + inventory optimization)
+
+RECOMMENDATION:
+  Treat as PROTOTYPE. Production deployment requires:
+    1. Revenue forecasting model
+    2. Prediction interval generation
+    3. Inventory optimization engine
+    4. Prophet tier activation for low-volume groups
+    5. Extensive stakeholder validation and scenario testing
+
+Timeline to production: 4-6 weeks (if prioritized).
+
+================================================================================

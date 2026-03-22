@@ -1,0 +1,162 @@
+================================================================================
+CLUB PISCINE FORECASTING PIPELINE VERIFICATION — DETAILED FINDINGS
+================================================================================
+
+VERIFICATION TASK: Trace column flow across 4 notebooks (01_eda → 02_weather → 03_features → 04_forecast)
+
+================================================================================
+QUESTION A: NB01 → NB02 HANDOFF: Does NB02 read the new columns from NB01?
+================================================================================
+
+NB01 Output (Cell 21):
+- Saves to: weekly_units.csv
+- Creates new columns: revenue_clean, is_return, is_active_product, weeks_with_sales
+- Code: weekly.to_csv(DATA_PROCESSED / "weekly_units.csv", index=False)
+
+NB02 Input (Cell 4):
+- Reads: weekly = pd.read_csv(DATA_PROCESSED / 'weekly_units.csv')
+- No explicit reference to the new NB01 columns
+- Does NOT use revenue_clean, is_return, is_active_product, or weeks_with_sales
+
+STATUS: PASS (NB02 reads successfully but ignores new columns — not harmful)
+
+================================================================================
+QUESTION B: NB02 → NB03 HANDOFF: Column compatibility
+================================================================================
+
+NB02 Output (Cell 25):
+- Saves to: weekly_units_weather.csv
+- Merge sequence creates THREE store_code columns: store_code_x, store_code_y, store_code
+- Actual output columns from NB03 Cell 4 output:
+  ['week_ending', 'store_code_x', 'city', 'division_code', 'units', 'revenue', 
+   'n_transactions', 'store_code_y', 'province', 'avg_temp', 'max_temp', 
+   'total_precip', 'sunshine_hours', 'rain_days', 'snow_days', 'bad_weather_days', 
+   'store_code', 'n_holidays', 'has_holiday', 'month']
+
+NB03 Input (Cell 4):
+- Reads the file successfully
+- GROUP_COLS = ['store_code','city','division_code']
+- Uses correct 'store_code' column for groupby operations
+
+STATUS: MESSY but FUNCTIONAL
+- Duplicate columns are wasteful but don't break NB03
+- RECOMMENDATION: NB02 Cell 21 should drop these columns after merges
+
+================================================================================
+QUESTION C: NB03 → NB04 HANDOFF: Feature list mismatches
+================================================================================
+
+NB03 Lag Features Created (Cell 13):
+- units_lag_1w, units_lag_2w, units_lag_4w, units_lag_52w
+- units_roll4_mean, units_roll4_std, units_roll8_mean, units_roll8_std, 
+  units_roll12_mean, units_roll12_std, units_volatility
+- revenue_lag_1w, revenue_lag_4w, revenue_roll4_mean
+- avg_price_per_unit, price_lag_1w
+Total: 16 features
+
+NB04 Hardcoded LAG_FEATURES (Cell 2):
+- units_lag_1w, units_lag_2w, units_lag_4w, units_roll4_mean, units_roll4_std
+Total: 5 features
+
+MISSING IN NB04: units_lag_52w, units_roll8_mean/std, units_roll12_mean/std, 
+                 units_volatility, revenue_lag_1w/4w, revenue_roll4_mean, 
+                 avg_price_per_unit, price_lag_1w (11 features)
+
+NB03 Weather Features Created (Cell 11):
+- RAW: avg_temp, total_precip, sunshine_hours, rain_days, snow_days, bad_weather_days
+- DEV_Z: 6 dev_z versions
+- FLAGS: temp_above_20, temp_above_25, temp_below_0, cooling_degree_days, heating_degree_days
+- LAGS: avg_temp_lag_1w, avg_temp_lag_2w, temp_shock, temp_warming
+- INTERACTIONS: precip_x_summer, bad_wx_x_summer, sunshine_x_summer, 
+               temp_above_25_x_sum, precip_x_spring, temp_warming_x_spr
+Total: 27 features
+
+NB04 Hardcoded WEATHER_FEATURES (Cell 2):
+- 12 features only (raw, flags, partial dev_z, NO lags, NO interactions)
+
+MISSING IN NB04: temp_below_0, avg_temp_lag_1w/2w, temp_shock, temp_warming,
+                 6 interaction terms, and 4 dev_z columns (15 features)
+
+IMPACT:
+NB04 Cell 8 builds features from hardcoded lists:
+  ALL_FEATURE_CANDIDATES = LAG_FEATURES + SEASONALITY_FEATURES + ... + WEATHER_FEATURES
+  available_features = [f for f in ALL_FEATURE_CANDIDATES if f in df.columns]
+
+Result: The 25+ features created by NB03 are NOT in the hardcoded lists, so they're
+        silently excluded from available_features and FINAL_FEATURES.
+
+================================================================================
+QUESTION D: GROUP_COLS duplicate handling
+================================================================================
+
+NB03 Cell 13:
+for _keys, _grp in df.groupby(GROUP_COLS):
+    _parts.append(add_lag_features(_grp))
+
+Result: Works correctly, uses clean 'store_code' column, not _x or _y versions.
+The duplicate columns are ignored.
+
+================================================================================
+QUESTION E: Weather lag NaN propagation
+================================================================================
+
+Code: df['avg_temp_lag_1w'] = df.groupby(GROUP_COLS)['avg_temp'].shift(1)
+
+NaN handling: shift(1) is safe—preserves existing NaNs and creates new NaN for 
+             first row of each group. No unintended NaN propagation.
+
+STATUS: CORRECT
+
+================================================================================
+QUESTION F: Revenue column flow
+================================================================================
+
+NB01 creates:
+- revenue (raw, may have negatives)
+- revenue_clean (clipped at 0)
+
+NB03 usage:
+- Uses raw 'revenue' for lags and price calculations
+- avg_price_per_unit = revenue / units → can create inf if units=0 but revenue>0
+- This is not handled downstream
+
+STATUS: POTENTIALLY PROBLEMATIC (inf values not addressed)
+
+================================================================================
+QUESTION G: FINAL_FEATURES construction
+================================================================================
+
+NB04 Cell 8:
+DIVISION_FEATURES = [c for c in df.columns if c.startswith(...)]
+ALL_FEATURE_CANDIDATES = (LAG_FEATURES + SEASONALITY_FEATURES + ... + WEATHER_FEATURES)
+available_features = [f for f in ALL_FEATURE_CANDIDATES if f in df.columns]
+FINAL_FEATURES = available_features (after correlation pruning)
+
+THE ISSUE: LAG_FEATURES and WEATHER_FEATURES are hardcoded in Cell 2 with only
+subset of what NB03 creates. So when building ALL_FEATURE_CANDIDATES, the 25+
+new features from NB03 are excluded.
+
+EXAMPLE:
+- units_lag_52y exists in df.columns
+- but NOT in NB04's hardcoded LAG_FEATURES
+- so NOT added to ALL_FEATURE_CANDIDATES
+- so NOT in available_features
+- so NOT in FINAL_FEATURES
+- so NOT used by XGBoost
+
+SAME for weather interactions, rolling windows, etc.
+
+================================================================================
+CRITICAL SUMMARY
+================================================================================
+
+BREAKING ISSUES:
+1. Duplicate store_code columns in NB02 output (messy but functional)
+2. NB04 hardcoded feature lists missing 25+ features created by NB03 (silent loss)
+3. avg_price_per_unit inf values not handled (potential model corruption)
+
+RECOMMENDATION:
+1. Update NB04 Cell 2 LAG_FEATURES and WEATHER_FEATURES to match NB03
+2. Test that FINAL_FEATURES now includes 25+ features
+3. Add inf handling in NB03 or NB04
+
