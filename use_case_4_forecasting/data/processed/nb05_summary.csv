@@ -1,0 +1,2 @@
+model,train_rows,test_rows,n_features,n_groups,n_stores,n_divisions,test_units_wmape,test_revenue_wmape,test_revenue_wmape_via_price,test_units_r2,test_revenue_r2,cv_wmape_mean,cv_wmape_std,units_pi_coverage_90,revenue_pi_coverage_90,ci_incoherence_pct
+Global LightGBM (units + direct revenue),19012,3576,71,284,26,11,0.21200910506571066,0.3291899604573179,,0.9359770410942467,0.8051683674075314,0.23300544014741134,0.09085238395288923,0.8685682326621924,0.8680089485458613,0.3635346756152125

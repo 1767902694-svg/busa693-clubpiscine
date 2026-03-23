@@ -23,6 +23,9 @@ wheels/
 .installed.cfg
 *.egg
 
+# Local libraries
+.pylibs/
+
 # Virtual Environment
 .venv/
 env/

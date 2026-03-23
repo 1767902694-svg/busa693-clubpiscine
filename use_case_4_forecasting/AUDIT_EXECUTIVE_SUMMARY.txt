@@ -1,0 +1,218 @@
+================================================================================
+WEATHER INTEGRATION NOTEBOOK (NB02) — EXECUTIVE SUMMARY
+================================================================================
+
+AUDIT COMPLETED: 2026-03-22
+NOTEBOOK: 02_weather_integration.ipynb
+STATUS: FUNCTIONAL BUT HAS CRITICAL DATA QUALITY ISSUES
+
+================================================================================
+BOTTOM LINE
+================================================================================
+
+The notebook successfully fetches and aggregates weather data from reliable 
+APIs, but produces outputs with critical defects:
+
+  ✓ Data collection: EXCELLENT (reliable API, proper rate limiting)
+  ✓ Geographic mapping: EXCELLENT (store-level, 27 stores)
+  ✓ Temporal alignment: EXCELLENT (consistent Sunday weeks, no offsets)
+  ✓ Feature engineering: EXCELLENT (7 weather features, business-relevant)
+  
+  ✗ Data completeness: FAILED (591 rows missing all weather = 2.4% loss)
+  ✗ Output schema: FAILED (duplicate columns: store_code_x, _y, original)
+  ✗ Validation: FAILED (no warnings about data quality issues)
+
+VERDICT: Do NOT use output files (weekly_units_weather.csv) until fixed.
+
+================================================================================
+CRITICAL DEFECTS
+================================================================================
+
+DEFECT #1: "Liquidation" City Missing Weather (HIGH PRIORITY)
+  ├─ Impact:    591 rows with NaN weather (store CP07, Feb 2024–Mar 2026)
+  ├─ Root Cause: City="Liquidation" in sales data but NOT in CITY_COORDS
+  ├─ Detection: Exact 1:1 match (591 Liquidation rows = 591 missing weather)
+  ├─ Severity:  Data Loss (~2.4% of sample)
+  └─ Fix Time:  < 5 minutes (1-line code change)
+
+DEFECT #2: Duplicate Column Names (MEDIUM PRIORITY)
+  ├─ Impact:    Schema bloat (24 cols instead of 21)
+  ├─ Cols:      store_code_x, store_code_y, store_code (3 copies)
+  ├─ Root Cause: Merge on ['city','week_ending'] without 'store_code'
+  ├─ Severity:  Schema Quality
+  └─ Fix Time:  < 1 minute (1-line drop)
+
+DEFECT #3: Gap Filling Fails Silently (MEDIUM PRIORITY)
+  ├─ Impact:    No imputation for unmapped cities (returns NaN)
+  ├─ Root Cause: Month-based median returns NaN for all-NaN groups
+  ├─ Status:    Defect #1 → Defect #3 (fixing #1 solves #3)
+  ├─ Severity:  Silent Data Quality
+  └─ Fix Time:  0 minutes (auto-fixed when #1 is fixed)
+
+DEFECT #4: No Data Validation (LOW PRIORITY)
+  ├─ Impact:    Data quality issues go unreported
+  ├─ Root Cause: Cell 21 prints only shape, not missing data summary
+  ├─ Severity:  Monitoring/Debugging
+  └─ Fix Time:  ~10 minutes (add validation block)
+
+DEFECT #5: Fragile Merge Key (LOW PRIORITY)
+  ├─ Impact:    Could fail silently if schema changes
+  ├─ Root Cause: Merge on ['city','week_ending'] assumes city uniqueness
+  ├─ Severity:  Code Robustness
+  └─ Fix Time:  < 1 minute (use 3-key merge + validate)
+
+================================================================================
+IMPACT ANALYSIS
+================================================================================
+
+If Left Unfixed:
+  ├─ NB03 (Feature Eng):
+  │   ├─ Receives 591 rows with NaN weather
+  │   ├─ Adstock transforms propagate NaNs
+  │   └─ Risk: Seasonal features may fail
+  │
+  ├─ NB06 (Causal Inference):
+  │   ├─ Ridge regression drops NaN rows (automatic)
+  │   ├─ Effective sample: 23,732 rows (2.4% loss)
+  │   ├─ ROAS estimates biased (Liquidation store excluded)
+  │   └─ Risk: Unreliable media effectiveness metrics
+  │
+  ├─ NB07 (Optimization):
+  │   ├─ Budget optimization runs on incomplete data
+  │   ├─ Liquidation store ignored in allocation
+  │   └─ Risk: Suboptimal recommendations
+  │
+  └─ Overall:
+      └─ 2.4% data loss + potential ML model failures
+
+If Fixed:
+  ├─ NB03+: No data loss, complete sample size (24,323 rows)
+  ├─ NB06: Reliable ROAS estimates (all stores included)
+  ├─ NB07: Robust budget recommendations (full data)
+  └─ Confidence: HIGH
+
+================================================================================
+RECOMMENDED ACTION PLAN
+================================================================================
+
+PHASE 1: Critical Fix (5–10 minutes)
+  □ 1. Add to Cell 5: weekly['city'] = weekly['city'].replace('Liquidation', 'Laval')
+  □ 2. Add to Cell 21: weekly_weather.drop(columns=['store_code_x', 'store_code_y'])
+  □ 3. Verify: Re-run NB02, check Cell 21 output for no NaN weather
+
+PHASE 2: Robustness (5–10 minutes)
+  □ 4. Replace Cell 21 merge with 3-key join + validate='m:1'
+  □ 5. Add validation block at end of Cell 21 (data quality check)
+
+PHASE 3: Documentation (5 minutes)
+  □ 6. Add comments explaining Liquidation mapping
+  □ 7. Update CLAUDE.md with known data quality note
+
+Total Effort: 15–20 minutes
+Testing: Re-run NB02, spot-check outputs
+
+================================================================================
+TECHNICAL DETAILS
+================================================================================
+
+Data Flows:
+  
+  weekly_units.csv (24,323 rows)
+    ├─ 27 stores (CP02–CP48)
+    ├─ 1 special: Liquidation (same as CP07/Laval)
+    └─ 125 weeks (2023-11-05 → 2026-03-22)
+            ↓
+        [NB02 Cell 4: Load data]
+            ↓
+    weekly['city'] = 28 unique cities (27 + Liquidation)
+            ↓
+        [Cell 9–11: Fetch weather from open-meteo APIs]
+            ↓
+    weather_daily (all stores except Liquidation)
+    [N daily obs = 27 stores × days]
+            ↓
+        [Cell 13: Aggregate daily → weekly]
+            ↓
+    weather_by_city_week.csv (3,456 rows)
+    [27 stores × 128 weeks, 0 NaN]
+            ↓
+        [Cell 21: Merge sales ← weather]
+            ↓
+    weekly_weather (24,323 rows)
+    [591 rows missing all weather ← Liquidation city]
+
+Weather Features Created:
+  avg_temp (°C)           — Pool water heating demand
+  max_temp (°C)           — Heat comfort factor
+  total_precip (mm)       — Rainy day avoidance
+  sunshine_hours (h)      — Outdoor appeal
+  rain_days               — Moisture/comfort
+  snow_days               — Accessibility
+  bad_weather_days       — Combined adverse conditions
+
+Geographic Scope:
+  Cities:     27 active (mostly Quebec, 1 Ontario)
+  Stores:     27 mapped store codes (CP02–CP48)
+  Precision:  ~0.1° lat/lon (~10km), acceptable for retail
+
+Temporal Scope:
+  Historical: 2023-11-05 → date.today() - 1 day (via archive API)
+  Forecast:   today → +16 days (via forecast API)
+  Coverage:   Full (2023-11-05 → 2026-03-22 sales period)
+  Alignment:  Sunday week-ending (consistent with sales weeks)
+
+================================================================================
+OUTPUT FILES STATUS
+================================================================================
+
+✓ weather_by_city_week.csv
+  Status:      CLEAN
+  Size:        3,456 rows × 11 columns
+  Content:     27 stores × 128 weeks (2023-11-05 → 2026-04-12)
+  Missing:     0 rows (100% complete)
+  Quality:     Suitable for standalone use or reference
+
+✗ weekly_units_weather.csv
+  Status:      BROKEN
+  Size:        24,323 rows × 24 columns
+  Content:     Sales + weather + holidays
+  Missing:     591 rows (all weather cols NaN)
+  Quality:     NOT suitable for ML pipeline until fixed
+  Issues:
+    - 591 rows missing 7 weather features
+    - 3 store_code columns (redundant)
+    - No validation warning issued
+
+================================================================================
+RECOMMENDATIONS FOR NEXT STEPS
+================================================================================
+
+Immediate:
+  1. Do NOT pass weekly_units_weather.csv to NB03 until fixed
+  2. Apply PHASE 1 fixes (< 5 minutes)
+  3. Re-run NB02 to regenerate outputs
+  4. Verify Cell 21 reports no missing weather
+
+Follow-up:
+  5. Apply PHASE 2 robustness improvements
+  6. Add PHASE 3 documentation
+  7. Consider adding data quality unit tests to NB02
+
+Long-term:
+  8. Document Liquidation store handling in project README
+  9. Set up automated data quality checks in pipeline
+
+================================================================================
+AUDIT FILES GENERATED
+================================================================================
+
+1. WEATHER_AUDIT_REPORT.md (493 lines)
+   → Comprehensive audit with all findings, evidence, and fixes
+   
+2. WEATHER_AUDIT_SUMMARY.txt (this file)
+   → Executive summary, impact analysis, action plan
+   
+3. WEATHER_ISSUES_DETAILED.md
+   → Issue-by-issue breakdown with code examples and testing
+
+================================================================================
