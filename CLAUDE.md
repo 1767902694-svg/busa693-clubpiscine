@@ -18,11 +18,13 @@ FI, BQ, GA, ME, PA, CH, HT, TO, PC, LO, SP
 ## Notebook Pipeline
 | NB | Name | Purpose | Key Output | Status |
 |----|------|---------|------------|--------|
+| 00 | Old Model | Tiered XGBoost + Prophet (REPLACED by NB05) | `forecast_output_stratified.csv` | Deprecated |
 | 01 | EDA | Load 68 store slices, store regrouping, weekly aggregation | `weekly_units.csv` | Executed |
 | 02 | Weather Integration | Open-Meteo API fetch, holiday flags, merge to sales | `weekly_units_weather.csv` | Executed |
-| 03 | Feature Engineering | Lags, rolling stats, Fourier, weather derivatives (69+2 features) | `modeling_dataset.csv` | Executed |
-| 04 | Forecast Model | Tiered XGBoost + Prophet (REPLACED by NB05) | `forecast_output_stratified.csv` | Deprecated |
-| 05 | Global Forecast Model | Single global LightGBM for units + direct revenue model | `nb05_*.csv` (7 files) | **Active** |
+| 03 | Units Feature Engineering | Lags, rolling stats, Fourier, weather derivatives (69+2 features) | `modeling_dataset.csv` | Executed |
+| 05 | Units Forecast Model | Single global LightGBM for unit demand | `nb05_*.csv` (5 files) | **Active** |
+| 06 | Revenue Feature Engineering | Placeholder for revenue-specific features | — | Placeholder |
+| 07 | Revenue Forecast Model | Direct global LightGBM for revenue | `nb07_*.csv` (6 files) | **Active** |
 
 ## Data Sources
 - **Sales**: 68 Power BI slice exports in `data/raw/slices/` (store-level Excel files)
@@ -49,7 +51,7 @@ FI, BQ, GA, ME, PA, CH, HT, TO, PC, LO, SP
 
 ## Model Architecture
 
-### NB04 — Tiered Strategy (DEPRECATED — replaced by NB05)
+### NB00 — Tiered Strategy (DEPRECATED — replaced by NB05)
 | Tier | Model | Scope |
 |------|-------|-------|
 | Tier 1 | XGBoost (global) | 17 high-volume groups only |
@@ -58,13 +60,18 @@ FI, BQ, GA, ME, PA, CH, HT, TO, PC, LO, SP
 
 **Why deprecated:** Only 17/287 groups forecasted (5.9% coverage), 1-week test set, 45.8% wMAPE.
 
-### NB05 — Global LightGBM (ACTIVE)
+### NB05 — Global LightGBM Units (ACTIVE)
 - **Units model**: LightGBM regression (MAE objective), 500 trees, max_depth=6, lr=0.05, early stopping at 50 rounds
-- **Revenue model**: Separate direct LightGBM (not units x price — avoids price-mix volatility)
 - **Confidence intervals**: Quantile regression (P5, P95) for 90% prediction intervals, coherence-enforced
 - **Validation**: Walk-forward CV, 6 folds across all seasons (52-week minimum train)
 - **Train/Test split**: 19,012 / 3,576 rows, cutoff at week 2025-09-28 (26-week holdout)
 - **Coverage**: 284/287 groups (100% of active store-division combinations)
+
+### NB07 — Global LightGBM Revenue (ACTIVE)
+- **Revenue model**: Separate direct LightGBM (not units x price — avoids price-mix volatility)
+- **Architecture**: Same hyperparameters as NB05 units model, trained on revenue target
+- **Confidence intervals**: Quantile regression (P5, P95), coherence-enforced
+- **Self-contained**: Duplicates data loading from NB05 so it can run independently
 
 ## Key Results (Verified March 22, 2026)
 
@@ -126,9 +133,17 @@ n_transactions, units_lag_1w, avg_price_per_unit, units_lag_52w, units_lag_2w, u
 - **Winter/Spring weakness**: wMAPE degrades to 26-31% in off-season. Consider holiday-type features or seasonal ensemble.
 
 ## NB05 Output Files (in data/processed/)
-- `nb05_model_accuracy.csv` — per store-division group accuracy
-- `nb05_division_accuracy.csv` — per division summary
-- `nb05_cv_results.csv` — 6-fold walk-forward CV results
+- `nb05_forecast_output.csv` — 4-week units forecast with CIs
+- `nb05_model_accuracy.csv` — per store-division group units accuracy
+- `nb05_division_accuracy.csv` — per division units summary
+- `nb05_cv_results.csv` — 6-fold walk-forward CV results (units)
 - `nb05_feature_importance.csv` — units model feature importance
-- `nb05_revenue_feature_importance.csv` — revenue model feature importance
-- `nb05_summary.csv` — single-row summary of all key metrics
+- `nb05_summary.csv` — single-row summary of units metrics
+
+## NB07 Output Files (in data/processed/)
+- `nb07_forecast_output.csv` — 4-week revenue forecast with CIs
+- `nb07_model_accuracy.csv` — per store-division group revenue accuracy
+- `nb07_division_accuracy.csv` — per division revenue summary
+- `nb07_cv_results.csv` — 6-fold walk-forward CV results (revenue)
+- `nb07_feature_importance.csv` — revenue model feature importance
+- `nb07_summary.csv` — single-row summary of revenue metrics
