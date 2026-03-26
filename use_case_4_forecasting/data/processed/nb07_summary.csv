@@ -1,0 +1,2 @@
+model,train_rows,test_rows,n_features,n_groups,n_stores,n_divisions,test_revenue_wmape,test_revenue_r2,cv_wmape_mean,cv_wmape_std,revenue_pi_coverage_90,total_forecast_revenue_4w
+Global LightGBM (direct revenue),19012,3576,90,284,26,11,0.3317851897424724,0.796265193627474,0.27491042792176934,0.08702988927848755,0.828579418344519,2213453.1953683756
