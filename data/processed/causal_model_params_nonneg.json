@@ -3,48 +3,48 @@
   "stage1_description": "Revenue ~ Controls (seasonal baseline)",
   "stage2_description": "Residuals ~ Media (incremental lift)",
   "decay_rates": {
-    "television": 0.2,
-    "radio": 0.5,
-    "panneaux": 0.4,
-    "social_media": 0.1,
-    "preroll": 0.3,
-    "banniere_web": 0.2,
-    "circulaire_digitale": 0.3
+    "television": 0.2134393616019503,
+    "radio": 0.04972103023468241,
+    "panneaux": 0.018919940332909578,
+    "social_media": 0.018919940332909578,
+    "preroll": 0.04972103023468241,
+    "banniere_web": 0.005444212055886945,
+    "circulaire_digitale": 0.005444212055886945
   },
   "saturation_params": {
     "television": {
       "type": "hill",
-      "K": 146393.60077383884,
+      "K": 147354.8412749012,
       "alpha": 2
     },
     "radio": {
       "type": "hill",
-      "K": 109085.55508871429,
+      "K": 66666.06753036441,
       "alpha": 2
     },
     "panneaux": {
       "type": "hill",
-      "K": 4875.570548307369,
+      "K": 4.262161787812413,
       "alpha": 2
     },
     "social_media": {
       "type": "hill",
-      "K": 22731.110464521313,
+      "K": 21634.028332173435,
       "alpha": 2
     },
     "preroll": {
       "type": "hill",
-      "K": 32334.87549718175,
+      "K": 68770.85061914581,
       "alpha": 2
     },
     "banniere_web": {
       "type": "hill",
-      "K": 25146.76186532452,
+      "K": 20782.106677293825,
       "alpha": 2
     },
     "circulaire_digitale": {
       "type": "hill",
-      "K": 13398.317974184953,
+      "K": 7436.835182482582,
       "alpha": 2
     }
   },
@@ -122,7 +122,7 @@
     "media_banniere_web_saturated": 490786.6360722045,
     "media_circulaire_digitale_saturated": 0.0
   },
-  "media_share_pct": 10.862020904610466,
+  "media_share_pct": 8.200125390815732,
   "seasonal_share_pct": 100.0,
   "scaler_media_mean": [
     0.36829300479014404,

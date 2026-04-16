@@ -1,0 +1,2 @@
+model,pc_only_divisions,mid_vol_divisions,low_vol_divisions,train_rows,test_rows,n_features,n_groups,n_stores,n_divisions,test_units_wmape,test_units_r2,cv_wmape_mean,cv_wmape_std,units_pi_coverage_90
+Segmented LightGBM — 3 segments (pc_only regression | mid_vol tweedie vp1.2 | low_vol tweedie vp1.5),['PC'],"['LO', 'ME']","['BQ', 'CH', 'FI', 'GA', 'HT', 'PA', 'SP', 'TO']",19020,3585,71,284,26,11,0.18618728801095924,0.9438522121195838,0.19481225040124062,0.06954283789181373,0.8850767085076708

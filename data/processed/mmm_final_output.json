@@ -1,18 +1,18 @@
 {
   "source": "NB07 (Two-Stage Non-Negative Ridge from NB06B)",
-  "created": "2026-02-26 15:53",
+  "created": "2026-03-08 23:29",
   "model_performance": {
     "model_type": "two_stage_nonneg_ridge",
     "r2_full": 0.8593681034880413,
     "r2_seasonal_s1": 0.8347681868858572,
     "r2_media_s2": 0.1488812362374211,
-    "media_share_pct": 10.862020904610466,
+    "media_share_pct": 8.200125390815732,
     "seasonal_share_pct": 100.0
   },
   "optimization": {
-    "current_response": 1831521.4261014527,
-    "optimal_response": 2222929.8857611604,
-    "lift_pct": 21.370673260036796,
+    "current_response": 1288689.9615744425,
+    "optimal_response": 1667602.2622354645,
+    "lift_pct": 29.40290620391659,
     "current_allocation": {
       "television": 109693.09000000001,
       "radio": 60202.128528528534,
@@ -26,9 +26,9 @@
       "television": 80000.0,
       "radio": 48161.70282282283,
       "panneaux": 6499.8894174174175,
-      "social_media": 35911.200262236496,
-      "preroll": 50630.71761828298,
-      "banniere_web": 30336.858250809368,
+      "social_media": 29851.734669660218,
+      "preroll": 62931.324696002936,
+      "banniere_web": 24095.71676566569,
       "circulaire_digitale": 9923.23825825826
     }
   }

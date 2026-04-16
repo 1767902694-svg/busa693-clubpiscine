@@ -1,0 +1,187 @@
+================================================================================
+WEATHER INTEGRATION NOTEBOOK (02) — AUDIT SUMMARY
+================================================================================
+
+NOTEBOOK: 02_weather_integration.ipynb
+STATUS: Executed (all 13 code cells run)
+AUDIT DATE: 2026-03-22
+
+================================================================================
+CRITICAL ISSUES (Must Fix)
+================================================================================
+
+1. MISSING WEATHER FOR 591 ROWS (2.4% of data)
+   - Issue: City "Liquidation" in sales data has NO weather coordinates
+   - Impact: 591 rows (store_code=CP07, dates 2024-02-11 → 2026-03-22)
+   - Root cause: Liquidation city not in CITY_COORDS dictionary
+   - Fix: Map Liquidation → Laval before merge in Cell 4–5
+
+2. DUPLICATE COLUMN NAMES (_x, _y suffixes)
+   - Issue: Merge creates store_code_x, store_code_y, store_code (3 copies)
+   - Impact: Schema clutter; redundant data
+   - Root cause: Merge on ['city','week_ending'] only (not store_code)
+   - Fix: Drop _x/_y columns after merge in Cell 21
+
+3. GAP FILLING FAILS SILENTLY
+   - Issue: Monthly median imputation returns NaN for Liquidation
+   - Impact: 591 rows stay empty; no warning issued
+   - Root cause: Can't compute median of all-missing city
+   - Fix: Add province-level fallback imputation
+
+================================================================================
+AUDIT RESULTS BY SECTION
+================================================================================
+
+✓ WEATHER DATA SOURCE
+  - Uses reliable APIs (open-meteo archive + forecast)
+  - Covers full date range (2023-11-05 → 2026-04-12)
+  - Rate limit handling with exponential backoff
+  - Timezone: America/Toronto (correct)
+
+✓ GEOGRAPHIC GRANULARITY
+  - Store-level mapping (27 stores with lat/lon)
+  - Coordinates: ~100m precision
+  - Fixed mapping (no dynamic updates)
+
+✓ TEMPORAL ALIGNMENT
+  - Consistent Sunday week-ending (resample('W'))
+  - No off-by-one errors detected
+  - Forecast weeks: 2026-03-29, 2026-04-05, 2026-04-12
+
+✓ WEATHER FEATURES
+  - 7 features created: avg_temp, max_temp, total_precip, sunshine_hours, 
+    rain_days, snow_days, bad_weather_days
+  - WMO code classification (0–99) correct
+  - Features appropriate for pool/spa business
+
+✗ MISSING DATA HANDLING
+  - Gap filling: Month-based median (works for matched cities)
+  - Fails for unmapped cities (Liquidation)
+  - No validation check or warning
+
+✗ OUTPUT FILES
+  - weather_by_city_week.csv: 3456 rows, clean (27 stores × 128 weeks)
+  - weekly_units_weather.csv: 24323 rows, BROKEN (591 missing all weather)
+  - Redundant columns: store_code_x, store_code_y, store_code
+
+================================================================================
+DATA QUALITY METRICS
+================================================================================
+
+Input:
+  - Sales data (weekly_units.csv): 24,323 rows, 27 stores + 1 Liquidation
+  - 125 unique week_ending dates (2023-11-05 → 2026-03-22)
+
+Processing:
+  - Historical weather: 2023-11-05 → date.today() - 1 day
+  - Forecast weather: +16 days forward
+  - Aggregation: Daily → Weekly (resample on Sundays)
+
+Output:
+  - weather_by_city_week.csv: 3,456 rows (27 stores × 128 weeks), 0 missing
+  - weekly_units_weather.csv: 24,323 rows, 591 missing all weather (2.4%)
+
+Gap Filling:
+  - Method: Monthly median per city
+  - Effectiveness: 100% for matched stores, 0% for Liquidation
+  - Fallback: None (silently fails)
+
+================================================================================
+EXECUTION STATUS
+================================================================================
+
+Cell  2 [CODE] ✓ Imports OK
+Cell  4 [CODE] ✓ City coords loaded (27 cities)
+Cell  5 [CODE] ✓ Schema validation OK
+Cell  7 [CODE] ✓ Weather classification function defined
+Cell  9 [CODE] ✓ Historical weather fetched (all cities)
+Cell 11 [CODE] ✓ Forecast weather fetched (all cities)
+Cell 13 [CODE] ✓ Weekly aggregation: 3456 rows
+Cell 14 [CODE] ✓ Column check OK
+Cell 15 [CODE] ⚠️  Reports "Missing weather rows: 0" [FALSE; this is intermediate merge]
+Cell 19 [CODE] ✓ Holiday records: QC + ON
+Cell 21 [CODE] ⚠️  Final merge: 591 missing, NO warning issued
+Cell 23 [CODE] ✓ Visualizations generated
+Cell 25 [CODE] ✓ Files saved
+
+No runtime errors, but data quality issues hidden.
+
+================================================================================
+DOWNSTREAM IMPACT
+================================================================================
+
+NB03 (Feature Engineering):
+  - Will receive 591 rows with NaN weather
+  - Adstock transformation will propagate NaNs
+  - Seasonal decomposition may fail
+
+NB06 (Causal Inference):
+  - Ridge regression will drop NaN rows or fail
+  - Effective sample: 23,732 rows (loss of 2.4%)
+  - Media effectiveness estimates may be biased
+
+NB07 (Optimization):
+  - Budget allocation based on incomplete data
+  - Liquidation store omitted from optimization
+
+RECOMMENDATION: Fix before proceeding to NB03+
+
+================================================================================
+FIXES REQUIRED (Priority)
+================================================================================
+
+P0 (CRITICAL — Fix before NB03):
+  1. Map "Liquidation" → "Laval" in Cell 4
+     weekly['city'] = weekly['city'].replace('Liquidation', 'Laval')
+  
+  2. Drop duplicate columns in Cell 21
+     weekly_weather = weekly_weather.drop(columns=['store_code_x', 'store_code_y'], errors='ignore')
+
+P1 (RECOMMENDED):
+  3. Add validation at end of Cell 21
+     Check for rows with all weather missing, print warning
+  
+  4. Enhance merge to use 3-key join (store_code, city, week_ending)
+     Add validate='m:1' to catch mismatches
+  
+  5. Improve gap filling with province-level fallback
+     med_city = groupby(['city','month']).transform('median')
+     med_prov = groupby(['province','month']).transform('median')
+     med = med_city.fillna(med_prov)
+
+P2 (NICE-TO-HAVE):
+  6. Document data quality issue in CLAUDE.md
+  7. Add explanatory comments in notebook
+
+================================================================================
+FILES GENERATED
+================================================================================
+
+✓ data/processed/weather_by_city_week.csv (3456 rows, 11 cols)
+  - Clean: 27 stores × 128 weeks, 0 missing values
+  - Ready for standalone use
+
+✗ data/processed/weekly_units_weather.csv (24323 rows, 24 cols)
+  - Broken: 591 rows missing all weather
+  - Redundant: 3 store_code columns
+  - Needs fix before ML pipeline
+
+================================================================================
+AUDIT CONCLUSION
+================================================================================
+
+VERDICT: FUNCTIONAL BUT BROKEN
+
+✓ Weather data collection: EXCELLENT (reliable API, proper aggregation)
+✓ Code execution: CLEAN (no runtime errors)
+✗ Data quality: FAILED (2.4% missing weather for entire city)
+✗ Output schema: CLUTTERED (duplicate columns)
+
+The notebook successfully fetches and aggregates weather data, but has critical 
+data quality issues that will break downstream ML models. The "Liquidation" city 
+must be resolved before proceeding.
+
+Estimated fix time: 10–15 minutes (3 small code changes)
+Estimated impact if unfixed: 2.4% data loss + possible failures in NB03+
+
+================================================================================

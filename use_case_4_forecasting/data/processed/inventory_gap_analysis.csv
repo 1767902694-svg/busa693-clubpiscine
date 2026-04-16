@@ -1,0 +1,285 @@
+store_code,division_code,forecast_demand_total,qty_available,inventory_value,demand_vs_stock,gap_flag
+CP02,BQ,10.0,0.0,0.0,10.0,⚠️ Potential gap
+CP02,CH,9.0,0.0,0.0,9.0,⚠️ Potential gap
+CP02,FI,6.0,0.0,0.0,6.0,⚠️ Potential gap
+CP02,GA,3.0,0.0,0.0,3.0,⚠️ Potential gap
+CP02,HT,9.0,0.0,0.0,9.0,⚠️ Potential gap
+CP02,LO,21.0,0.0,0.0,21.0,⚠️ Potential gap
+CP02,ME,24.0,0.0,0.0,24.0,⚠️ Potential gap
+CP02,PA,2.0,0.0,0.0,2.0,⚠️ Potential gap
+CP02,PC,218.27000045776367,0.0,0.0,218.27000045776367,⚠️ Potential gap
+CP02,SP,2.0,0.0,0.0,2.0,⚠️ Potential gap
+CP02,TO,6.0,0.0,0.0,6.0,⚠️ Potential gap
+CP04,BQ,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP04,CH,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP04,FI,19.0,0.0,0.0,19.0,⚠️ Potential gap
+CP04,GA,50.0,0.0,0.0,50.0,⚠️ Potential gap
+CP04,HT,17.0,0.0,0.0,17.0,⚠️ Potential gap
+CP04,LO,54.0,0.0,0.0,54.0,⚠️ Potential gap
+CP04,ME,23.0,0.0,0.0,23.0,⚠️ Potential gap
+CP04,PA,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP04,PC,424.92999267578125,0.0,0.0,424.92999267578125,⚠️ Potential gap
+CP04,SP,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP04,TO,3.0,0.0,0.0,3.0,⚠️ Potential gap
+CP05,BQ,8.0,0.0,0.0,8.0,⚠️ Potential gap
+CP05,CH,3.0,0.0,0.0,3.0,⚠️ Potential gap
+CP05,FI,19.0,0.0,0.0,19.0,⚠️ Potential gap
+CP05,GA,3.0,0.0,0.0,3.0,⚠️ Potential gap
+CP05,HT,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP05,LO,55.0,0.0,0.0,55.0,⚠️ Potential gap
+CP05,ME,90.0,0.0,0.0,90.0,⚠️ Potential gap
+CP05,PA,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP05,PC,1359.5,0.0,0.0,1359.5,⚠️ Potential gap
+CP05,SP,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP05,TO,3.0,0.0,0.0,3.0,⚠️ Potential gap
+CP06,BQ,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP06,CH,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP06,FI,14.0,0.0,0.0,14.0,⚠️ Potential gap
+CP06,GA,150.0,0.0,0.0,150.0,⚠️ Potential gap
+CP06,HT,8.0,0.0,0.0,8.0,⚠️ Potential gap
+CP06,LO,52.0,0.0,0.0,52.0,⚠️ Potential gap
+CP06,ME,61.0,0.0,0.0,61.0,⚠️ Potential gap
+CP06,PA,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP06,PC,885.8999938964844,0.0,0.0,885.8999938964844,⚠️ Potential gap
+CP06,SP,3.0,0.0,0.0,3.0,⚠️ Potential gap
+CP06,TO,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP07,BQ,15.0,0.0,0.0,15.0,⚠️ Potential gap
+CP07,CH,8.0,0.0,0.0,8.0,⚠️ Potential gap
+CP07,FI,26.0,0.0,0.0,26.0,⚠️ Potential gap
+CP07,GA,16.0,0.0,0.0,16.0,⚠️ Potential gap
+CP07,HT,15.0,0.0,0.0,15.0,⚠️ Potential gap
+CP07,LO,90.0,0.0,0.0,90.0,⚠️ Potential gap
+CP07,ME,168.0,0.0,0.0,168.0,⚠️ Potential gap
+CP07,PA,92.0,0.0,0.0,92.0,⚠️ Potential gap
+CP07,PC,566.4300079345703,0.0,0.0,566.4300079345703,⚠️ Potential gap
+CP07,SP,9.0,0.0,0.0,9.0,⚠️ Potential gap
+CP07,TO,6.0,0.0,0.0,6.0,⚠️ Potential gap
+CP08,BQ,13.0,701.0,101572.83,-101559.83,✅ OK
+CP08,CH,6.0,268.0,249830.8,-249824.8,✅ OK
+CP08,FI,14.0,771.0,187227.4,-187213.4,✅ OK
+CP08,GA,6.0,585.0,478400.08,-478394.08,✅ OK
+CP08,HT,4.0,73.0,115622.35,-115618.35,✅ OK
+CP08,LO,44.0,3722.0,42682.14,-42638.14,✅ OK
+CP08,ME,24.0,9918.0,1110425.95,-1110401.95,✅ OK
+CP08,PA,8.0,862.0,268636.76,-268628.76,✅ OK
+CP08,PC,255.5900001525879,21720.0,220567.25,-220311.6599998474,✅ OK
+CP08,SP,4.0,62.0,488831.02,-488827.02,✅ OK
+CP08,TO,4.0,170.0,69768.75,-69764.75,✅ OK
+CP10,BQ,8.0,0.0,0.0,8.0,⚠️ Potential gap
+CP10,CH,6.0,0.0,0.0,6.0,⚠️ Potential gap
+CP10,FI,10.0,0.0,0.0,10.0,⚠️ Potential gap
+CP10,GA,3.0,0.0,0.0,3.0,⚠️ Potential gap
+CP10,HT,3.0,0.0,0.0,3.0,⚠️ Potential gap
+CP10,LO,41.0,0.0,0.0,41.0,⚠️ Potential gap
+CP10,ME,39.0,0.0,0.0,39.0,⚠️ Potential gap
+CP10,PA,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP10,PC,448.34000396728516,0.0,0.0,448.34000396728516,⚠️ Potential gap
+CP10,SP,68.0,0.0,0.0,68.0,⚠️ Potential gap
+CP10,TO,1.0,0.0,0.0,1.0,⚠️ Potential gap
+CP12,BQ,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP12,CH,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP12,FI,13.0,0.0,0.0,13.0,⚠️ Potential gap
+CP12,GA,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP12,HT,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP12,LO,10.0,0.0,0.0,10.0,⚠️ Potential gap
+CP12,ME,84.0,0.0,0.0,84.0,⚠️ Potential gap
+CP12,PA,1.0,0.0,0.0,1.0,⚠️ Potential gap
+CP12,PC,129.0,0.0,0.0,129.0,⚠️ Potential gap
+CP12,SP,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP12,TO,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP13,BQ,6.0,0.0,0.0,6.0,⚠️ Potential gap
+CP13,CH,6.0,0.0,0.0,6.0,⚠️ Potential gap
+CP13,FI,14.0,0.0,0.0,14.0,⚠️ Potential gap
+CP13,GA,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP13,HT,6.0,0.0,0.0,6.0,⚠️ Potential gap
+CP13,LO,22.0,0.0,0.0,22.0,⚠️ Potential gap
+CP13,ME,23.0,0.0,0.0,23.0,⚠️ Potential gap
+CP13,PA,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP13,PC,282.0,0.0,0.0,282.0,⚠️ Potential gap
+CP13,SP,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP13,TO,3.0,0.0,0.0,3.0,⚠️ Potential gap
+CP15,BQ,3.0,0.0,0.0,3.0,⚠️ Potential gap
+CP15,CH,8.0,0.0,0.0,8.0,⚠️ Potential gap
+CP15,FI,17.0,0.0,0.0,17.0,⚠️ Potential gap
+CP15,GA,21.0,0.0,0.0,21.0,⚠️ Potential gap
+CP15,HT,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP15,LO,39.0,0.0,0.0,39.0,⚠️ Potential gap
+CP15,ME,12.0,0.0,0.0,12.0,⚠️ Potential gap
+CP15,PA,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP15,PC,381.94000244140625,0.0,0.0,381.94000244140625,⚠️ Potential gap
+CP15,SP,9.0,0.0,0.0,9.0,⚠️ Potential gap
+CP15,TO,1.0,0.0,0.0,1.0,⚠️ Potential gap
+CP16,BQ,27.0,0.0,0.0,27.0,⚠️ Potential gap
+CP16,CH,9.0,0.0,0.0,9.0,⚠️ Potential gap
+CP16,FI,14.0,0.0,0.0,14.0,⚠️ Potential gap
+CP16,GA,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP16,HT,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP16,LO,75.0,0.0,0.0,75.0,⚠️ Potential gap
+CP16,ME,32.0,0.0,0.0,32.0,⚠️ Potential gap
+CP16,PA,13.0,0.0,0.0,13.0,⚠️ Potential gap
+CP16,PC,319.3600082397461,0.0,0.0,319.3600082397461,⚠️ Potential gap
+CP16,SP,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP16,TO,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP17,BQ,10.0,0.0,0.0,10.0,⚠️ Potential gap
+CP17,CH,3.0,0.0,0.0,3.0,⚠️ Potential gap
+CP17,FI,14.0,0.0,0.0,14.0,⚠️ Potential gap
+CP17,GA,12.0,0.0,0.0,12.0,⚠️ Potential gap
+CP17,HT,13.0,0.0,0.0,13.0,⚠️ Potential gap
+CP17,LO,19.0,0.0,0.0,19.0,⚠️ Potential gap
+CP17,ME,32.0,0.0,0.0,32.0,⚠️ Potential gap
+CP17,PA,3.0,0.0,0.0,3.0,⚠️ Potential gap
+CP17,PC,416.2799987792969,0.0,0.0,416.2799987792969,⚠️ Potential gap
+CP17,SP,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP17,TO,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP202,BQ,4.0,66.0,16023.54,-16019.54,✅ OK
+CP202,CH,5.0,-1.0,1070.0,-1065.0,✅ OK
+CP202,FI,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP202,GA,4.0,30.0,54591.42,-54587.42,✅ OK
+CP202,LO,26.0,909.0,11290.039999999999,-11264.039999999999,✅ OK
+CP202,ME,9.0,546.0,77523.12,-77514.12,✅ OK
+CP202,PA,10.0,128.0,20277.92,-20267.92,✅ OK
+CP202,PC,381.87999725341797,3182.0,32499.99,-32118.110002746584,✅ OK
+CP202,SP,11.0,24.0,215438.91999999998,-215427.91999999998,✅ OK
+CP202,TO,8.0,-1.0,182.54,-174.54,✅ OK
+CP28,BQ,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP28,CH,6.0,0.0,0.0,6.0,⚠️ Potential gap
+CP28,FI,6.0,0.0,0.0,6.0,⚠️ Potential gap
+CP28,GA,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP28,HT,2.0,0.0,0.0,2.0,⚠️ Potential gap
+CP28,LO,16.0,0.0,0.0,16.0,⚠️ Potential gap
+CP28,ME,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP28,PA,8.0,0.0,0.0,8.0,⚠️ Potential gap
+CP28,PC,279.0699920654297,0.0,0.0,279.0699920654297,⚠️ Potential gap
+CP28,SP,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP28,TO,448.0,0.0,0.0,448.0,⚠️ Potential gap
+CP32,BQ,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP32,CH,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP32,FI,13.0,0.0,0.0,13.0,⚠️ Potential gap
+CP32,GA,27.0,0.0,0.0,27.0,⚠️ Potential gap
+CP32,HT,8.0,0.0,0.0,8.0,⚠️ Potential gap
+CP32,LO,32.0,0.0,0.0,32.0,⚠️ Potential gap
+CP32,ME,12.0,0.0,0.0,12.0,⚠️ Potential gap
+CP32,PA,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP32,PC,376.67000579833984,0.0,0.0,376.67000579833984,⚠️ Potential gap
+CP32,SP,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP32,TO,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP33,BQ,3.0,0.0,0.0,3.0,⚠️ Potential gap
+CP33,CH,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP33,FI,6.0,0.0,0.0,6.0,⚠️ Potential gap
+CP33,GA,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP33,HT,6.0,0.0,0.0,6.0,⚠️ Potential gap
+CP33,LO,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP33,ME,13.0,0.0,0.0,13.0,⚠️ Potential gap
+CP33,PA,11.0,0.0,0.0,11.0,⚠️ Potential gap
+CP33,PC,101.0,0.0,0.0,101.0,⚠️ Potential gap
+CP33,SP,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP33,TO,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP35,BQ,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP35,CH,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP35,FI,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP35,GA,3.0,0.0,0.0,3.0,⚠️ Potential gap
+CP35,HT,23.0,0.0,0.0,23.0,⚠️ Potential gap
+CP35,LO,83.0,0.0,0.0,83.0,⚠️ Potential gap
+CP35,ME,17.0,0.0,0.0,17.0,⚠️ Potential gap
+CP35,PA,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP35,PC,499.3000030517578,0.0,0.0,499.3000030517578,⚠️ Potential gap
+CP35,SP,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP35,TO,13.0,0.0,0.0,13.0,⚠️ Potential gap
+CP36,BQ,18.0,0.0,0.0,18.0,⚠️ Potential gap
+CP36,CH,45.0,0.0,0.0,45.0,⚠️ Potential gap
+CP36,FI,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP36,GA,16.0,0.0,0.0,16.0,⚠️ Potential gap
+CP36,HT,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP36,LO,42.0,0.0,0.0,42.0,⚠️ Potential gap
+CP36,ME,631.0,0.0,0.0,631.0,⚠️ Potential gap
+CP36,PA,33.0,0.0,0.0,33.0,⚠️ Potential gap
+CP36,PC,278.6799964904785,0.0,0.0,278.6799964904785,⚠️ Potential gap
+CP36,SP,15.0,0.0,0.0,15.0,⚠️ Potential gap
+CP36,TO,6.0,0.0,0.0,6.0,⚠️ Potential gap
+CP37,BQ,6.0,250.0,32414.57,-32408.57,✅ OK
+CP37,CH,6.0,39.0,99431.02,-99425.02,✅ OK
+CP37,FI,8.0,35.0,12980.65,-12972.65,✅ OK
+CP37,GA,5.0,382.0,661811.62,-661806.62,✅ OK
+CP37,HT,8.0,80.0,147623.72,-147615.72,✅ OK
+CP37,LO,56.0,1334.0,24908.77,-24852.77,✅ OK
+CP37,ME,76.0,4194.0,581120.81,-581044.81,✅ OK
+CP37,PA,28.0,586.0,87826.03,-87798.03,✅ OK
+CP37,PC,681.9800109863281,9585.0,155575.23,-154893.24998901368,✅ OK
+CP37,SP,3.0,85.0,892580.75,-892577.75,✅ OK
+CP37,TO,4.0,80.0,35212.15,-35208.15,✅ OK
+CP39,BQ,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP39,CH,9.0,0.0,0.0,9.0,⚠️ Potential gap
+CP39,FI,12.0,0.0,0.0,12.0,⚠️ Potential gap
+CP39,GA,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP39,HT,2.0,0.0,0.0,2.0,⚠️ Potential gap
+CP39,LO,13.0,0.0,0.0,13.0,⚠️ Potential gap
+CP39,ME,19.0,0.0,0.0,19.0,⚠️ Potential gap
+CP39,PA,12.0,0.0,0.0,12.0,⚠️ Potential gap
+CP39,PC,169.0,0.0,0.0,169.0,⚠️ Potential gap
+CP39,SP,3.0,0.0,0.0,3.0,⚠️ Potential gap
+CP39,TO,3.0,0.0,0.0,3.0,⚠️ Potential gap
+CP40,BQ,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP40,CH,11.0,0.0,0.0,11.0,⚠️ Potential gap
+CP40,GA,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP40,HT,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP40,LO,8.0,0.0,0.0,8.0,⚠️ Potential gap
+CP40,ME,18.0,0.0,0.0,18.0,⚠️ Potential gap
+CP40,PA,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP40,PC,171.0,0.0,0.0,171.0,⚠️ Potential gap
+CP40,SP,8.0,0.0,0.0,8.0,⚠️ Potential gap
+CP40,TO,8.0,0.0,0.0,8.0,⚠️ Potential gap
+CP44,BQ,7.0,568.0,48794.1,-48787.1,✅ OK
+CP44,CH,6.0,59.0,28009.86,-28003.86,✅ OK
+CP44,FI,9.0,358.0,34447.54,-34438.54,✅ OK
+CP44,GA,33.0,95.0,53156.75,-53123.75,✅ OK
+CP44,HT,5.0,9.0,3940.14,-3935.14,✅ OK
+CP44,LO,49.0,2908.0,30909.43,-30860.43,✅ OK
+CP44,ME,9.0,2446.0,186392.59,-186383.59,✅ OK
+CP44,PA,7.0,124.0,14716.08,-14709.08,✅ OK
+CP44,PC,125.0,12147.0,131935.51,-131810.51,✅ OK
+CP44,SP,5.0,16.0,95801.62,-95796.62,✅ OK
+CP44,TO,5.0,20.0,4833.69,-4828.69,✅ OK
+CP45,BQ,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP45,CH,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP45,FI,6.0,0.0,0.0,6.0,⚠️ Potential gap
+CP45,GA,6.0,0.0,0.0,6.0,⚠️ Potential gap
+CP45,HT,7.0,0.0,0.0,7.0,⚠️ Potential gap
+CP45,LO,19.0,0.0,0.0,19.0,⚠️ Potential gap
+CP45,ME,12.0,0.0,0.0,12.0,⚠️ Potential gap
+CP45,PA,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP45,PC,248.0,0.0,0.0,248.0,⚠️ Potential gap
+CP45,SP,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP45,TO,3.0,0.0,0.0,3.0,⚠️ Potential gap
+CP46,BQ,8.0,0.0,0.0,8.0,⚠️ Potential gap
+CP46,CH,6.0,0.0,0.0,6.0,⚠️ Potential gap
+CP46,FI,12.0,0.0,0.0,12.0,⚠️ Potential gap
+CP46,GA,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP46,HT,8.0,0.0,0.0,8.0,⚠️ Potential gap
+CP46,LO,16.0,0.0,0.0,16.0,⚠️ Potential gap
+CP46,ME,14.0,0.0,0.0,14.0,⚠️ Potential gap
+CP46,PA,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP46,PC,252.0,0.0,0.0,252.0,⚠️ Potential gap
+CP46,SP,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP46,TO,6.0,0.0,0.0,6.0,⚠️ Potential gap
+CP47,BQ,9.0,0.0,0.0,9.0,⚠️ Potential gap
+CP47,CH,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP47,FI,9.0,0.0,0.0,9.0,⚠️ Potential gap
+CP47,GA,16.0,0.0,0.0,16.0,⚠️ Potential gap
+CP47,HT,1.0,0.0,0.0,1.0,⚠️ Potential gap
+CP47,LO,9.0,0.0,0.0,9.0,⚠️ Potential gap
+CP47,ME,17.0,0.0,0.0,17.0,⚠️ Potential gap
+CP47,PA,5.0,0.0,0.0,5.0,⚠️ Potential gap
+CP47,PC,185.0,0.0,0.0,185.0,⚠️ Potential gap
+CP47,SP,4.0,0.0,0.0,4.0,⚠️ Potential gap
+CP47,TO,2.0,0.0,0.0,2.0,⚠️ Potential gap
+CP48,BQ,4.0,419.0,51172.46,-51168.46,✅ OK
+CP48,CH,6.0,78.0,29197.5,-29191.5,✅ OK
+CP48,FI,4.0,286.0,27720.94,-27716.94,✅ OK
+CP48,GA,3.0,49.0,39057.93,-39054.93,✅ OK
+CP48,HT,10.0,12.0,4773.5599999999995,-4763.5599999999995,✅ OK
+CP48,LO,57.0,2631.0,24862.46,-24805.46,✅ OK
+CP48,ME,23.0,4108.0,226186.95,-226163.95,✅ OK
+CP48,PA,6.0,167.0,22317.14,-22311.14,✅ OK
+CP48,PC,236.3600082397461,21732.0,142602.7,-142366.33999176027,✅ OK
+CP48,SP,6.0,19.0,97173.61,-97167.61,✅ OK
+CP48,TO,7.0,33.0,6830.58,-6823.58,✅ OK
